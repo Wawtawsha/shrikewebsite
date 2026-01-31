@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+/* Dark mode variant */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Cinematic dark theme with oklch colors */
+@theme {
+  /* Dark cinematic background colors */
+  --color-background: oklch(0.1 0.01 240);
+  --color-surface: oklch(0.15 0.01 240);
+  --color-surface-elevated: oklch(0.2 0.01 240);
+
+  /* Text colors */
+  --color-foreground: oklch(0.95 0.01 240);
+  --color-muted: oklch(0.65 0.01 240);
+  --color-subtle: oklch(0.45 0.01 240);
+
+  /* Accent gold/amber */
+  --color-accent: oklch(0.75 0.15 80);
+  --color-accent-hover: oklch(0.8 0.18 80);
+
+  /* Borders */
+  --color-border: oklch(0.25 0.01 240);
+  --color-border-subtle: oklch(0.18 0.01 240);
+
+  /* Font families */
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-geist);
+  --font-mono: var(--font-mono);
+}
+
+/* Skip to content link for accessibility */
+.skip-to-content {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  padding: 1rem 2rem;
+  background: var(--color-accent);
+  color: var(--color-background);
+  font-weight: 600;
+  z-index: 100;
+  transition: top 0.2s;
+}
+
+.skip-to-content:focus {
+  top: 0;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Remove default margins */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/* Base body styles */
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
