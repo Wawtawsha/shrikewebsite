@@ -7,26 +7,26 @@
 
 ### Hero & Landing
 
-- [ ] **HERO-01**: Full-screen video showreel plays behind Shrike Media name on landing
-- [ ] **HERO-02**: Subtle animated scroll-down indicator cues user to explore
-- [ ] **HERO-03**: Mobile devices display optimized static image fallback instead of video
-- [ ] **HERO-04**: Hero loads fast — video streams progressively, no blank screen waiting
+- [x] **HERO-01**: Full-screen video showreel plays behind Shrike Media name on landing
+- [x] **HERO-02**: Subtle animated scroll-down indicator cues user to explore
+- [x] **HERO-03**: Mobile devices display optimized static image fallback instead of video
+- [x] **HERO-04**: Hero loads fast — video streams progressively, no blank screen waiting
 
 ### Portfolio
 
-- [ ] **PORT-01**: Portfolio page with category filtering (Photography / Videography / Software)
-- [ ] **PORT-02**: Thumbnail grid layout with cinematic hover effects revealing project info
-- [ ] **PORT-03**: Lightbox / detail view expands on click with project description and media
-- [ ] **PORT-04**: Projects animate in with scroll-driven reveal effects as user scrolls down
+- [x] **PORT-01**: Portfolio page with category filtering (Photography / Videography / Software)
+- [x] **PORT-02**: Thumbnail grid layout with cinematic hover effects revealing project info
+- [x] **PORT-03**: Lightbox / detail view expands on click with project description and media
+- [x] **PORT-04**: Projects animate in with scroll-driven reveal effects as user scrolls down
 
 > **Review gate:** PORT-01 through PORT-04 to be reviewed after implementation — owner wants to evaluate execution before committing to keeping all four.
 
 ### Services & Booking
 
-- [ ] **SERV-01**: Services overview section describing media production and technical consulting
-- [ ] **SERV-02**: Service type selector — user picks Photography, Videography, or Technical Consultation
-- [ ] **SERV-03**: Embedded Calendly scheduling widget for direct booking
-- [ ] **SERV-04**: "Contact us for pricing" approach — no visible pricing, consultative model
+- [x] **SERV-01**: Services overview section describing media production and technical consulting
+- [x] **SERV-02**: Service type selector — user picks Photography, Videography, or Technical Consultation
+- [x] **SERV-03**: Embedded Calendly scheduling widget for direct booking
+- [x] **SERV-04**: "Contact us for pricing" approach — no visible pricing, consultative model
 
 ### Animations & Interactions
 
@@ -40,7 +40,7 @@
 ### Design & Visual
 
 - [x] **DSGN-01**: Dark cinematic color scheme with dramatic lighting and moody atmosphere
-- [ ] **DSGN-02**: Each portfolio category has distinct visual treatment appropriate to the medium
+- [x] **DSGN-02**: Each portfolio category has distinct visual treatment appropriate to the medium
 - [x] **DSGN-03**: Typography that conveys premium quality and technical precision
 - [x] **DSGN-04**: Consistent dark theme across all pages and components
 
@@ -88,24 +88,24 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| HERO-01 | Phase 2 | Pending |
-| HERO-02 | Phase 2 | Pending |
-| HERO-03 | Phase 2 | Pending |
-| HERO-04 | Phase 2 | Pending |
-| PORT-01 | Phase 2 | Pending |
-| PORT-02 | Phase 2 | Pending |
-| PORT-03 | Phase 2 | Pending |
-| PORT-04 | Phase 2 | Pending |
-| SERV-01 | Phase 2 | Pending |
-| SERV-02 | Phase 2 | Pending |
-| SERV-03 | Phase 2 | Pending |
-| SERV-04 | Phase 2 | Pending |
+| HERO-01 | Phase 2 | Complete |
+| HERO-02 | Phase 2 | Complete |
+| HERO-03 | Phase 2 | Complete |
+| HERO-04 | Phase 2 | Complete |
+| PORT-01 | Phase 2 | Complete |
+| PORT-02 | Phase 2 | Complete |
+| PORT-03 | Phase 2 | Complete |
+| PORT-04 | Phase 2 | Complete |
+| SERV-01 | Phase 2 | Complete |
+| SERV-02 | Phase 2 | Complete |
+| SERV-03 | Phase 2 | Complete |
+| SERV-04 | Phase 2 | Complete |
 | ANIM-01 | Phase 3 | Pending |
 | ANIM-02 | Phase 3 | Pending |
 | ANIM-03 | Phase 3 | Pending |
 | ANIM-04 | Phase 3 | Pending |
 | DSGN-01 | Phase 1 | Complete |
-| DSGN-02 | Phase 2 | Pending |
+| DSGN-02 | Phase 2 | Complete |
 | DSGN-03 | Phase 1 | Complete |
 | DSGN-04 | Phase 1 | Complete |
 | TECH-01 | Phase 1 | Complete |
@@ -126,4 +126,4 @@
 
 ---
 *Requirements defined: 2026-01-30*
-*Last updated: 2026-01-31 after Phase 1 completion*
+*Last updated: 2026-01-31 after Phase 2 completion*
