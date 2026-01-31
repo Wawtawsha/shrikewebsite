@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { generateJsonLd, SITE_URL } from "@/lib/metadata";
+import { OptimizedImage } from "@/components/OptimizedImage";
 
 export async function generateMetadata({
   params,
@@ -69,8 +70,14 @@ export default async function ProjectPage({
           Project details will be loaded here based on the slug.
         </p>
 
-        <div className="aspect-video bg-surface border border-border rounded-lg flex items-center justify-center mb-8">
-          <span className="text-muted">Hero Image</span>
+        <div className="aspect-video bg-surface border border-border rounded-lg overflow-hidden mb-8 relative">
+          <OptimizedImage
+            src={`/work/${slug}/hero.jpg`}
+            alt={`${projectTitle} project hero image`}
+            fill
+            sizes="(max-width: 768px) 100vw, 896px"
+            className="object-cover"
+          />
         </div>
 
         <div className="prose prose-invert max-w-none">
