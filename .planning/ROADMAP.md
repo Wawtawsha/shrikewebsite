@@ -60,7 +60,12 @@ Plans:
 4. User can select a service type and book a consultation directly via embedded Calendly widget
 5. Video hero loads progressively — user sees poster frame instantly, video streams in background without blocking interaction
 
-**Plans:** 0 (created during /gsd:plan-phase 2)
+**Plans:** 3 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — Hero video + shared data modules + scroll reveal hook (HERO-01-04)
+- [ ] 02-02-PLAN.md — Portfolio grid with filtering, lightbox, scroll reveals (PORT-01-04, DSGN-02)
+- [ ] 02-03-PLAN.md — Services page with service selector and Calendly booking (SERV-01-04)
 
 ---
 
@@ -91,7 +96,7 @@ Plans:
 | Phase | Status | Requirements | Plans | Progress |
 |-------|--------|--------------|-------|----------|
 | 1 - Performance Foundation | ✅ Complete | 7 | 2/2 | 100% |
-| 2 - Rich Media & Core Features | ○ Pending | 13 | 0/? | 0% |
+| 2 - Rich Media & Core Features | ▶ In Progress | 13 | 0/3 | 0% |
 | 3 - Cinematic Polish & Performance | ○ Pending | 5 | 0/? | 0% |
 
 **Total Requirements:** 25 v1 requirements
@@ -126,4 +131,5 @@ Phase 3 (Polish) — depends on all content and features being in place
 
 *Roadmap created: 2026-01-30*
 *Phase 1 completed: 2026-01-31*
-*Next action: /gsd:plan-phase 2*
+*Phase 2 planned: 2026-01-30*
+*Next action: /gsd:execute-phase 2*
