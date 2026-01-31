@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Our Work",
+  description: "A curated collection of our finest creative engineering projects. Explore premium photography, videography, and technical solutions.",
+};
+
 export default function WorkPage() {
   return (
     <main id="main-content" className="min-h-screen py-20 px-6">

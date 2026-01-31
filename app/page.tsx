@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Home",
+  description: "Elite creative engineering for brands that demand excellence. Premium photography, videography, and technical consultation.",
+};
+
 export default function Home() {
   return (
     <main id="main-content" className="min-h-screen flex items-center justify-center px-6">

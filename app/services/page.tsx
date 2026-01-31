@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Services",
+  description: "Elite creative engineering across photography, videography, and technical consultation. Premium solutions for brands that demand excellence.",
+};
+
 const services = [
   {
     id: 'photography',
