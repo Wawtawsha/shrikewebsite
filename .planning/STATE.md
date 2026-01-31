@@ -1,6 +1,6 @@
 # State: Shrike Media
 
-**Last Updated:** 2026-01-31
+**Last Updated:** 2026-01-30
 
 ---
 
@@ -10,22 +10,22 @@
 
 **Core value:** When someone lands on this site, they must immediately feel they're looking at the work of elite creative engineers who can solve any problem.
 
-**Current focus:** Phase 1 - Performance Foundation
+**Current focus:** Phase 2 - Rich Media & Core Features
 
 ---
 
 ## Current Position
 
-**Phase:** 1 of 3 (Performance Foundation) — COMPLETE
-**Plan:** All plans complete (01-01, 01-02)
-**Status:** Phase 1 verified and complete
-**Progress:** ~33% (Phase 1 of 3 done)
+**Phase:** 2 of 3 (Rich Media & Core Features)
+**Plan:** 1 of 3 complete (02-01)
+**Status:** In progress
+**Progress:** ~44% (Phase 1 complete + 02-01 done)
 
-**Last activity:** 2026-01-31 - Phase 1 verified and completed
+**Last activity:** 2026-01-30 - Completed 02-01-PLAN.md (hero video + shared data)
 
 **Progress bar:**
 ```
-█████████░░░░░░░░░░░░░░░░░ 33%
+███████████░░░░░░░░░░░░░░░ 44%
 ```
 
 ---
@@ -35,7 +35,7 @@
 | Phase | Status | Plans | Requirement Coverage |
 |-------|--------|-------|---------------------|
 | 1 - Performance Foundation | ✅ Complete | 2/2 | 7 reqs (TECH-01, TECH-02, TECH-03, TECH-05, DSGN-01, DSGN-03, DSGN-04) |
-| 2 - Rich Media & Core Features | ○ Pending | 0/? | 13 reqs (HERO-01–04, PORT-01–04, SERV-01–04, DSGN-02) |
+| 2 - Rich Media & Core Features | In Progress | 1/3 | 13 reqs (HERO-01–04, PORT-01–04, SERV-01–04, DSGN-02) |
 | 3 - Cinematic Polish & Performance | ○ Pending | 0/? | 5 reqs (ANIM-01–04, TECH-04) |
 
 **Total phases:** 3
@@ -79,6 +79,7 @@
 | 2026-01-31 | 01-02 | AVIF prioritized over WebP | Better compression ratios, Next.js falls back automatically |
 | 2026-01-31 | 01-02 | Global motion accessibility enforcement | All animations/transitions disabled when prefers-reduced-motion active |
 | 2026-01-31 | 01-02 | JSON-LD structured data (Organization + CreativeWork) | schema.org best practice for search engines |
+| 2026-01-30 | 02-01 | matchMedia for mobile video fallback | Conditional render (video vs OptimizedImage) requires JS, not CSS-only |
 
 ### Active TODOs
 - [x] SEO foundation (01-02 complete) - sitemap, robots, metadata, JSON-LD ✅
@@ -105,22 +106,21 @@ None
 
 ## Session Continuity
 
-**Last session:** 2026-01-31 — Phase 1 verification and completion
-**Session outcome:** Phase 1 verified — all 7 requirements complete, 2 gaps fixed (orphaned OptimizedImage, missing Escape key handler)
+**Last session:** 2026-01-30 — Executed 02-01 (hero video + shared data)
+**Session outcome:** Plan 02-01 complete — hero video, scroll indicator, shared data modules, scroll reveal hook
 
-**Stopped at:** Phase 1 complete
+**Stopped at:** Completed 02-01-PLAN.md
 **Resume file:** None
 
 **Context for next session:**
-- Phase 1 COMPLETE: All 7 requirements verified (TECH-01-03, TECH-05, DSGN-01, DSGN-03-04)
-- Next.js 16.1.6 with Tailwind v4, dark cinematic theme, premium typography
-- SEO: metadata, Open Graph, JSON-LD, sitemap.xml, robots.txt
-- Accessibility: keyboard nav with Escape, skip-to-content, ARIA landmarks, reduced motion
-- Images: OptimizedImage with blur placeholders wired into project pages, AVIF/WebP
+- Phase 2 in progress: 02-01 complete (HERO-01-04 satisfied)
+- Homepage now has full-screen cinematic hero with video/image responsive swap
+- lib/projects.ts (8 projects) and lib/services.ts (3 services) ready for Plans 02-02 and 02-03
+- hooks/useScrollReveal.ts ready for scroll-driven reveal animations
 - Build passing, all routes render
-- Ready for Phase 2: Rich Media & Core Features (hero video, portfolio, services, booking)
+- Next: 02-02 (portfolio grid) or 02-03 (services section)
 
 ---
 
 *State file initialized: 2026-01-30*
-*Last updated: 2026-01-31 after 01-02 completion*
+*Last updated: 2026-01-30 after 02-01 completion*
