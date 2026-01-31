@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { inter, geist, sourceCodePro } from "@/lib/fonts";
+import { Navigation } from "@/components/Navigation";
+import { Footer } from "@/components/Footer";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -15,12 +17,14 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${inter.variable} ${geist.variable} ${sourceCodePro.variable} antialiased`}
+        className={`${inter.variable} ${geist.variable} ${sourceCodePro.variable} antialiased flex flex-col min-h-screen`}
       >
         <a href="#main-content" className="skip-to-content">
           Skip to content
         </a>
+        <Navigation />
         {children}
+        <Footer />
       </body>
     </html>
   );
