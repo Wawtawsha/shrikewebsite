@@ -26,7 +26,11 @@
 4. Search engines can crawl and index all pages with proper metadata and structured data
 5. User on slow connection sees optimized images (WebP/AVIF) that load progressively with blur placeholders
 
-**Plans:** 0 (created during /gsd:plan-phase 1)
+**Plans:** 2 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Scaffold Next.js 16 with dark theme, typography, responsive layout, and navigation
+- [ ] 01-02-PLAN.md — SEO metadata, JSON-LD structured data, sitemap, accessibility, image optimization
 
 ---
 
@@ -86,7 +90,7 @@
 
 | Phase | Status | Requirements | Plans | Progress |
 |-------|--------|--------------|-------|----------|
-| 1 - Performance Foundation | ○ Pending | 7 | 0/? | 0% |
+| 1 - Performance Foundation | ● Planning | 7 | 0/2 | 0% |
 | 2 - Rich Media & Core Features | ○ Pending | 13 | 0/? | 0% |
 | 3 - Cinematic Polish & Performance | ○ Pending | 5 | 0/? | 0% |
 
@@ -121,4 +125,4 @@ Phase 3 (Polish) — depends on all content and features being in place
 ---
 
 *Roadmap created: 2026-01-30*
-*Next action: /gsd:plan-phase 1*
+*Next action: /gsd:execute-phase 1*
