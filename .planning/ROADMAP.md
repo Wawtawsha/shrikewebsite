@@ -29,8 +29,8 @@
 **Plans:** 2 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Scaffold Next.js 16 with dark theme, typography, responsive layout, and navigation
-- [ ] 01-02-PLAN.md — SEO metadata, JSON-LD structured data, sitemap, accessibility, image optimization
+- [x] 01-01-PLAN.md — Scaffold Next.js 16 with dark theme, typography, responsive layout, and navigation
+- [x] 01-02-PLAN.md — SEO metadata, JSON-LD structured data, sitemap, accessibility, image optimization
 
 ---
 
@@ -90,7 +90,7 @@ Plans:
 
 | Phase | Status | Requirements | Plans | Progress |
 |-------|--------|--------------|-------|----------|
-| 1 - Performance Foundation | ● Planning | 7 | 0/2 | 0% |
+| 1 - Performance Foundation | ✅ Complete | 7 | 2/2 | 100% |
 | 2 - Rich Media & Core Features | ○ Pending | 13 | 0/? | 0% |
 | 3 - Cinematic Polish & Performance | ○ Pending | 5 | 0/? | 0% |
 
@@ -125,4 +125,5 @@ Phase 3 (Polish) — depends on all content and features being in place
 ---
 
 *Roadmap created: 2026-01-30*
-*Next action: /gsd:execute-phase 1*
+*Phase 1 completed: 2026-01-31*
+*Next action: /gsd:plan-phase 2*

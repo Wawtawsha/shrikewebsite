@@ -39,18 +39,18 @@
 
 ### Design & Visual
 
-- [ ] **DSGN-01**: Dark cinematic color scheme with dramatic lighting and moody atmosphere
+- [x] **DSGN-01**: Dark cinematic color scheme with dramatic lighting and moody atmosphere
 - [ ] **DSGN-02**: Each portfolio category has distinct visual treatment appropriate to the medium
-- [ ] **DSGN-03**: Typography that conveys premium quality and technical precision
-- [ ] **DSGN-04**: Consistent dark theme across all pages and components
+- [x] **DSGN-03**: Typography that conveys premium quality and technical precision
+- [x] **DSGN-04**: Consistent dark theme across all pages and components
 
 ### Technical & Performance
 
-- [ ] **TECH-01**: Fully responsive design across mobile, tablet, and desktop
-- [ ] **TECH-02**: SEO optimization — meta tags, Open Graph, structured data for portfolio items
-- [ ] **TECH-03**: Accessibility — prefers-reduced-motion support, keyboard navigation, screen reader friendly
+- [x] **TECH-01**: Fully responsive design across mobile, tablet, and desktop
+- [x] **TECH-02**: SEO optimization — meta tags, Open Graph, structured data for portfolio items
+- [x] **TECH-03**: Accessibility — prefers-reduced-motion support, keyboard navigation, screen reader friendly
 - [ ] **TECH-04**: Lighthouse performance score 90+ despite rich media and animations
-- [ ] **TECH-05**: Optimized media loading — lazy loading, progressive video, WebP/AVIF images
+- [x] **TECH-05**: Optimized media loading — lazy loading, progressive video, WebP/AVIF images
 
 ## v2 Requirements
 
@@ -104,15 +104,15 @@
 | ANIM-02 | Phase 3 | Pending |
 | ANIM-03 | Phase 3 | Pending |
 | ANIM-04 | Phase 3 | Pending |
-| DSGN-01 | Phase 1 | Pending |
+| DSGN-01 | Phase 1 | Complete |
 | DSGN-02 | Phase 2 | Pending |
-| DSGN-03 | Phase 1 | Pending |
-| DSGN-04 | Phase 1 | Pending |
-| TECH-01 | Phase 1 | Pending |
-| TECH-02 | Phase 1 | Pending |
-| TECH-03 | Phase 1 | Pending |
+| DSGN-03 | Phase 1 | Complete |
+| DSGN-04 | Phase 1 | Complete |
+| TECH-01 | Phase 1 | Complete |
+| TECH-02 | Phase 1 | Complete |
+| TECH-03 | Phase 1 | Complete |
 | TECH-04 | Phase 3 | Pending |
-| TECH-05 | Phase 1 | Pending |
+| TECH-05 | Phase 1 | Complete |
 
 **Coverage:**
 - v1 requirements: 25 total
@@ -126,4 +126,4 @@
 
 ---
 *Requirements defined: 2026-01-30*
-*Last updated: 2026-01-30 after roadmap creation*
+*Last updated: 2026-01-31 after Phase 1 completion*
