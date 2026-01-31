@@ -1,6 +1,6 @@
 # State: Shrike Media
 
-**Last Updated:** 2026-01-30
+**Last Updated:** 2026-01-31
 
 ---
 
@@ -17,15 +17,15 @@
 ## Current Position
 
 **Phase:** 2 of 3 (Rich Media & Core Features)
-**Plan:** 1 of 3 complete (02-01)
-**Status:** In progress
-**Progress:** ~44% (Phase 1 complete + 02-01 done)
+**Plan:** 3 of 3 complete (02-01, 02-02, 02-03)
+**Status:** Phase complete
+**Progress:** ~71% (Phase 1 + Phase 2 complete)
 
-**Last activity:** 2026-01-30 - Completed 02-01-PLAN.md (hero video + shared data)
+**Last activity:** 2026-01-31 - Completed 02-03-PLAN.md (services page + Calendly)
 
 **Progress bar:**
 ```
-███████████░░░░░░░░░░░░░░░ 44%
+██████████████████░░░░░░░░ 71%
 ```
 
 ---
@@ -35,7 +35,7 @@
 | Phase | Status | Plans | Requirement Coverage |
 |-------|--------|-------|---------------------|
 | 1 - Performance Foundation | ✅ Complete | 2/2 | 7 reqs (TECH-01, TECH-02, TECH-03, TECH-05, DSGN-01, DSGN-03, DSGN-04) |
-| 2 - Rich Media & Core Features | In Progress | 1/3 | 13 reqs (HERO-01–04, PORT-01–04, SERV-01–04, DSGN-02) |
+| 2 - Rich Media & Core Features | ✅ Complete | 3/3 | 13 reqs (HERO-01–04, PORT-01–04, SERV-01–04, DSGN-02) |
 | 3 - Cinematic Polish & Performance | ○ Pending | 0/? | 5 reqs (ANIM-01–04, TECH-04) |
 
 **Total phases:** 3
@@ -80,6 +80,10 @@
 | 2026-01-31 | 01-02 | Global motion accessibility enforcement | All animations/transitions disabled when prefers-reduced-motion active |
 | 2026-01-31 | 01-02 | JSON-LD structured data (Organization + CreativeWork) | schema.org best practice for search engines |
 | 2026-01-30 | 02-01 | matchMedia for mobile video fallback | Conditional render (video vs OptimizedImage) requires JS, not CSS-only |
+| 2026-01-31 | 02-02 | Native dialog over div+z-index for lightbox | Free focus trapping, ESC close, backdrop, accessibility |
+| 2026-01-31 | 02-02 | URL search params for portfolio filtering | Shareable/bookmarkable filter state, SEO-friendly |
+| 2026-01-31 | 02-02 | Suspense boundary with skeleton fallback | Required by useSearchParams; skeleton matches grid layout |
+| 2026-01-31 | 02-03 | Server-client split for services page | SEO metadata in server component, interactivity in client wrapper |
 
 ### Active TODOs
 - [x] SEO foundation (01-02 complete) - sitemap, robots, metadata, JSON-LD ✅
