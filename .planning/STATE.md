@@ -1,6 +1,6 @@
 # State: Shrike Media
 
-**Last Updated:** 2026-01-30
+**Last Updated:** 2026-01-31
 
 ---
 
@@ -17,15 +17,15 @@
 ## Current Position
 
 **Phase:** 1 of 3 (Performance Foundation)
-**Plan:** 01-01 complete
+**Plan:** 01-02 complete
 **Status:** In progress
-**Progress:** ~3.8% (1/26 estimated total plans)
+**Progress:** ~7.7% (2/26 estimated total plans)
 
-**Last activity:** 2026-01-30 - Completed 01-01-PLAN.md (Foundation Scaffold)
+**Last activity:** 2026-01-31 - Completed 01-02-PLAN.md (SEO & Accessibility Foundation)
 
 **Progress bar:**
 ```
-█░░░░░░░░░░░░░░░░░░░░░░░░░ 3.8%
+██░░░░░░░░░░░░░░░░░░░░░░░░ 7.7%
 ```
 
 ---
@@ -34,7 +34,7 @@
 
 | Phase | Status | Plans | Requirement Coverage |
 |-------|--------|-------|---------------------|
-| 1 - Performance Foundation | ● In Progress | 1/? | 7 reqs (TECH-01, TECH-02, TECH-03, TECH-05, DSGN-01, DSGN-03, DSGN-04) |
+| 1 - Performance Foundation | ● In Progress | 2/? | 7 reqs (TECH-01, TECH-02, TECH-03, TECH-05, DSGN-01, DSGN-03, DSGN-04) |
 | 2 - Rich Media & Core Features | ○ Pending | 0/? | 13 reqs (HERO-01–04, PORT-01–04, SERV-01–04, DSGN-02) |
 | 3 - Cinematic Polish & Performance | ○ Pending | 0/? | 5 reqs (ANIM-01–04, TECH-04) |
 
@@ -74,12 +74,19 @@
 | 2026-01-30 | 01-01 | Premium typography: Inter (body), Geist (headlines), Source Code Pro (mono) | Readability + modern bold aesthetic + technical messaging |
 | 2026-01-30 | 01-01 | Responsive navigation: sticky header with mobile hamburger | Desktop inline nav, mobile menu, ARIA landmarks, keyboard support |
 | 2026-01-30 | 01-01 | Next.js 16 dynamic routes with async params | Follow Next.js 16 best practices for [slug] routes |
+| 2026-01-31 | 01-02 | SITE_URL from env var with fallback | Defaults to https://shrikemedia.com, allows override for staging/preview |
+| 2026-01-31 | 01-02 | Title template: "%s \| Shrike Media" | Consistent branding across all pages |
+| 2026-01-31 | 01-02 | AVIF prioritized over WebP | Better compression ratios, Next.js falls back automatically |
+| 2026-01-31 | 01-02 | Global motion accessibility enforcement | All animations/transitions disabled when prefers-reduced-motion active |
+| 2026-01-31 | 01-02 | JSON-LD structured data (Organization + CreativeWork) | schema.org best practice for search engines |
 
 ### Active TODOs
-- [ ] Continue Phase 1 plans (foundation complete, remaining: performance optimization, SEO, analytics)
+- [x] SEO foundation (01-02 complete) - sitemap, robots, metadata, JSON-LD ✅
+- [ ] Continue Phase 1 plans (remaining: analytics, performance monitoring, error tracking)
+- [ ] Add og-image.jpg to public/ directory (referenced in metadata but not yet created)
 - [ ] Review research flags: Calendly performance impact, video codec comparison, GSAP ScrollTrigger patterns
 - [ ] Establish performance testing device matrix (mid-range devices)
-- [ ] Measure baseline Lighthouse scores after 01-01 foundation
+- [ ] Measure baseline Lighthouse scores after Phase 1 complete
 
 ### Blockers
 None
@@ -90,25 +97,31 @@ None
 - Depth setting = quick (3-5 phases, 1-3 plans each)
 - Build passing with 0 errors (Next.js 16.1.6 Turbopack)
 - All routes render: /, /work, /services, /work/[slug], 404
+- SEO infrastructure complete (01-02): sitemap.xml, robots.txt, Open Graph, Twitter Cards, JSON-LD
+- Motion accessibility enforced globally via CSS (prefers-reduced-motion respected)
+- Image optimization ready: OptimizedImage component + AVIF/WebP formats configured
 
 ---
 
 ## Session Continuity
 
-**Last session:** 2026-01-30 — Plan 01-01 execution
-**Session outcome:** Foundation scaffold complete (Next.js 16, Tailwind v4, responsive nav, page shells)
+**Last session:** 2026-01-31 — Plan 01-02 execution
+**Session outcome:** SEO & accessibility foundation complete (metadata, sitemap, robots, JSON-LD, motion a11y, image optimization)
 
-**Stopped at:** Completed 01-01-PLAN.md
+**Stopped at:** Completed 01-02-PLAN.md
 **Resume file:** None
 
 **Context for next session:**
-- Foundation is solid: dark theme, typography, navigation, page shells all working
-- Build passing, all routes render
-- Ready for next Phase 1 plan (likely performance optimization or SEO/metadata)
+- Phase 1 foundation solid: Next.js scaffold + SEO/a11y infrastructure complete
+- SEO: Open Graph, Twitter Cards, JSON-LD, sitemap.xml, robots.txt all working
+- Accessibility: prefers-reduced-motion respected globally, useReducedMotion hook available
+- Images: OptimizedImage component with blur placeholders, AVIF/WebP formats configured
+- Build passing with 0 errors, all routes render, sitemap/robots accessible
+- Ready for next Phase 1 plan (analytics, performance monitoring, or error tracking)
 - No blockers, no deviations from plan
-- 6 minutes execution time (efficient scaffolding)
+- 5 minutes execution time (efficient SEO/a11y setup)
 
 ---
 
 *State file initialized: 2026-01-30*
-*Last updated: 2026-01-30 after 01-01 completion*
+*Last updated: 2026-01-31 after 01-02 completion*
