@@ -87,7 +87,11 @@ Plans:
 4. User runs Lighthouse audit and sees performance score 90+ with LCP < 2.5s and CLS < 0.1
 5. User with motion sensitivity preferences enabled (prefers-reduced-motion) sees crossfade transitions instead of parallax, no vestibular-triggering animations
 
-**Plans:** 0 (created during /gsd:plan-phase 3)
+**Plans:** 2 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — Lenis smooth scroll + Motion page transitions (ANIM-01, ANIM-02)
+- [ ] 03-02-PLAN.md — Micro-interactions, parallax, and Lighthouse performance validation (ANIM-03, ANIM-04, TECH-04)
 
 ---
 
@@ -97,7 +101,7 @@ Plans:
 |-------|--------|--------------|-------|----------|
 | 1 - Performance Foundation | ✅ Complete | 7 | 2/2 | 100% |
 | 2 - Rich Media & Core Features | ✅ Complete | 13 | 3/3 | 100% |
-| 3 - Cinematic Polish & Performance | ○ Pending | 5 | 0/? | 0% |
+| 3 - Cinematic Polish & Performance | ○ In Progress | 5 | 0/2 | 0% |
 
 **Total Requirements:** 25 v1 requirements
 **Coverage:** 25/25 (100%)
@@ -133,4 +137,5 @@ Phase 3 (Polish) — depends on all content and features being in place
 *Phase 1 completed: 2026-01-31*
 *Phase 2 planned: 2026-01-30*
 *Phase 2 completed: 2026-01-31*
-*Next action: /gsd:plan-phase 3*
+*Phase 3 planned: 2026-01-31*
+*Next action: /gsd:execute-phase 3*
