@@ -86,7 +86,15 @@ export function ProjectLightbox({ project, onClose }: ProjectLightboxProps) {
           {/* Content */}
           <div className="p-6 space-y-6">
             {/* Hero area */}
-            <div className="aspect-video bg-gradient-to-br from-surface to-border rounded-lg" />
+            <div className="aspect-video bg-gradient-to-br from-surface to-border rounded-lg overflow-hidden relative">
+              {project.thumbnail && (
+                <img
+                  src={project.thumbnail}
+                  alt={project.title}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+              )}
+            </div>
 
             <p className="text-lg text-muted">{project.description}</p>
 
