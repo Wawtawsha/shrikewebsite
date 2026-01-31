@@ -110,21 +110,20 @@ None
 
 ## Session Continuity
 
-**Last session:** 2026-01-30 — Executed 02-01 (hero video + shared data)
-**Session outcome:** Plan 02-01 complete — hero video, scroll indicator, shared data modules, scroll reveal hook
+**Last session:** 2026-01-31 — Executed 02-03 (services page + Calendly booking)
+**Session outcome:** Plan 02-03 complete — ServiceSelector, CalendlyEmbed, services page wiring
 
-**Stopped at:** Completed 02-01-PLAN.md
+**Stopped at:** Completed 02-03-PLAN.md
 **Resume file:** None
 
 **Context for next session:**
-- Phase 2 in progress: 02-01 complete (HERO-01-04 satisfied)
-- Homepage now has full-screen cinematic hero with video/image responsive swap
-- lib/projects.ts (8 projects) and lib/services.ts (3 services) ready for Plans 02-02 and 02-03
-- hooks/useScrollReveal.ts ready for scroll-driven reveal animations
+- Phase 2 complete: all 3 plans done (02-01, 02-02, 02-03)
+- SERV-01 through SERV-04 satisfied
+- react-calendly added; Calendly URL is placeholder (needs real account)
 - Build passing, all routes render
-- Next: 02-02 (portfolio grid) or 02-03 (services section)
+- Next: Phase 3 (Cinematic Polish & Performance)
 
 ---
 
 *State file initialized: 2026-01-30*
-*Last updated: 2026-01-30 after 02-01 completion*
+*Last updated: 2026-01-31 after 02-03 completion*
