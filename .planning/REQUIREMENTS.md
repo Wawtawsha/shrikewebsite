@@ -30,10 +30,10 @@
 
 ### Animations & Interactions
 
-- [ ] **ANIM-01**: Smooth scrolling throughout the site via Lenis
-- [ ] **ANIM-02**: Cinematic page transitions between routes
-- [ ] **ANIM-03**: Micro-interactions on hover effects, button animations, and subtle motion elements
-- [ ] **ANIM-04**: Parallax depth effects on scroll for cinematic sections
+- [x] **ANIM-01**: Smooth scrolling throughout the site via Lenis
+- [x] **ANIM-02**: Cinematic page transitions between routes
+- [x] **ANIM-03**: Micro-interactions on hover effects, button animations, and subtle motion elements
+- [x] **ANIM-04**: Parallax depth effects on scroll for cinematic sections
 
 > **Review gate:** ANIM-01 through ANIM-04 to be reviewed after implementation — owner wants to evaluate execution before committing to keeping all four.
 
@@ -49,7 +49,7 @@
 - [x] **TECH-01**: Fully responsive design across mobile, tablet, and desktop
 - [x] **TECH-02**: SEO optimization — meta tags, Open Graph, structured data for portfolio items
 - [x] **TECH-03**: Accessibility — prefers-reduced-motion support, keyboard navigation, screen reader friendly
-- [ ] **TECH-04**: Lighthouse performance score 90+ despite rich media and animations
+- [x] **TECH-04**: Lighthouse performance score 90+ despite rich media and animations
 - [x] **TECH-05**: Optimized media loading — lazy loading, progressive video, WebP/AVIF images
 
 ## v2 Requirements
@@ -100,10 +100,10 @@
 | SERV-02 | Phase 2 | Complete |
 | SERV-03 | Phase 2 | Complete |
 | SERV-04 | Phase 2 | Complete |
-| ANIM-01 | Phase 3 | Pending |
-| ANIM-02 | Phase 3 | Pending |
-| ANIM-03 | Phase 3 | Pending |
-| ANIM-04 | Phase 3 | Pending |
+| ANIM-01 | Phase 3 | Complete |
+| ANIM-02 | Phase 3 | Complete |
+| ANIM-03 | Phase 3 | Complete |
+| ANIM-04 | Phase 3 | Complete |
 | DSGN-01 | Phase 1 | Complete |
 | DSGN-02 | Phase 2 | Complete |
 | DSGN-03 | Phase 1 | Complete |
@@ -111,7 +111,7 @@
 | TECH-01 | Phase 1 | Complete |
 | TECH-02 | Phase 1 | Complete |
 | TECH-03 | Phase 1 | Complete |
-| TECH-04 | Phase 3 | Pending |
+| TECH-04 | Phase 3 | Complete |
 | TECH-05 | Phase 1 | Complete |
 
 **Coverage:**
@@ -126,4 +126,4 @@
 
 ---
 *Requirements defined: 2026-01-30*
-*Last updated: 2026-01-31 after Phase 2 completion*
+*Last updated: 2026-02-01 after Phase 3 completion — all v1 requirements complete*
