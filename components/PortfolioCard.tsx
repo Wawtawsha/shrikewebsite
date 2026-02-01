@@ -2,6 +2,8 @@
 
 import type { Project } from "@/types/portfolio";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
+import { motion } from "motion/react";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 const categoryConfig = {
   photography: {
@@ -30,6 +32,7 @@ interface PortfolioCardProps {
 export function PortfolioCard({ project, onSelect, index }: PortfolioCardProps) {
   const { ref, isVisible } = useScrollReveal();
   const config = categoryConfig[project.category];
+  const reducedMotion = useReducedMotion();
 
   return (
     <div
@@ -41,10 +44,12 @@ export function PortfolioCard({ project, onSelect, index }: PortfolioCardProps) 
         transitionDelay: `${index * 100}ms`,
       }}
     >
-      <button
+      <motion.button
         type="button"
         onClick={() => onSelect(project)}
-        className="group w-full text-left rounded-lg overflow-hidden bg-surface border border-border focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 hover:scale-[1.02] transition-transform duration-300"
+        whileHover={reducedMotion ? {} : { scale: 1.02, y: -4 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+        className="group w-full text-left rounded-lg overflow-hidden bg-surface border border-border focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 hover:shadow-2xl transition-shadow duration-300"
       >
         {/* Thumbnail */}
         <div className={`${config.aspect} relative overflow-hidden bg-gradient-to-br from-surface to-border`}>
@@ -75,7 +80,7 @@ export function PortfolioCard({ project, onSelect, index }: PortfolioCardProps) 
             <p className="text-muted text-sm mt-1">{project.client}</p>
           )}
         </div>
-      </button>
+      </motion.button>
     </div>
   );
 }

@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import { motion } from 'motion/react';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -14,6 +16,7 @@ export function Navigation() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
     if (!mobileMenuOpen) return;
@@ -40,15 +43,20 @@ export function Navigation() {
           <ul className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
               <li key={link.href}>
-                <Link
-                  href={link.href}
-                  className={`font-medium transition-colors hover:text-accent ${
-                    pathname === link.href ? 'text-accent' : 'text-foreground'
-                  }`}
-                  aria-current={pathname === link.href ? 'page' : undefined}
+                <motion.div
+                  whileHover={reducedMotion ? { opacity: 0.8 } : { scale: 1.05, opacity: 0.8 }}
+                  transition={{ duration: 0.2 }}
                 >
-                  {link.label}
-                </Link>
+                  <Link
+                    href={link.href}
+                    className={`relative font-medium transition-colors hover:text-accent nav-link ${
+                      pathname === link.href ? 'text-accent' : 'text-foreground'
+                    }`}
+                    aria-current={pathname === link.href ? 'page' : undefined}
+                  >
+                    {link.label}
+                  </Link>
+                </motion.div>
               </li>
             ))}
           </ul>

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { OptimizedImage } from "./OptimizedImage";
+import { ParallaxSection } from "./ParallaxSection";
 
 export function HeroVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -56,8 +57,8 @@ export function HeroVideo() {
       {/* Dark overlay */}
       <div className="absolute inset-0 bg-black/40" />
 
-      {/* Content */}
-      <div className="relative z-10 flex h-full flex-col items-center justify-center text-center">
+      {/* Content with parallax depth */}
+      <ParallaxSection speed={0.2} className="relative z-10 flex h-full flex-col items-center justify-center text-center">
         <h1
           className="text-6xl font-bold tracking-tight text-white md:text-8xl lg:text-9xl"
           style={{ fontFamily: "var(--font-geist)" }}
@@ -67,7 +68,7 @@ export function HeroVideo() {
         <p className="mt-4 text-lg text-white/70 md:text-xl">
           Elite creative engineering
         </p>
-      </div>
+      </ParallaxSection>
     </section>
   );
 }

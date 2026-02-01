@@ -46,6 +46,33 @@
   top: 0;
 }
 
+/* Button hover micro-interaction utility */
+.btn-hover {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.btn-hover:hover {
+  transform: scale(1.03);
+}
+
+/* Navigation link underline animation */
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s ease;
+}
+
+.nav-link:hover::after {
+  transform: scaleX(1);
+}
+
 /* Lenis smooth scroll compatibility */
 html.lenis,
 html.lenis body {
@@ -72,6 +99,15 @@ html.lenis body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  /* Disable hover transforms for reduced motion */
+  .btn-hover:hover {
+    transform: none;
+  }
+
+  .nav-link::after {
+    transition: none;
   }
 }
 
