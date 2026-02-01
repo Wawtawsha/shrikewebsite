@@ -77,7 +77,7 @@ export function HeroVideo() {
           style={{ marginTop: "48px" }}
         >
           <Link
-            href="/book"
+            href="/services"
             className="group inline-flex items-center gap-4 rounded-full border-2 border-white text-white text-xl font-semibold tracking-wide transition-all duration-300 hover:bg-white hover:text-black hover:scale-105"
             style={{
               fontFamily: "var(--font-geist)",
