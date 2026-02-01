@@ -37,7 +37,7 @@ export function PortfolioGrid() {
   return (
     <>
       {/* Filter tabs */}
-      <div className="flex gap-2 mb-12 flex-wrap" role="tablist" aria-label="Filter by category">
+      <div className="flex gap-2 flex-wrap" style={{ marginBottom: '48px' }} role="tablist" aria-label="Filter by category">
         {categories.map((cat) => (
           <button
             key={cat.value}

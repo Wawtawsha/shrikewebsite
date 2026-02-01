@@ -27,7 +27,7 @@ function GridSkeleton() {
 
 export default function WorkPage() {
   return (
-    <main id="main-content" className="min-h-screen py-20 px-6">
+    <main id="main-content" className="min-h-screen" style={{ padding: '80px 64px' }}>
       <div className="max-w-7xl mx-auto">
         <h1
           className="text-5xl md:text-7xl font-bold mb-6 tracking-tight"
@@ -35,7 +35,7 @@ export default function WorkPage() {
         >
           Our Work
         </h1>
-        <p className="text-xl text-muted mb-16 max-w-2xl">
+        <p className="text-xl text-muted max-w-2xl" style={{ marginBottom: '32px' }}>
           A curated collection of our finest creative engineering projects.
         </p>
 

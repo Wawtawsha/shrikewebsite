@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { HeroVideo } from "@/components/HeroVideo";
 import { ScrollIndicator } from "@/components/ScrollIndicator";
+import { WireframeBackground } from "@/components/WireframeBackground";
+import { WhyChooseUs } from "@/components/WhyChooseUs";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -12,14 +14,13 @@ export default function Home() {
   return (
     <main id="main-content">
       <div className="relative">
+        <WireframeBackground />
         <HeroVideo />
         <ScrollIndicator />
       </div>
 
-      {/* Below the fold — placeholder for portfolio/services sections */}
-      <section className="flex min-h-screen items-center justify-center px-6">
-        <p className="text-xl text-muted">More coming soon.</p>
-      </section>
+      {/* Why Choose Us */}
+      <WhyChooseUs />
     </main>
   );
 }

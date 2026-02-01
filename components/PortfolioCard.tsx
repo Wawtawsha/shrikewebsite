@@ -12,12 +12,12 @@ const categoryConfig = {
     badge: "bg-amber-600/80",
   },
   videography: {
-    aspect: "aspect-video",
+    aspect: "aspect-[4/3]",
     overlay: "bg-blue-900/60",
     badge: "bg-blue-600/80",
   },
   technical: {
-    aspect: "aspect-square",
+    aspect: "aspect-[4/3]",
     overlay: "bg-emerald-900/60",
     badge: "bg-emerald-600/80",
   },
