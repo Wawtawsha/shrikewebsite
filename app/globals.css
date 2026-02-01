@@ -46,6 +46,16 @@
   top: 0;
 }
 
+/* Lenis smooth scroll compatibility */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto;
+}
+
 /* Smooth scrolling - respects prefers-reduced-motion */
 @media (prefers-reduced-motion: no-preference) {
   html {

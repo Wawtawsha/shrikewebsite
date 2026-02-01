@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { inter, geist, sourceCodePro } from "@/lib/fonts";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import LenisProvider from "@/components/LenisProvider";
+import PageTransition from "@/components/PageTransition";
 import { siteMetadata, SITE_URL, generateOrganizationJsonLd } from "@/lib/metadata";
 import "./globals.css";
 
@@ -70,7 +72,9 @@ export default function RootLayout({
           Skip to content
         </a>
         <Navigation />
-        {children}
+        <LenisProvider>
+          <PageTransition>{children}</PageTransition>
+        </LenisProvider>
         <Footer />
       </body>
     </html>
