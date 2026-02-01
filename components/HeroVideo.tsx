@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { OptimizedImage } from "./OptimizedImage";
 import { ParallaxSection } from "./ParallaxSection";
@@ -68,6 +69,12 @@ export function HeroVideo() {
         <p className="mt-4 text-lg text-white/70 md:text-xl">
           Elite creative engineering
         </p>
+        <Link
+          href="/book"
+          className="mt-8 inline-block rounded-none border-2 border-white bg-transparent px-8 py-4 text-lg font-semibold uppercase tracking-wider text-white transition-all duration-300 hover:bg-white hover:text-black"
+        >
+          Book Now
+        </Link>
       </ParallaxSection>
     </section>
   );

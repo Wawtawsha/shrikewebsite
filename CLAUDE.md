@@ -115,7 +115,8 @@ npm run lint         # Run ESLint
 
 | Route | Page |
 |-------|------|
-| `/` | Homepage (video hero + scroll indicator) |
+| `/` | Homepage (video hero + "Book Now" button + scroll indicator) |
+| `/book` | Booking page (placeholder — to be built) |
 | `/work` | Portfolio (filterable grid) |
 | `/work/[slug]` | Project detail |
 | `/services` | Services + Calendly booking |
@@ -133,5 +134,11 @@ These need real assets before production:
 
 New to this project? Read `HANDOFF.md` for full context on where we are, what's done, and what's next.
 
+## Changelog
+
+| Date | Change |
+|------|--------|
+| 2026-02-01 | Added "Book Now" button to hero, created placeholder `/book` route |
+
 ---
-*Last updated: 2026-02-01 — v1 milestone complete*
+*Last updated: 2026-02-01*
