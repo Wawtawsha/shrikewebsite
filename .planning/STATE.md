@@ -17,15 +17,15 @@
 ## Current Position
 
 **Phase:** 3 of 3 (Cinematic Polish & Performance)
-**Plan:** 1 of ? complete (03-01)
-**Status:** In progress
-**Progress:** ~75% (Phase 1 + Phase 2 + 03-01 complete)
+**Plan:** 2 of ? complete (03-01, 03-02)
+**Status:** In progress (at checkpoint)
+**Progress:** ~80% (Phase 1 + Phase 2 + 03-01 + 03-02 complete)
 
-**Last activity:** 2026-02-01 - Completed 03-01-PLAN.md (Lenis smooth scroll + page transitions)
+**Last activity:** 2026-01-31 - Completed 03-02-PLAN.md (micro-interactions + parallax)
 
 **Progress bar:**
 ```
-███████████████████░░░░░░░ 75%
+████████████████████░░░░░░ 80%
 ```
 
 ---
@@ -36,7 +36,7 @@
 |-------|--------|-------|---------------------|
 | 1 - Performance Foundation | ✅ Complete | 2/2 | 7 reqs (TECH-01, TECH-02, TECH-03, TECH-05, DSGN-01, DSGN-03, DSGN-04) |
 | 2 - Rich Media & Core Features | ✅ Complete | 3/3 | 13 reqs (HERO-01–04, PORT-01–04, SERV-01–04, DSGN-02) |
-| 3 - Cinematic Polish & Performance | ⏳ In Progress | 1/? | 5 reqs (ANIM-01–04, TECH-04) |
+| 3 - Cinematic Polish & Performance | ⏳ In Progress | 2/? | 5 reqs (ANIM-01–04, TECH-04) |
 
 **Total phases:** 3
 **Total requirements:** 25
@@ -89,6 +89,11 @@
 | 2026-02-01 | 03-01 | Page transitions: 300ms fade+slide normal, 150ms fade-only reduced | Accessibility-first animation strategy |
 | 2026-02-01 | 03-01 | LenisProvider wraps PageTransition in layout | Smooth scroll outer layer, transitions inner layer |
 | 2026-02-01 | 03-01 | Navigation and Footer outside transitions | Static chrome, only page content animates |
+| 2026-01-31 | 03-02 | ParallaxSection speed prop default 0.3 | Subtle depth without vestibular issues |
+| 2026-01-31 | 03-02 | Nav links: scale 1.05 + underline on hover | Premium feel with CSS transform animation |
+| 2026-01-31 | 03-02 | Portfolio cards: lift (y: -4) + shadow on hover | Tactile feedback with GPU-accelerated transform |
+| 2026-01-31 | 03-02 | All animations ONLY transform/opacity | GPU-accelerated, no layout thrashing |
+| 2026-01-31 | 03-02 | Reduced-motion: no parallax, no scale, opacity-only | Full accessibility compliance |
 
 ### Active TODOs
 - [x] SEO foundation (01-02 complete) - sitemap, robots, metadata, JSON-LD ✅
@@ -115,20 +120,21 @@ None
 
 ## Session Continuity
 
-**Last session:** 2026-02-01 — Completed 03-01-PLAN.md (animation infrastructure)
-**Session outcome:** Lenis smooth scroll and Motion page transitions installed. 2 tasks, 2 commits. Build passing.
+**Last session:** 2026-01-31 — Completed 03-02-PLAN.md (micro-interactions + parallax)
+**Session outcome:** Micro-interactions and parallax added. 2 tasks, 2 commits. Build passing. Stopped at checkpoint.
 
-**Stopped at:** Completed 03-01-PLAN.md
+**Stopped at:** Checkpoint (Task 3 of 03-02-PLAN.md) - awaiting user verification
 **Resume file:** None
 
 **Context for next session:**
-- Phase 3 STARTED: Plan 03-01 complete (ANIM-01, ANIM-02)
-- Animation infrastructure ready: Lenis (smooth scroll) + Motion (page transitions)
-- Dependencies: lenis@latest, motion@latest installed
-- LenisProvider + PageTransition integrated in app/layout.tsx
-- Reduced-motion fully supported (no Lenis, simple opacity transitions)
-- Build passing, all routes render with smooth scroll and transitions
-- Ready for: scroll reveals (ANIM-03), GSAP integration (ANIM-04), performance optimization (TECH-04)
+- Phase 3 CONTINUING: Plans 03-01, 03-02 complete (ANIM-01, ANIM-02, ANIM-03, ANIM-04 partial)
+- Cinematic polish complete: smooth scroll (Lenis) + page transitions + micro-interactions + parallax
+- ParallaxSection component: useScroll + useTransform pattern established
+- All animations GPU-accelerated (transform/opacity only)
+- Reduced-motion fully supported (no parallax, no scale, opacity-only)
+- Build passing with 0 errors
+- CHECKPOINT: User needs to verify: hover animations, parallax depth, reduced-motion fallbacks, Lighthouse 90+
+- Ready after approval: additional polish, final performance tuning, or next phase
 
 ---
 
