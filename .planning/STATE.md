@@ -1,6 +1,6 @@
 # State: Shrike Media
 
-**Last Updated:** 2026-01-31
+**Last Updated:** 2026-02-01
 
 ---
 
@@ -10,22 +10,22 @@
 
 **Core value:** When someone lands on this site, they must immediately feel they're looking at the work of elite creative engineers who can solve any problem.
 
-**Current focus:** Phase 2 - Rich Media & Core Features
+**Current focus:** Phase 3 - Cinematic Polish & Performance
 
 ---
 
 ## Current Position
 
-**Phase:** 2 of 3 (Rich Media & Core Features)
-**Plan:** 3 of 3 complete (02-01, 02-02, 02-03)
-**Status:** Phase complete
-**Progress:** ~71% (Phase 1 + Phase 2 complete)
+**Phase:** 3 of 3 (Cinematic Polish & Performance)
+**Plan:** 1 of ? complete (03-01)
+**Status:** In progress
+**Progress:** ~75% (Phase 1 + Phase 2 + 03-01 complete)
 
-**Last activity:** 2026-01-31 - Completed 02-03-PLAN.md (services page + Calendly)
+**Last activity:** 2026-02-01 - Completed 03-01-PLAN.md (Lenis smooth scroll + page transitions)
 
 **Progress bar:**
 ```
-██████████████████░░░░░░░░ 71%
+███████████████████░░░░░░░ 75%
 ```
 
 ---
@@ -36,7 +36,7 @@
 |-------|--------|-------|---------------------|
 | 1 - Performance Foundation | ✅ Complete | 2/2 | 7 reqs (TECH-01, TECH-02, TECH-03, TECH-05, DSGN-01, DSGN-03, DSGN-04) |
 | 2 - Rich Media & Core Features | ✅ Complete | 3/3 | 13 reqs (HERO-01–04, PORT-01–04, SERV-01–04, DSGN-02) |
-| 3 - Cinematic Polish & Performance | ○ Pending | 0/? | 5 reqs (ANIM-01–04, TECH-04) |
+| 3 - Cinematic Polish & Performance | ⏳ In Progress | 1/? | 5 reqs (ANIM-01–04, TECH-04) |
 
 **Total phases:** 3
 **Total requirements:** 25
@@ -84,6 +84,11 @@
 | 2026-01-31 | 02-02 | URL search params for portfolio filtering | Shareable/bookmarkable filter state, SEO-friendly |
 | 2026-01-31 | 02-02 | Suspense boundary with skeleton fallback | Required by useSearchParams; skeleton matches grid layout |
 | 2026-01-31 | 02-03 | Server-client split for services page | SEO metadata in server component, interactivity in client wrapper |
+| 2026-02-01 | 03-01 | Lenis config: lerp 0.1, duration 1.2, smoothWheel true | Cinematic smooth scroll with momentum feel |
+| 2026-02-01 | 03-01 | Motion easing: cubic-bezier [0.42, 0, 0.58, 1] | easeInOut for consistent animation feel across transitions |
+| 2026-02-01 | 03-01 | Page transitions: 300ms fade+slide normal, 150ms fade-only reduced | Accessibility-first animation strategy |
+| 2026-02-01 | 03-01 | LenisProvider wraps PageTransition in layout | Smooth scroll outer layer, transitions inner layer |
+| 2026-02-01 | 03-01 | Navigation and Footer outside transitions | Static chrome, only page content animates |
 
 ### Active TODOs
 - [x] SEO foundation (01-02 complete) - sitemap, robots, metadata, JSON-LD ✅
@@ -110,22 +115,22 @@ None
 
 ## Session Continuity
 
-**Last session:** 2026-01-31 — Phase 2 verified and completed
-**Session outcome:** All 13 requirements verified. 1 gap fixed (lightbox thumbnail rendering).
+**Last session:** 2026-02-01 — Completed 03-01-PLAN.md (animation infrastructure)
+**Session outcome:** Lenis smooth scroll and Motion page transitions installed. 2 tasks, 2 commits. Build passing.
 
-**Stopped at:** Phase 2 complete
+**Stopped at:** Completed 03-01-PLAN.md
 **Resume file:** None
 
 **Context for next session:**
-- Phase 2 COMPLETE: All 13 requirements verified (HERO-01-04, PORT-01-04, SERV-01-04, DSGN-02)
-- Hero: full-screen video with mobile fallback, scroll indicator
-- Portfolio: category filtering, cinematic cards, native dialog lightbox, scroll reveals
-- Services: 3-card selector, Calendly embed (placeholder URL), no pricing
-- Calendly URL placeholder needs real account URL
-- Build passing, all routes render with real data
-- Ready for Phase 3: Cinematic Polish & Performance (Lenis, GSAP, page transitions)
+- Phase 3 STARTED: Plan 03-01 complete (ANIM-01, ANIM-02)
+- Animation infrastructure ready: Lenis (smooth scroll) + Motion (page transitions)
+- Dependencies: lenis@latest, motion@latest installed
+- LenisProvider + PageTransition integrated in app/layout.tsx
+- Reduced-motion fully supported (no Lenis, simple opacity transitions)
+- Build passing, all routes render with smooth scroll and transitions
+- Ready for: scroll reveals (ANIM-03), GSAP integration (ANIM-04), performance optimization (TECH-04)
 
 ---
 
 *State file initialized: 2026-01-30*
-*Last updated: 2026-01-31 after 02-03 completion*
+*Last updated: 2026-02-01 after 03-01 completion*
