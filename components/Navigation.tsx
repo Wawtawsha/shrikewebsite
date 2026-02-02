@@ -8,7 +8,7 @@ import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 const navLinks = [
   { href: '/', label: 'Home' },
-  { href: '/work', label: 'Work' },
+  // { href: '/work', label: 'Work' }, // Hidden until portfolio is ready
   { href: '/services', label: 'Services' },
 ];
 
