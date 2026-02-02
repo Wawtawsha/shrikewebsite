@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { PortfolioGrid } from "@/components/PortfolioGrid";
+import { WireframeBackground } from "@/components/WireframeBackground";
 
 export const metadata: Metadata = {
   title: "Our Work",
@@ -27,8 +28,9 @@ function GridSkeleton() {
 
 export default function WorkPage() {
   return (
-    <main id="main-content" className="min-h-screen" style={{ padding: '80px 64px' }}>
-      <div className="max-w-7xl mx-auto">
+    <main id="main-content" className="min-h-screen relative" style={{ padding: '80px 64px' }}>
+      <WireframeBackground />
+      <div className="max-w-7xl mx-auto relative z-10">
         <h1
           className="text-5xl md:text-7xl font-bold mb-6 tracking-tight"
           style={{ fontFamily: "var(--font-geist)" }}

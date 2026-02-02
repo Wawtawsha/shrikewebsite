@@ -37,17 +37,17 @@ export function PortfolioGrid() {
   return (
     <>
       {/* Filter tabs */}
-      <div className="flex gap-2 flex-wrap" style={{ marginBottom: '48px' }} role="tablist" aria-label="Filter by category">
+      <div className="flex gap-3 flex-wrap" style={{ marginBottom: '48px' }} role="tablist" aria-label="Filter by category">
         {categories.map((cat) => (
           <button
             key={cat.value}
             role="tab"
             aria-selected={activeCategory === cat.value}
             onClick={() => setCategory(cat.value)}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${
+            className={`px-6 py-3 rounded-lg text-base font-semibold tracking-wide transition-all duration-300 ${
               activeCategory === cat.value
-                ? "bg-accent text-white"
-                : "bg-surface text-muted hover:text-foreground border border-border"
+                ? "bg-accent text-white shadow-lg shadow-accent/25"
+                : "bg-surface/80 text-muted hover:text-foreground hover:bg-surface border border-border/50 hover:border-border hover:shadow-md"
             }`}
           >
             {cat.label}

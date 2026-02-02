@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ServicesContent } from "./ServicesContent";
+import { WireframeBackground } from "@/components/WireframeBackground";
 
 export const metadata: Metadata = {
   title: "Services",
@@ -9,8 +10,9 @@ export const metadata: Metadata = {
 
 export default function ServicesPage() {
   return (
-    <main id="main-content" className="min-h-screen" style={{ padding: "80px 64px" }}>
-      <div className="max-w-5xl mx-auto">
+    <main id="main-content" className="min-h-screen relative" style={{ padding: "80px 64px" }}>
+      <WireframeBackground />
+      <div className="max-w-5xl mx-auto relative z-10">
         <h1
           className="text-5xl md:text-7xl font-bold mb-6 tracking-tight"
           style={{ fontFamily: "var(--font-display)" }}
