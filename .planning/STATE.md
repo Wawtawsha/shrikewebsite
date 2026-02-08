@@ -1,31 +1,31 @@
 # State: Shrike Media
 
-**Last Updated:** 2026-02-01
+**Last Updated:** 2026-02-08
 
 ---
 
 ## Project Reference
 
-**Project file:** `.planning/PROJECT.md` (updated 2026-01-30)
+**Project file:** `.planning/PROJECT.md` (updated 2026-02-08)
 
 **Core value:** When someone lands on this site, they must immediately feel they're looking at the work of elite creative engineers who can solve any problem.
 
-**Current focus:** Milestone complete — all phases done
+**Current focus:** Milestone v1.1 — Event Photo Gallery
 
 ---
 
 ## Current Position
 
-**Phase:** 3 of 3 (Cinematic Polish & Performance)
-**Plan:** 2 of 2 complete (03-01, 03-02)
-**Status:** Phase complete — milestone complete
-**Progress:** 100% (All 3 phases complete)
+**Phase:** Not started (defining requirements)
+**Plan:** —
+**Status:** Defining requirements
+**Progress:** 0%
 
-**Last activity:** 2026-02-01 - Phase 3 verified and completed
+**Last activity:** 2026-02-08 — Milestone v1.1 started
 
 **Progress bar:**
 ```
-█████████████████████████ 100%
+░░░░░░░░░░░░░░░░░░░░░░░░░ 0%
 ```
 
 ---
@@ -34,29 +34,7 @@
 
 | Phase | Status | Plans | Requirement Coverage |
 |-------|--------|-------|---------------------|
-| 1 - Performance Foundation | ✅ Complete | 2/2 | 7 reqs (TECH-01, TECH-02, TECH-03, TECH-05, DSGN-01, DSGN-03, DSGN-04) |
-| 2 - Rich Media & Core Features | ✅ Complete | 3/3 | 13 reqs (HERO-01–04, PORT-01–04, SERV-01–04, DSGN-02) |
-| 3 - Cinematic Polish & Performance | ✅ Complete | 2/2 | 5 reqs (ANIM-01–04, TECH-04) |
-
-**Total phases:** 3
-**Total requirements:** 25
-**Coverage:** 25/25 (100%)
-
----
-
-## Performance Metrics
-
-### Current
-- Lighthouse Performance: Not measured
-- LCP: Not measured (next/font with display:swap configured)
-- CLS: Not measured (sticky nav may impact)
-- FID: Not measured
-
-### Targets (Phase 3)
-- Lighthouse Performance: 90+
-- LCP: < 2.5s
-- CLS: < 0.1
-- FID: < 100ms
+| (phases not yet defined) | | | |
 
 ---
 
@@ -66,75 +44,45 @@
 
 | Date | Phase | Decision | Rationale |
 |------|-------|----------|-----------|
-| 2026-01-30 | Roadmap | Three-phase roadmap: Foundation → Media → Polish | Research-driven approach (performance infrastructure before visual polish) |
-| 2026-01-30 | Roadmap | Motion accessibility (TECH-03) established in Phase 1 | Enforce early to avoid retrofit |
-| 2026-01-30 | Roadmap | Portfolio and animation requirements flagged for review gates | Owner wants to evaluate execution before committing |
-| 2026-01-30 | 01-01 | Dark mode enforced via className='dark' on html | Prevent flash of unstyled content |
-| 2026-01-30 | 01-01 | Tailwind v4 with oklch colors | Perceptually uniform dark cinematic palette (no banding) |
-| 2026-01-30 | 01-01 | Premium typography: Inter (body), Geist (headlines), Source Code Pro (mono) | Readability + modern bold aesthetic + technical messaging |
-| 2026-01-30 | 01-01 | Responsive navigation: sticky header with mobile hamburger | Desktop inline nav, mobile menu, ARIA landmarks, keyboard support |
-| 2026-01-30 | 01-01 | Next.js 16 dynamic routes with async params | Follow Next.js 16 best practices for [slug] routes |
-| 2026-01-31 | 01-02 | SITE_URL from env var with fallback | Defaults to https://shrikemedia.com, allows override for staging/preview |
-| 2026-01-31 | 01-02 | Title template: "%s \| Shrike Media" | Consistent branding across all pages |
-| 2026-01-31 | 01-02 | AVIF prioritized over WebP | Better compression ratios, Next.js falls back automatically |
-| 2026-01-31 | 01-02 | Global motion accessibility enforcement | All animations/transitions disabled when prefers-reduced-motion active |
-| 2026-01-31 | 01-02 | JSON-LD structured data (Organization + CreativeWork) | schema.org best practice for search engines |
-| 2026-01-30 | 02-01 | matchMedia for mobile video fallback | Conditional render (video vs OptimizedImage) requires JS, not CSS-only |
-| 2026-01-31 | 02-02 | Native dialog over div+z-index for lightbox | Free focus trapping, ESC close, backdrop, accessibility |
-| 2026-01-31 | 02-02 | URL search params for portfolio filtering | Shareable/bookmarkable filter state, SEO-friendly |
-| 2026-01-31 | 02-02 | Suspense boundary with skeleton fallback | Required by useSearchParams; skeleton matches grid layout |
-| 2026-01-31 | 02-03 | Server-client split for services page | SEO metadata in server component, interactivity in client wrapper |
-| 2026-02-01 | 03-01 | Lenis config: lerp 0.1, duration 1.2, smoothWheel true | Cinematic smooth scroll with momentum feel |
-| 2026-02-01 | 03-01 | Motion easing: cubic-bezier [0.42, 0, 0.58, 1] | easeInOut for consistent animation feel across transitions |
-| 2026-02-01 | 03-01 | Page transitions: 300ms fade+slide normal, 150ms fade-only reduced | Accessibility-first animation strategy |
-| 2026-02-01 | 03-01 | LenisProvider wraps PageTransition in layout | Smooth scroll outer layer, transitions inner layer |
-| 2026-02-01 | 03-01 | Navigation and Footer outside transitions | Static chrome, only page content animates |
-| 2026-01-31 | 03-02 | ParallaxSection speed prop default 0.3 | Subtle depth without vestibular issues |
-| 2026-01-31 | 03-02 | Nav links: scale 1.05 + underline on hover | Premium feel with CSS transform animation |
-| 2026-01-31 | 03-02 | Portfolio cards: lift (y: -4) + shadow on hover | Tactile feedback with GPU-accelerated transform |
-| 2026-01-31 | 03-02 | All animations ONLY transform/opacity | GPU-accelerated, no layout thrashing |
-| 2026-01-31 | 03-02 | Reduced-motion: no parallax, no scale, opacity-only | Full accessibility compliance |
+| 2026-02-08 | Milestone | Supabase for gallery backend | Storage + DB in one place, MCP tools already connected |
+| 2026-02-08 | Milestone | Fully anonymous interactions | Zero friction for non-tech-savvy winery audience |
+| 2026-02-08 | Milestone | Single /gallery route, re-skinned per event | Simpler than multi-event routing, swap photos and theme |
+| 2026-02-08 | Milestone | No gallery link in main nav | Gallery is client-facing, shared via direct URL |
+| 2026-02-08 | Milestone | Direct upload to Supabase Storage | No admin UI, owner uploads 200-1500 photos directly |
+| 2026-02-08 | Milestone | Warm/cute design for gallery | Distinct from dark cinematic main site, matches winery audience |
 
 ### Active TODOs
-- [x] SEO foundation (01-02 complete) - sitemap, robots, metadata, JSON-LD ✅
-- [ ] Continue Phase 1 plans (remaining: analytics, performance monitoring, error tracking)
-- [ ] Add og-image.jpg to public/ directory (referenced in metadata but not yet created)
-- [ ] Review research flags: Calendly performance impact, video codec comparison, GSAP ScrollTrigger patterns
-- [ ] Establish performance testing device matrix (mid-range devices)
-- [ ] Measure baseline Lighthouse scores after Phase 1 complete
+- [ ] Research Supabase Storage + Next.js integration patterns
+- [ ] Research masonry grid libraries for React/Next.js
+- [ ] Define spam protection approach for anonymous comments
 
 ### Blockers
 None
 
 ### Notes
-- Research recommends foundation-first approach: performance infrastructure before visual polish ✅ Completed 01-01
-- Review gates set for PORT-01–04 and ANIM-01–04 — owner wants to evaluate execution before committing
-- Depth setting = quick (3-5 phases, 1-3 plans each)
-- Build passing with 0 errors (Next.js 16.1.6 Turbopack)
-- All routes render: /, /work, /services, /work/[slug], 404
-- SEO infrastructure complete (01-02): sitemap.xml, robots.txt, Open Graph, Twitter Cards, JSON-LD
-- Motion accessibility enforced globally via CSS (prefers-reduced-motion respected)
-- Image optimization ready: OptimizedImage component + AVIF/WebP formats configured
+- v1 milestone complete: 25/25 requirements, 3 phases (Performance Foundation → Rich Media → Cinematic Polish)
+- Gallery is first client-facing photo delivery feature
+- Target audience: women 30-60, primarily mobile, not tech-savvy
+- First event: winery shoot, ~200-1500 photos
 
 ---
 
 ## Session Continuity
 
-**Last session:** 2026-02-01 — Phase 3 verified and completed. Milestone complete.
-**Session outcome:** All 5 requirements verified (ANIM-01-04, TECH-04). Owner approved animations at checkpoint.
+**Last session:** 2026-02-08 — Milestone v1.1 started, gathering requirements
+**Session outcome:** PROJECT.md and STATE.md updated for new milestone
 
-**Stopped at:** Milestone complete
+**Stopped at:** Pre-research, defining requirements
 **Resume file:** None
 
 **Context for next session:**
-- ALL PHASES COMPLETE: 25/25 v1 requirements satisfied
-- Phase 3: Lenis smooth scroll, page transitions, micro-interactions, parallax, Lighthouse perf
-- Owner visually approved animations at checkpoint
-- Review gate pending: ANIM-01-04 (owner evaluates before committing)
-- Build passing, all routes render
-- Ready for: /gsd:audit-milestone
+- v1.1 milestone: Pinterest-style event photo gallery
+- Backend: Supabase (Storage + DB)
+- Auth: Anonymous (device-based likes, anonymous comments)
+- Design: Cute/warm, mobile-first, for winery event clients
+- Next: Research → Requirements → Roadmap
 
 ---
 
 *State file initialized: 2026-01-30*
-*Last updated: 2026-02-01 after Phase 3 completion — milestone complete*
+*Last updated: 2026-02-08 after v1.1 milestone start*
