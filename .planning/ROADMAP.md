@@ -18,7 +18,7 @@
 
 ## v1.1 Phases — Event Photo Gallery
 
-### Phase 1: Gallery Foundation & Infrastructure
+### Phase 1: Gallery Foundation & Infrastructure — COMPLETE
 
 **Goal:** Restructure the app for dual-theme support, set up Supabase backend, create upload tooling, and verify the main site is unbroken.
 
@@ -38,8 +38,8 @@
 **Plans:** 2 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Route group restructure + CSS theme split + Supabase client setup
-- [ ] 01-02-PLAN.md — Database schema + RLS + triggers + upload tooling with sharp/blurhash
+- [x] 01-01-PLAN.md — Route group restructure + CSS theme split + Supabase client setup
+- [x] 01-02-PLAN.md — Database schema + RLS + triggers + upload tooling with sharp/blurhash
 
 ---
 
@@ -66,8 +66,8 @@ Plans:
 **Plans:** 2 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — react-photo-album masonry grid + progressive loading + blur placeholders + Server Component data flow
-- [ ] 02-02-PLAN.md — yet-another-react-lightbox integration + warm theme CSS + mobile-first responsive polish
+- [ ] 02-01-PLAN.md — Masonry grid + progressive loading + blurhash placeholders + Server Component data flow
+- [ ] 02-02-PLAN.md — Lightbox with zoom/swipe + warm theme CSS polish + mobile-first responsive design
 
 ---
 
@@ -105,22 +105,22 @@ Plans:
 | v1 Phase 1 | Complete | 7 | 2/2 | 100% |
 | v1 Phase 2 | Complete | 13 | 3/3 | 100% |
 | v1 Phase 3 | Complete | 5 | 2/2 | 100% |
-| v1.1 Phase 1 - Foundation | Pending | 4 | 0/2 | 0% |
-| v1.1 Phase 2 - Display & Design | Pending | 6 | 0/2 | 0% |
+| v1.1 Phase 1 - Foundation | Complete | 4 | 2/2 | 100% |
+| v1.1 Phase 2 - Display & Design | Planned | 6 | 2 plans | 0% |
 | v1.1 Phase 3 - Social & Polish | Pending | 5 | 0/2 | 0% |
 
 **v1 Total:** 25 requirements, 7 plans — COMPLETE
-**v1.1 Total:** 15 requirements, 6 plans — PENDING
+**v1.1 Total:** 15 requirements, 6 plans — IN PROGRESS
 
 ---
 
 ## Dependencies
 
 ```
-v1.1 Phase 1 (Foundation)
-    ↓
+v1.1 Phase 1 (Foundation) — COMPLETE
+    |
 v1.1 Phase 2 (Display) — depends on route groups, Supabase setup, uploaded test photos
-    ↓
+    |
 v1.1 Phase 3 (Social) — depends on gallery UI being in place to add interactions to
 ```
 
@@ -152,3 +152,4 @@ v1.1 Phase 3 (Social) — depends on gallery UI being in place to add interactio
 *Roadmap created: 2026-01-30*
 *v1 phases complete: 2026-02-01*
 *v1.1 roadmap added: 2026-02-08*
+*v1.1 Phase 2 planned: 2026-02-08*
