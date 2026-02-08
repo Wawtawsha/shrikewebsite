@@ -1,711 +1,869 @@
-# Architecture Patterns: High-End Creative Portfolio
+# Architecture Patterns: Event Photo Gallery Integration
 
-**Domain:** Cinematic portfolio website with heavy animation and video
-**Project:** Shrike Media
-**Researched:** 2026-01-30
+**Domain:** Supabase-backed photo gallery with anonymous social features, integrated into existing Next.js 16 App Router site
+**Researched:** 2026-02-08
+**Overall confidence:** HIGH (architecture patterns well-established; Supabase + Next.js integration well-documented)
 
-## Executive Summary
+---
 
-High-end creative portfolios in 2026 follow a **server-first, client-islands architecture** that prioritizes performance while delivering cinematic experiences. The key insight: animations and rich media don't require client-heavy SPAs. Instead, modern portfolios use Server Components for structure, targeted Client Components for interactivity, and GPU-accelerated animations via GSAP/WebGL.
+## The Core Architectural Decision: Route Group with Separate Layout
 
-**Critical architectural decision:** Next.js App Router with React Server Components as the foundation, with Client Components isolated to specific interactive boundaries (scroll controllers, video players, menu interactions).
+The gallery has a fundamentally different visual identity (cute/warm) from the main site (dark/cinematic) and explicitly requires no navigation links between them. This is the textbook use case for **Next.js Route Groups with separate root layouts**.
 
-## Recommended Architecture
+### Why Route Groups, Not a Nested Layout
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                         Next.js App Router                       │
-│                      (Server Components Default)                 │
-└────────────────────────┬────────────────────────────────────────┘
-                         │
-        ┌────────────────┼────────────────┐
-        │                │                │
-        v                v                v
-┌───────────────┐ ┌──────────────┐ ┌────────────────┐
-│  Page Layouts │ │   UI Shell   │ │  Content Layer │
-│  (Server)     │ │  (Server)    │ │  (Server)      │
-│               │ │              │ │                │
-│ - app/page.tsx│ │ - Header     │ │ - Static text  │
-│ - portfolio/  │ │ - Footer     │ │ - Metadata     │
-│ - services/   │ │ - Navigation │ │ - Hardcoded    │
-└───────┬───────┘ └──────┬───────┘ └────────────────┘
-        │                │
-        └────────────────┼──────────────────────────┐
-                         │                          │
-                         v                          v
-              ┌──────────────────────┐   ┌─────────────────────┐
-              │  Client Islands      │   │  Media Layer        │
-              │  ("use client")      │   │  (Optimized)        │
-              ├──────────────────────┤   ├─────────────────────┤
-              │                      │   │                     │
-              │ - ScrollController   │   │ - VideoPlayer       │
-              │   (Lenis + GSAP)     │   │   (lazy loaded)     │
-              │                      │   │                     │
-              │ - AnimationEngine    │   │ - ImageOptimizer    │
-              │   (GSAP contexts)    │   │   (next/image)      │
-              │                      │   │                     │
-              │ - InteractiveMenu    │   │ - VideoOptimizer    │
-              │   (state + gestures) │   │   (CDN + adaptive)  │
-              │                      │   │                     │
-              │ - 3D Elements        │   │ - AssetPreloader    │
-              │   (R3F - optional)   │   │   (intersection)    │
-              └──────────────────────┘   └─────────────────────┘
-```
+Three architectural options exist. Only one is correct.
 
-### Data Flow Direction
+**Option A: Gallery as a regular route under root layout** (`app/gallery/page.tsx`)
+- Gallery inherits Navigation, Footer, LenisProvider, PageTransition, dark theme
+- You'd have to conditionally hide/override all of these
+- The dark oklch color system bleeds into the gallery unless extensively overridden
+- The `className="dark"` on `<html>` in the root layout forces dark mode globally
+- **Verdict: Wrong.** Conditional overrides create fragile, entangled code.
+
+**Option B: Gallery as a separate Next.js app / subdomain**
+- Complete isolation, separate deployment
+- Overkill for what is fundamentally one route with a few API endpoints
+- Doubles deployment complexity, CI/CD, and hosting costs
+- **Verdict: Wrong.** Overcorrection for a styling difference.
+
+**Option C: Route Groups with separate root layouts** (RECOMMENDED)
+- `app/(main)/layout.tsx` wraps all existing pages with Navigation, Footer, dark theme
+- `app/(gallery)/gallery/layout.tsx` wraps gallery with its own warm theme, no shared chrome
+- Each has its own `<html>` and `<body>` tags with different class/theme
+- Zero interference between the two visual identities
+- URL stays clean: `/gallery` (route group parentheses are omitted from URL)
+- **Verdict: Correct.** Clean separation, no conditional logic, standard Next.js pattern.
+
+**Critical trade-off to acknowledge:** Navigation between route groups triggers a full page load (not client-side navigation). This is actually a *benefit* here since we don't want navigation links between them anyway. The full page load ensures complete CSS/theme isolation.
+
+### Recommended Directory Structure
 
 ```
-Server (Build/Request Time)
-    │
-    ├──> Render Page Structure (RSC)
-    ├──> Inject Static Content
-    ├──> Generate Metadata
-    │
-    └──> Send HTML + Minimal JS to Client
-              │
-              v
-Client (Runtime)
-    │
-    ├──> Hydrate Client Islands
-    ├──> Initialize Scroll Controller
-    ├──> Setup Animation Contexts
-    │
-    └──> User Interaction
-              │
-              ├──> Scroll Event → Lenis → GSAP ScrollTrigger
-              ├──> Viewport Intersection → Lazy Load Media
-              ├──> Route Change → Prefetch + Animate Transition
-              └──> Menu Toggle → State Update → Animation
+app/
+  (main)/                          -- Route group: existing Shrike site
+    layout.tsx                     -- Moved from app/layout.tsx (dark theme, Nav, Footer)
+    page.tsx                       -- Homepage
+    not-found.tsx                  -- 404 page
+    work/                          -- Portfolio pages
+    services/                      -- Services pages
+    book/                          -- Booking page
+    sitemap.ts                     -- Sitemap
+    robots.ts                      -- Robots config
+
+  (gallery)/                       -- Route group: warm photo gallery
+    gallery/                       -- /gallery URL
+      layout.tsx                   -- Gallery root layout (warm theme, own html/body)
+      page.tsx                     -- Gallery grid (Server Component)
+      gallery.css                  -- Gallery-specific theme tokens
+      [photoId]/                   -- /gallery/[photoId] (optional: deep link to photo)
+        page.tsx                   -- Individual photo view
+
+  globals.css                      -- Shared reset, box-sizing only (NOT theme)
+  favicon.ico                      -- Shared favicon
+
+  api/                             -- API Route Handlers (shared, not in route group)
+    gallery/
+      likes/
+        route.ts                   -- POST /api/gallery/likes
+      comments/
+        route.ts                   -- POST/GET /api/gallery/comments
+
+lib/
+  supabase/
+    client.ts                      -- Browser Supabase client (for Client Components)
+    server.ts                      -- Server Supabase client (for Server Components/Route Handlers)
+  gallery.ts                       -- Gallery data fetching functions
+
+types/
+  gallery.ts                       -- Photo, Comment, Like types
+
+components/
+  gallery/                         -- Gallery-specific components (NOT shared with main site)
+    GalleryGrid.tsx                -- Masonry grid layout
+    PhotoCard.tsx                  -- Individual photo card with like button
+    PhotoLightbox.tsx              -- Full-screen photo view with comments
+    CommentSection.tsx             -- Anonymous comment list + form
+    LikeButton.tsx                 -- Heart/like toggle with optimistic UI
+    GalleryHeader.tsx              -- Minimal gallery header (event name, date)
 ```
 
-## Component Boundaries
+### What Moves, What Stays, What Is New
 
-### Layer 1: Server Foundation (Next.js App Router)
+| File | Action | Notes |
+|------|--------|-------|
+| `app/layout.tsx` | **MOVE** to `app/(main)/layout.tsx` | Identical content, just relocated |
+| `app/page.tsx` | **MOVE** to `app/(main)/page.tsx` | Identical content |
+| `app/not-found.tsx` | **MOVE** to `app/(main)/not-found.tsx` | Identical content |
+| `app/work/` | **MOVE** to `app/(main)/work/` | Identical content |
+| `app/services/` | **MOVE** to `app/(main)/services/` | Identical content |
+| `app/book/` | **MOVE** to `app/(main)/book/` | Identical content |
+| `app/sitemap.ts` | **MOVE** to `app/(main)/sitemap.ts` | Identical content |
+| `app/robots.ts` | **MOVE** to `app/(main)/robots.ts` | Identical content |
+| `app/globals.css` | **MODIFY** | Extract theme tokens into layout-specific CSS; keep only shared resets |
+| `components/Navigation.tsx` | **NO CHANGE** | Used only by `(main)` layout |
+| `components/Footer.tsx` | **NO CHANGE** | Used only by `(main)` layout |
+| `components/LenisProvider.tsx` | **NO CHANGE** | Used only by `(main)` layout |
+| `components/PageTransition.tsx` | **NO CHANGE** | Used only by `(main)` layout |
+| `hooks/useReducedMotion.ts` | **NO CHANGE** | Reusable by gallery if needed |
+| `hooks/useScrollReveal.ts` | **NO CHANGE** | Reusable by gallery if needed |
+| `lib/fonts.ts` | **NO CHANGE** | Gallery can import its own fonts or reuse |
+| `next.config.ts` | **MODIFY** | Add Supabase image domain |
+| `app/(gallery)/` | **NEW** | Entire gallery route group |
+| `lib/supabase/` | **NEW** | Supabase client utilities |
+| `lib/gallery.ts` | **NEW** | Gallery data functions |
+| `types/gallery.ts` | **NEW** | Gallery TypeScript types |
+| `components/gallery/` | **NEW** | All gallery components |
+| `app/api/gallery/` | **NEW** | API route handlers |
 
-| Component | Responsibility | Renders | Communicates With |
-|-----------|---------------|---------|-------------------|
-| `app/layout.tsx` | Root layout, global providers, fonts | Server | All pages, metadata API |
-| `app/page.tsx` | Home page structure | Server | Client islands (ScrollController, VideoHero) |
-| `app/portfolio/page.tsx` | Portfolio grid structure | Server | Client islands (FilterBar, GridAnimator) |
-| `app/services/page.tsx` | Services + Calendly embed | Server | Client island (CalendlyEmbed) |
-| `components/Header.tsx` | Navigation shell | Server | Client island (MobileMenu) |
-| `components/Footer.tsx` | Footer content | Server | None (static) |
+**Important:** The file moves are mechanical renames. All import paths using `@/` aliases continue to work because the `@/` alias resolves to the project root, not `app/`. No import changes needed in component files.
 
-**Why Server Components:**
-- Zero client JS for static content
-- SEO-friendly (full HTML on first render)
-- Fast initial load (no hydration for these)
-- Direct access to hardcoded content (no API layer needed)
+---
 
-### Layer 2: Client Islands (Strategic Interactivity)
+## CSS Theme Architecture
 
-| Component | Responsibility | Client JS | Dependencies |
-|-----------|---------------|-----------|--------------|
-| `components/ScrollController.tsx` | Smooth scroll + sync GSAP | ~15KB | Lenis, GSAP |
-| `components/AnimationEngine.tsx` | GSAP context provider | ~8KB | GSAP, ScrollTrigger |
-| `components/VideoHero.tsx` | Video player with controls | ~12KB | Intersection Observer |
-| `components/InteractiveMenu.tsx` | Mobile menu + transitions | ~6KB | Framer Motion (optional) |
-| `components/FilterBar.tsx` | Portfolio category filter | ~4KB | React state |
-| `components/GridAnimator.tsx` | Portfolio grid reveal | ~10KB | GSAP, Intersection Observer |
-| `components/CalendlyEmbed.tsx` | Calendly integration | External | Calendly widget |
+### The Problem
 
-**Why Client Components:**
-- Need React hooks (useState, useEffect, useRef)
-- Browser APIs (window, document, Intersection Observer)
-- Event handlers (onClick, onScroll)
-- Third-party libraries requiring DOM access
+The main site uses oklch dark theme tokens defined in `app/globals.css` via Tailwind's `@theme` directive. The gallery needs an entirely different warm/cute palette. These cannot coexist in a single CSS theme declaration.
 
-**Client-Server Boundary Pattern:**
-```tsx
-// app/page.tsx (Server Component)
-export default function HomePage() {
-  return (
-    <main>
-      <Header /> {/* Server */}
-      <VideoHero /> {/* Client - needs video controls */}
-      <section>
-        <h2>About Shrike</h2> {/* Server */}
-        <p>Static content...</p> {/* Server */}
-      </section>
-      <ScrollReveal> {/* Client - needs Intersection Observer */}
-        <PortfolioPreview /> {/* Server - just markup */}
-      </ScrollReveal>
-    </main>
+### The Solution: Split CSS
+
+**`app/globals.css`** -- Shared minimal reset only:
+```css
+@import "tailwindcss";
+
+/* Shared reset -- NO theme tokens here */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Reduced motion global -- shared accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+```
+
+**`app/(main)/main.css`** -- Dark cinematic theme (everything currently in globals.css minus the shared reset):
+```css
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-background: oklch(0.1 0.01 240);
+  --color-surface: oklch(0.15 0.01 240);
+  /* ... all existing dark theme tokens ... */
+}
+
+/* All existing Lenis, nav-link, btn-hover, skip-to-content styles */
+```
+
+**`app/(gallery)/gallery/gallery.css`** -- Warm gallery theme:
+```css
+@theme {
+  --color-background: oklch(0.98 0.01 80);     /* Warm cream */
+  --color-surface: oklch(0.95 0.02 60);         /* Soft warm white */
+  --color-surface-elevated: oklch(1.0 0 0);     /* Pure white cards */
+  --color-foreground: oklch(0.2 0.02 40);       /* Warm dark brown */
+  --color-muted: oklch(0.5 0.03 50);            /* Muted warm */
+  --color-accent: oklch(0.65 0.2 25);           /* Warm pink/coral */
+  --color-accent-hover: oklch(0.7 0.22 25);
+  --color-border: oklch(0.88 0.02 60);          /* Soft border */
+  --color-border-subtle: oklch(0.92 0.01 60);
+}
+```
+
+Each root layout imports only its own CSS. Clean separation, no conditional logic, no CSS specificity wars.
+
+### Consideration: Tailwind v4 and Multiple @theme Blocks
+
+Tailwind v4 uses `@theme` to define design tokens. Having two separate CSS files with different `@theme` blocks works correctly because each root layout imports its own CSS file. The page's CSS bundle only includes the relevant theme. This is well-supported -- Tailwind v4 scopes `@theme` to the CSS file graph that imports it.
+
+**Confidence: HIGH** -- This is how Tailwind v4 is designed to work with multiple themes.
+
+---
+
+## Supabase Integration Architecture
+
+### Client Setup: Simple Is Correct Here
+
+Since this gallery has NO user authentication (all interactions are anonymous), the full `@supabase/ssr` cookie-based auth setup is unnecessary overhead. The SSR package exists to coordinate auth tokens across server/client boundaries via cookies. With no auth, there are no tokens to coordinate.
+
+**Recommended approach:** Use `@supabase/supabase-js` directly with the anon/publishable key.
+
+```
+lib/supabase/
+  server.ts   -- createClient() for Server Components and Route Handlers
+  client.ts   -- createClient() for Client Components (browser)
+```
+
+**Server client** (`lib/supabase/server.ts`):
+```typescript
+import { createClient } from '@supabase/supabase-js'
+
+export function createServerSupabaseClient() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
   )
 }
 ```
 
-### Layer 3: Animation Architecture
+**Browser client** (`lib/supabase/client.ts`):
+```typescript
+import { createClient } from '@supabase/supabase-js'
 
-**GSAP + Lenis Integration Pattern:**
+let client: ReturnType<typeof createClient> | null = null
 
-```
-┌─────────────────────────────────────────────────────┐
-│           ScrollController (Client Component)        │
-│  - Initializes Lenis smooth scroll                  │
-│  - Syncs with GSAP ticker                           │
-│  - Provides scroll context to children              │
-└──────────────────────┬──────────────────────────────┘
-                       │
-                       v
-        ┌──────────────────────────────┐
-        │   GSAP ScrollTrigger Sync    │
-        │   lenis.on('scroll',         │
-        │     ScrollTrigger.update)    │
-        └──────────────┬───────────────┘
-                       │
-        ┌──────────────┴───────────────┐
-        │                              │
-        v                              v
-┌───────────────────┐      ┌──────────────────────┐
-│ Section Animators │      │  Element Animators   │
-│                   │      │                      │
-│ - Hero parallax   │      │ - Text reveals       │
-│ - Section reveals │      │ - Image fades        │
-│ - Pinned sections │      │ - Micro-interactions │
-└───────────────────┘      └──────────────────────┘
-```
-
-**Architectural Benefits:**
-1. **Single scroll source:** Lenis provides smooth, normalized scroll
-2. **GPU acceleration:** GSAP uses transforms (not top/left)
-3. **RequestAnimationFrame sync:** Via GSAP ticker
-4. **Modular triggers:** Each section owns its animations
-5. **No layout thrashing:** Batch reads/writes through GSAP
-
-**Implementation Pattern:**
-```tsx
-// components/ScrollController.tsx (Client Component)
-'use client'
-
-import Lenis from '@studio-freight/lenis'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-
-export function ScrollController({ children }) {
-  useEffect(() => {
-    // 1. Initialize Lenis
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-    })
-
-    // 2. Sync Lenis with ScrollTrigger
-    lenis.on('scroll', ScrollTrigger.update)
-
-    // 3. Add to GSAP ticker
-    gsap.ticker.add((time) => {
-      lenis.raf(time * 1000)
-    })
-
-    // 4. Disable lag smoothing
-    gsap.ticker.lagSmoothing(0)
-
-    return () => {
-      lenis.destroy()
-      gsap.ticker.remove(lenis.raf)
-    }
-  }, [])
-
-  return <>{children}</>
+export function createBrowserSupabaseClient() {
+  if (!client) {
+    client = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
+    )
+  }
+  return client
 }
 ```
 
-### Layer 4: Media Optimization Architecture
+**Why this is safe:** The `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (anon key) is designed to be exposed to the browser. All security comes from Supabase RLS policies on the database, not from hiding the key. The anon key provides the `anon` Postgres role, which RLS policies control.
 
-**Video Strategy:**
+**Counter-argument addressed:** "But what about `@supabase/ssr`?" -- The SSR package adds cookie management for auth token persistence across requests. Without auth, it adds complexity for zero benefit. If auth is ever added later, the migration is straightforward: install `@supabase/ssr`, replace the client creation functions, add middleware. But don't add it preemptively.
 
-```
-Video Hero (autoplay, loop, muted)
-    │
-    ├──> Source Selection
-    │    - Desktop: 1080p MP4/WebM
-    │    - Mobile: 720p MP4
-    │    - Fallback: Poster image
-    │
-    ├──> Lazy Loading Strategy
-    │    - Above fold: Preload
-    │    - Below fold: Intersection Observer
-    │    - preload="metadata" for instant play
-    │
-    ├──> Format Optimization
-    │    - Primary: WebM (web-optimized)
-    │    - Fallback: MP4 (universal)
-    │    - Codec: H.264/VP9
-    │    - Compression: FFmpeg (bitrate control)
-    │
-    └──> CDN Delivery
-         - Vercel Blob / Cloudinary
-         - Adaptive streaming (optional)
-         - Edge caching
+**Confidence: HIGH** -- Verified against Supabase documentation and GitHub discussions. Direct `createClient` is explicitly supported for server-only and auth-free use cases.
+
+### Environment Variables
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://[project-id].supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=eyJ...  # anon/publishable key
+SUPABASE_SERVICE_ROLE_KEY=eyJ...             # NEVER exposed to client, for admin operations only
 ```
 
-**Image Strategy:**
+The service role key is only used if you need admin operations (e.g., bulk upload script). It should NEVER be in `NEXT_PUBLIC_*` variables.
 
-```tsx
-// Use next/image for automatic optimization
-<Image
-  src="/portfolio/project-1.jpg"
-  width={1200}
-  height={800}
-  quality={85}
-  priority={isAboveFold} // LCP optimization
-  placeholder="blur"
-  blurDataURL={blurDataUrl}
-/>
-```
+### next.config.ts Update
 
-**Loading Priority:**
-1. **Critical (preload):** Hero video, above-fold images
-2. **High (eager):** First portfolio items
-3. **Low (lazy):** Below-fold content via Intersection Observer
-4. **Deferred:** Non-visible sections until scroll proximity
-
-## Architecture Patterns to Follow
-
-### Pattern 1: Server-First Component Design
-
-**What:** Default to Server Components, opt into Client Components only when needed
-
-**When:** All new components should start as Server Components
-
-**Why:**
-- Smaller client bundle (better performance)
-- Automatic code splitting
-- Better SEO (full HTML on first render)
-- Simpler data flow (no prop drilling for static content)
-
-**Example:**
-```tsx
-// GOOD: Server Component with Client island
-// app/portfolio/page.tsx
-export default function PortfolioPage() {
-  const projects = getProjects() // Can be sync, runs on server
-
-  return (
-    <main>
-      <h1>Portfolio</h1> {/* Server */}
-      <FilterBar /> {/* Client - needs state */}
-      <ProjectGrid projects={projects}> {/* Server */}
-        {projects.map(project => (
-          <ProjectCard key={project.id} {...project} /> {/* Server */}
-        ))}
-      </ProjectGrid>
-    </main>
-  )
-}
-
-// BAD: Unnecessary Client Component
-'use client' // ❌ Entire page is client-side
-export default function PortfolioPage() {
-  // Now everything needs hydration
-}
-```
-
-### Pattern 2: GSAP Context Isolation
-
-**What:** Each animated section owns its GSAP context
-
-**When:** Creating scroll-triggered animations
-
-**Why:**
-- Automatic cleanup on unmount
-- Scoped selectors (no global conflicts)
-- Better performance (isolated timelines)
-- Easier debugging
-
-**Example:**
-```tsx
-'use client'
-import { useGSAP } from '@gsap/react'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-
-export function HeroSection() {
-  const containerRef = useRef(null)
-
-  useGSAP(() => {
-    // Animations scoped to this section
-    gsap.from('.hero-title', {
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: 'top center',
-        end: 'bottom top',
-        scrub: true,
+```typescript
+const nextConfig: NextConfig = {
+  images: {
+    formats: ["image/avif", "image/webp"],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '*.supabase.co',
+        pathname: '/storage/v1/object/public/**',
       },
-      y: 100,
-      opacity: 0,
-    })
-  }, { scope: containerRef }) // ← Cleanup on unmount
-
-  return <section ref={containerRef}>...</section>
-}
+    ],
+  },
+};
 ```
 
-### Pattern 3: Intersection Observer for Lazy Loading
+This allows `next/image` to optimize Supabase Storage images.
 
-**What:** Load media only when entering viewport
+---
 
-**When:** Below-fold videos, images, heavy components
+## Data Model
 
-**Why:**
-- Faster initial load
-- Reduced bandwidth
-- Better Core Web Vitals (LCP, CLS)
+### Database Schema (Supabase PostgreSQL)
 
-**Example:**
-```tsx
-'use client'
-import { useInView } from 'react-intersection-observer'
+```sql
+-- Photos table: metadata for images stored in Supabase Storage
+create table photos (
+  id uuid primary key default gen_random_uuid(),
+  storage_path text not null,              -- Path in Supabase Storage bucket
+  caption text,
+  event_name text not null,                -- Event this photo belongs to
+  width integer not null,                  -- Original image width
+  height integer not null,                 -- Original image height (needed for masonry)
+  blurhash text,                           -- Blur placeholder hash
+  sort_order integer default 0,            -- Manual ordering
+  like_count integer default 0,            -- Denormalized count (updated by trigger/RPC)
+  created_at timestamptz default now()
+);
 
-export function LazyVideo({ src, poster }) {
-  const { ref, inView } = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  })
+-- Likes table: anonymous likes tracked by visitor cookie
+create table likes (
+  id uuid primary key default gen_random_uuid(),
+  photo_id uuid references photos(id) on delete cascade,
+  visitor_id text not null,                -- Cookie-based visitor ID
+  created_at timestamptz default now(),
+  unique(photo_id, visitor_id)             -- One like per visitor per photo
+);
 
-  return (
-    <div ref={ref}>
-      {inView ? (
-        <video src={src} poster={poster} autoPlay muted loop />
-      ) : (
-        <img src={poster} alt="Video placeholder" />
-      )}
-    </div>
-  )
-}
+-- Comments table: anonymous comments
+create table comments (
+  id uuid primary key default gen_random_uuid(),
+  photo_id uuid references photos(id) on delete cascade,
+  display_name text not null default 'Guest',
+  body text not null,
+  visitor_id text not null,                -- Cookie-based visitor ID
+  created_at timestamptz default now()
+);
 ```
 
-### Pattern 4: Animation State Machine
+**Design decision: Denormalized `like_count` on `photos` table** rather than computing via JOIN. With 200-1500 photos each potentially having many likes, a JOIN-based count on every page load is wasteful. A Postgres function increments/decrements the count atomically.
 
-**What:** Centralize animation states for complex interactions
+```sql
+-- Function to increment like count
+create or replace function increment_like_count(p_photo_id uuid)
+returns void as $$
+  update photos set like_count = like_count + 1 where id = p_photo_id;
+$$ language sql;
 
-**When:** Menu transitions, page transitions, multi-step animations
+-- Function to decrement like count
+create or replace function decrement_like_count(p_photo_id uuid)
+returns void as $$
+  update photos set like_count = greatest(like_count - 1, 0) where id = p_photo_id;
+$$ language sql;
+```
 
-**Why:**
-- Predictable state transitions
-- Prevents animation conflicts
-- Easier to debug
-- Better accessibility (reduced motion support)
+### RLS Policies
 
-**Example:**
-```tsx
-'use client'
-import { useReducer } from 'react'
-import { gsap } from 'gsap'
+```sql
+-- Photos: Anyone can read, nobody can modify via API (admin uses service role key)
+alter table photos enable row level security;
+create policy "Photos are publicly readable" on photos for select using (true);
 
-type AnimState = 'idle' | 'opening' | 'open' | 'closing'
+-- Likes: Anyone can read and insert, delete own likes only
+alter table likes enable row level security;
+create policy "Likes are publicly readable" on likes for select using (true);
+create policy "Anyone can insert a like" on likes for insert with check (true);
 
-export function InteractiveMenu() {
-  const [state, dispatch] = useReducer(animReducer, 'idle')
+-- Comments: Anyone can read and insert
+alter table comments enable row level security;
+create policy "Comments are publicly readable" on comments for select using (true);
+create policy "Anyone can insert a comment" on comments for insert with check (true);
+```
 
-  const open = () => {
-    if (state !== 'idle') return
-    dispatch({ type: 'OPEN_START' })
-    gsap.to('.menu', {
-      x: 0,
-      onComplete: () => dispatch({ type: 'OPEN_COMPLETE' })
-    })
+**Note on anonymous identity:** Without authentication, RLS policies for write operations are necessarily permissive. The real access control happens at the API Route Handler level (rate limiting, input validation, spam prevention). RLS provides a safety net, not the primary defense.
+
+### Supabase Storage Setup
+
+- **Bucket name:** `gallery-photos`
+- **Bucket type:** Public (direct URL access without auth tokens)
+- **URL pattern:** `https://[project-id].supabase.co/storage/v1/object/public/gallery-photos/[path]`
+- **Folder structure in bucket:** `events/[event-name]/[filename].jpg`
+
+Public bucket is correct because:
+1. All photos are meant to be publicly viewable
+2. No auth token needed in image URLs means simpler `<img>` / `next/image` usage
+3. Better CDN caching (no auth headers to vary on)
+4. RLS still controls upload/delete operations
+
+### Storage Limits Reality Check (Free Tier)
+
+| Limit | Free Tier | Implication |
+|-------|-----------|-------------|
+| Total storage | 1 GB | ~200-500 photos at 2-5 MB each; resize before upload |
+| Max file size | 50 MB | Fine for photos |
+| Egress | 2 GB/month | ~400-1000 full-size photo loads; serve thumbnails aggressively |
+| Database | 500 MB | More than enough for metadata |
+| Auto-pause | 7 days inactivity | **PROBLEM for production** -- Pro plan ($25/mo) needed |
+| Image transforms | Pro plan only | Cannot use Supabase's server-side resize on free tier |
+
+**Recommendation:** Start on free tier for development, but plan for Pro ($25/month) before sharing the gallery link publicly. The auto-pause behavior on free tier will cause 30+ second cold starts for the first visitor after inactivity.
+
+**Image sizing strategy for free tier:** Since Supabase image transformations require Pro plan, resize images BEFORE uploading. Store two variants per photo in the bucket: a thumbnail (~400px wide, ~50KB) and a full-size (~1600px wide, ~200KB). This is simpler than on-the-fly transforms anyway.
+
+---
+
+## Component Architecture
+
+### Server vs. Client Component Boundaries
+
+```
+Gallery Page (SERVER COMPONENT)
+  -- Fetches photo list from Supabase at request time
+  -- Passes data as props to client components
+  |
+  +-- GalleryHeader (SERVER COMPONENT)
+  |     -- Event name, date, photo count
+  |     -- Pure display, no interactivity
+  |
+  +-- GalleryGrid (CLIENT COMPONENT -- 'use client')
+        -- Masonry layout needs window width for responsive columns
+        -- Scroll-based lazy loading / infinite scroll
+        |
+        +-- PhotoCard (CLIENT COMPONENT)
+        |     -- Image display with blur placeholder
+        |     -- Click to open lightbox
+        |     -- Inline LikeButton
+        |     |
+        |     +-- LikeButton (CLIENT COMPONENT)
+        |           -- Heart icon with count
+        |           -- Optimistic toggle
+        |           -- Calls POST /api/gallery/likes
+        |
+        +-- PhotoLightbox (CLIENT COMPONENT)
+              -- Native <dialog> (reuse pattern from existing ProjectLightbox)
+              -- Full-size image
+              -- Like button + count
+              -- CommentSection
+              |
+              +-- CommentSection (CLIENT COMPONENT)
+                    -- Comment list (loaded from props or fetched)
+                    -- Comment form (anonymous: display name + body)
+                    -- Calls POST /api/gallery/comments
+```
+
+**Key principle:** The page-level Server Component does the Supabase query. All interactivity below is Client Components receiving data via props. This avoids Client Components needing to make their own initial fetch, reducing waterfall requests.
+
+### New Components (Complete List)
+
+| Component | Type | Responsibility | Props |
+|-----------|------|---------------|-------|
+| `GalleryHeader` | Server | Event name, date, photo count | `eventName`, `photoCount` |
+| `GalleryGrid` | Client | CSS columns masonry, infinite scroll, lightbox state | `initialPhotos`, `totalCount` |
+| `PhotoCard` | Client | Image + like count overlay, click handler | `photo`, `isLiked`, `onSelect` |
+| `LikeButton` | Client | Heart toggle, optimistic state, API call | `photoId`, `likeCount`, `isLiked` |
+| `PhotoLightbox` | Client | `<dialog>` modal, full-size image, comments | `photo`, `onClose` |
+| `CommentSection` | Client | Comment list, form, submission | `photoId`, `initialComments` |
+
+### Why Not Use Server Actions for Likes/Comments?
+
+Server Actions (the `"use server"` directive) might seem natural for mutations. However, for anonymous interactions, API Route Handlers are better because:
+
+1. **Rate limiting:** Route Handlers give you access to `Request` headers (IP address) for rate limiting. Server Actions abstract this away.
+2. **Explicit HTTP semantics:** POST /api/gallery/likes is a clear, debuggable API surface. Server Actions are invoked via opaque POST requests to the page URL.
+3. **CORS control:** If the gallery is ever embedded or accessed cross-origin, Route Handlers support CORS headers.
+4. **Simplicity:** For an early-stage startup, an explicit REST-ish API is easier to reason about and debug than Server Action internals.
+
+**Counter-argument:** Server Actions reduce boilerplate (no route file, no fetch call). True, but the debugging tradeoff isn't worth it for stateful mutations with rate limiting needs. For reads, Server Components are superior. For writes, Route Handlers are clearer.
+
+### API Route Handlers
+
+**`app/api/gallery/likes/route.ts`**
+
+```
+POST /api/gallery/likes
+Body: { photoId: string, visitorId: string }
+Response: { liked: boolean, likeCount: number }
+Logic:
+  1. Validate input (photoId is UUID, visitorId is string 10-100 chars)
+  2. Rate limit by IP (max 60 like toggles per minute)
+  3. Check if like exists for this visitorId + photoId
+  4. If exists: DELETE like, decrement count via RPC
+  5. If not: INSERT like, increment count via RPC
+  6. Return new state
+```
+
+**`app/api/gallery/comments/route.ts`**
+
+```
+GET /api/gallery/comments?photoId=xxx
+Response: { comments: Comment[] }
+Logic:
+  1. Validate photoId
+  2. Query comments ordered by created_at desc
+  3. Return array
+
+POST /api/gallery/comments
+Body: { photoId: string, displayName: string, body: string, visitorId: string }
+Response: { comment: Comment }
+Logic:
+  1. Validate input (displayName max 50 chars, body max 500 chars)
+  2. Rate limit by IP (max 10 comments per minute)
+  3. Sanitize text (strip HTML tags, trim whitespace)
+  4. INSERT comment
+  5. Return created comment
+```
+
+### Rate Limiting Approach
+
+Use an in-memory Map for rate limiting. This is appropriate because:
+- Single Vercel serverless function (shared memory within instance)
+- Scale is small (event gallery, not Twitter)
+- No external dependency needed (no Redis/Upstash)
+- Acceptable if limits reset on cold start
+
+```typescript
+// lib/rate-limit.ts
+const rateMap = new Map<string, { count: number; resetAt: number }>();
+
+export function rateLimit(ip: string, limit: number, windowMs: number): boolean {
+  const now = Date.now();
+  const record = rateMap.get(ip);
+
+  if (!record || now > record.resetAt) {
+    rateMap.set(ip, { count: 1, resetAt: now + windowMs });
+    return true; // allowed
   }
 
-  // State machine prevents conflicting animations
+  if (record.count >= limit) return false; // blocked
+
+  record.count++;
+  return true; // allowed
 }
 ```
 
-### Pattern 5: Progressive Enhancement
+**Caveat:** In-memory rate limiting resets when the serverless function cold-starts. For this use case (preventing casual abuse on a photo gallery), this is acceptable. If more robust rate limiting is needed, upgrade to Upstash Redis ($0/month on free tier).
 
-**What:** Core functionality works without JS, animations enhance
+### Anonymous Identity (Visitor ID)
 
-**When:** Navigation, forms, content display
+Without user accounts, you need a way to:
+- Track "has this person liked this photo?" (for UI state)
+- Prevent unlimited likes from the same person
 
-**Why:**
-- Accessibility
-- Resilience (JS fails gracefully)
-- Better SEO
-- Faster perceived performance
+**Recommended approach: Cookie-based visitor ID**
 
-**Example:**
-```tsx
-// Server Component: Works without JS
-export function Navigation() {
-  return (
-    <nav>
-      <a href="/">Home</a>
-      <a href="/portfolio">Portfolio</a>
-      <a href="/services">Services</a>
-    </nav>
-  )
-}
+```typescript
+// lib/visitor.ts
+export function getOrCreateVisitorId(): string {
+  const cookieName = 'gallery_visitor';
+  const existing = document.cookie
+    .split('; ')
+    .find(c => c.startsWith(cookieName + '='));
 
-// Client Component: Enhances with transitions
-'use client'
-export function AnimatedNavigation() {
-  return (
-    <Navigation /> {/* Wrapped in animation context */}
-  )
+  if (existing) return existing.split('=')[1];
+
+  const id = crypto.randomUUID();
+  document.cookie = `${cookieName}=${id}; path=/gallery; max-age=${60 * 60 * 24 * 365}; SameSite=Lax`;
+  return id;
 }
 ```
+
+**Why not browser fingerprinting libraries (FingerprintJS, etc.)?**
+- Adds a heavyweight dependency for a simple use case
+- Privacy concerns and legal implications (GDPR)
+- A cookie is sufficient: if someone clears cookies and re-likes, that is acceptable behavior for a casual event gallery
+
+**Why not localStorage?**
+- Doesn't travel with HTTP requests to Route Handlers naturally
+- Cookie is already the minimal correct primitive
+
+---
+
+## Masonry Grid Implementation
+
+### Approach: CSS `columns` Property
+
+For a Pinterest-style layout with varying image heights, the simplest high-performance approach is CSS `columns`. No JavaScript layout calculation needed.
+
+```css
+.masonry-grid {
+  columns: 1;
+  column-gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .masonry-grid {
+    columns: 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .masonry-grid {
+    columns: 3;
+  }
+}
+
+.masonry-grid > * {
+  break-inside: avoid;
+  margin-bottom: 12px;
+}
+```
+
+**Trade-off acknowledged:** CSS `columns` fills top-to-bottom, left-to-right. This means item order reads down columns, not across rows. For a photo gallery where chronological order is less important than visual layout, this is acceptable. If strict left-to-right reading order matters, a JS-based masonry solution would be needed.
+
+**Why not CSS Grid `masonry` value?**
+- As of February 2026, CSS `grid-template-rows: masonry` is only supported in Firefox behind a flag. Chrome and Safari do not support it. It is not production-ready.
+- **Confidence: MEDIUM** -- Browser support may have improved; verify before implementation.
+
+**Why not a JS masonry library?**
+- Libraries like `react-masonry-css` or `masonry-layout` add dependencies for something CSS handles natively
+- JS layout calculation causes layout shift and performance issues on large photo sets
+- CSS `columns` performs well for 200-1500 photos with lazy loading
+
+### Image Loading Strategy
+
+```
+1. Server Component fetches photo metadata (id, storage_path, width, height, caption, like_count)
+2. Photos rendered with aspect-ratio set from width/height (prevents CLS)
+3. CSS gradient placeholder or blurhash shown immediately
+4. Images lazy-loaded via loading="lazy" on next/image
+5. next/image handles format optimization (avif/webp) via Supabase remote pattern
+6. Thumbnail variant loaded in grid; full-size variant loaded in lightbox
+```
+
+**Pagination:** For 200-1500 photos, load the first ~50, then load more on scroll (infinite scroll). Full page load of 1500 photos would create a massive initial DOM. Use cursor-based pagination via Supabase `.range()`.
+
+---
+
+## Data Flow: End to End
+
+### Initial Page Load
+
+```
+Browser requests /gallery
+    |
+    v
+Next.js Server Component (gallery/page.tsx)
+    |
+    +-- createServerSupabaseClient()
+    +-- supabase.from('photos').select('*').order('sort_order').range(0, 49)
+    +-- Returns photo metadata (NOT image bytes)
+    |
+    v
+HTML streamed to browser with photo metadata embedded as props
+    |
+    v
+GalleryGrid (Client Component) hydrates
+    |
+    +-- Renders PhotoCard for each photo
+    +-- PhotoCard renders next/image with Supabase Storage public URL
+    +-- Browser fetches images directly from Supabase CDN
+    +-- IntersectionObserver triggers more photos as user scrolls (fetch next batch)
+```
+
+### Like Interaction
+
+```
+User taps heart on PhotoCard
+    |
+    v
+LikeButton (Client Component)
+    |
+    +-- Optimistic UI: immediately toggle heart, increment/decrement count
+    +-- POST /api/gallery/likes { photoId, visitorId: getVisitorId() }
+    |
+    v
+Route Handler (api/gallery/likes/route.ts)
+    |
+    +-- Rate limit check (IP-based)
+    +-- createServerSupabaseClient()
+    +-- Check existing like: supabase.from('likes').select().match({...})
+    +-- Toggle: INSERT or DELETE
+    +-- Update photo.like_count via Supabase RPC
+    +-- Return { liked: boolean, likeCount: number }
+    |
+    v
+LikeButton receives response
+    +-- If optimistic state matches server: done
+    +-- If mismatch (race condition, rate limit): revert to server state
+```
+
+### Comment Submission
+
+```
+User types comment in PhotoLightbox
+    |
+    v
+CommentSection (Client Component)
+    |
+    +-- Validate: displayName (1-50 chars), body (1-500 chars)
+    +-- Optimistic UI: append comment to list immediately
+    +-- POST /api/gallery/comments { photoId, displayName, body, visitorId }
+    |
+    v
+Route Handler (api/gallery/comments/route.ts)
+    |
+    +-- Rate limit check (IP-based)
+    +-- Input sanitization (strip HTML, trim whitespace)
+    +-- createServerSupabaseClient()
+    +-- INSERT comment
+    +-- Return created comment with server-assigned id and created_at
+    |
+    v
+CommentSection receives response
+    +-- Replace optimistic comment with server version (has real ID, timestamp)
+    +-- On error: remove optimistic comment, show error message
+```
+
+---
+
+## What Can Be Reused from Existing Codebase
+
+| Existing Asset | Reusable? | How |
+|----------------|-----------|-----|
+| `ProjectLightbox.tsx` pattern | **YES** -- pattern, not code | Same `<dialog>` + showModal/close pattern, different styling |
+| `useReducedMotion.ts` | **YES** -- direct import | Accessibility hook works anywhere |
+| `useScrollReveal.ts` | **YES** -- direct import | Could use for photo card entrance animations |
+| `PortfolioGrid.tsx` pattern | **PARTIALLY** | URL-based filtering pattern reusable if gallery has categories |
+| Navigation.tsx | **NO** | Gallery has its own header |
+| Footer.tsx | **NO** | Gallery has its own footer (or none) |
+| LenisProvider.tsx | **NO** | Smooth scroll not appropriate for infinite-scroll gallery |
+| PageTransition.tsx | **NO** | Different route group, different transitions (or none) |
+| Dark theme CSS | **NO** | Gallery uses warm theme |
+| `lib/fonts.ts` | **MAYBE** | Gallery may want a different display font for the warm aesthetic |
+
+---
+
+## Suggested Build Order
+
+Based on dependency analysis:
+
+### Phase 1: Foundation
+1. Supabase project setup + environment variables
+2. Route group restructure (`(main)` and `(gallery)`)
+3. CSS split (globals.css -> main.css + gallery.css)
+4. Supabase client utilities (`lib/supabase/server.ts`, `lib/supabase/client.ts`)
+5. `next.config.ts` update for Supabase image domain
+6. **Verify:** Main site still works identically after restructure
+
+### Phase 2: Gallery Display (Read-Only)
+1. Database schema (photos table)
+2. Seed data: upload test photos to Supabase Storage
+3. TypeScript types (`types/gallery.ts`)
+4. Data fetching functions (`lib/gallery.ts`)
+5. Gallery layout (`(gallery)/gallery/layout.tsx`) with warm theme
+6. Gallery page Server Component (fetch + render)
+7. GalleryGrid with CSS columns masonry
+8. PhotoCard with lazy loading and aspect ratio
+9. PhotoLightbox (dialog-based full-size view)
+10. **Verify:** Gallery renders with real photos, main site unaffected
+
+### Phase 3: Social Features (Write Operations)
+1. Likes table + RLS policies
+2. Comments table + RLS policies
+3. Visitor ID cookie utility
+4. Rate limiting utility
+5. API Route Handler: likes (with rate limiting)
+6. API Route Handler: comments (with rate limiting + validation)
+7. LikeButton component with optimistic UI
+8. CommentSection component
+9. **Verify:** Can like, unlike, comment; rate limiting works
+
+### Phase 4: Polish
+1. Infinite scroll / cursor-based pagination
+2. Blur placeholders (CSS gradient or blurhash)
+3. Mobile-first responsive refinement
+4. Loading states and error boundaries
+5. Photo upload admin tooling (script or simple form)
+6. **Verify:** Performance acceptable, mobile experience smooth
+
+---
 
 ## Anti-Patterns to Avoid
 
-### Anti-Pattern 1: Client-First Thinking
+### Anti-Pattern 1: Fetching Supabase Data in Client Components
+**What:** Using `useEffect` + Supabase client to fetch photos on mount
+**Why bad:** Waterfall request (HTML loads -> JS hydrates -> fetch starts -> data arrives), no SSR benefit, layout shift
+**Instead:** Fetch in Server Component, pass as props. The initial photo batch should be in the HTML response.
 
-**What:** Making everything a Client Component by default
+### Anti-Pattern 2: Storing Image Bytes in the Database
+**What:** Storing actual image data in PostgreSQL BYTEA columns
+**Why bad:** Slow queries, massive database size, no CDN benefit
+**Instead:** Store in Supabase Storage (S3-backed), store only the `storage_path` in the database.
 
-**Why bad:**
-- Bloated client bundle
-- Slower initial load
-- Worse SEO (CSR delay)
-- Unnecessary hydration cost
+### Anti-Pattern 3: Complex State Management for Likes
+**What:** Using Redux/Zustand/Context for like state across all photos
+**Why bad:** Over-engineered; like state is local to each PhotoCard
+**Instead:** Each LikeButton manages its own state. Optimistic toggle with server reconciliation. Component-local `useState` is sufficient.
 
-**Instead:** Default to Server Components, isolate Client Components to interactive boundaries
+### Anti-Pattern 4: Sharing Root Layout Between Themes
+**What:** Single root layout with conditional rendering based on pathname
+**Why bad:** Conditional `className` on `<html>`, CSS specificity wars, dark theme bleeding through
+**Instead:** Route groups with separate root layouts. Complete isolation.
 
-**Example of bad:**
-```tsx
-'use client' // ❌ Entire app is client-side
-export default function RootLayout({ children }) {
-  return <html>...</html>
-}
-```
+### Anti-Pattern 5: Real-time Subscriptions for Likes
+**What:** Using Supabase Realtime to sync like counts across all viewers
+**Why bad:** Adds WebSocket complexity, connection management, and cost for a feature nobody notices (seeing someone else's like appear in real-time on a photo gallery is not valuable)
+**Instead:** Fetch fresh data on page load. Accept that like counts may be a few seconds stale.
 
-**Example of good:**
-```tsx
-// ✅ Server Component layout
-export default function RootLayout({ children }) {
-  return (
-    <html>
-      <body>
-        <ScrollController> {/* Only this is client */}
-          {children}
-        </ScrollController>
-      </body>
-    </html>
-  )
-}
-```
+### Anti-Pattern 6: Installing @supabase/ssr Without Auth
+**What:** Setting up the full SSR cookie auth pipeline when there are no user accounts
+**Why bad:** Unnecessary middleware, cookie handlers, and complexity for zero benefit
+**Instead:** Use `@supabase/supabase-js` directly. Add SSR package only if/when auth is introduced.
 
-### Anti-Pattern 2: Scroll Event Listeners
-
-**What:** Using `window.addEventListener('scroll', ...)` directly
-
-**Why bad:**
-- Blocks main thread
-- Causes layout thrashing
-- Poor performance on low-end devices
-- Not compatible with smooth scroll libraries
-
-**Instead:** Use Intersection Observer for triggers, GSAP ScrollTrigger for animations
-
-**Example of bad:**
-```tsx
-'use client'
-useEffect(() => {
-  window.addEventListener('scroll', () => {
-    // ❌ Runs on every scroll frame
-    if (window.scrollY > 100) {
-      element.style.opacity = '1' // ❌ Forces reflow
-    }
-  })
-}, [])
-```
-
-**Example of good:**
-```tsx
-'use client'
-useGSAP(() => {
-  gsap.to('.element', {
-    scrollTrigger: {
-      trigger: '.element',
-      start: 'top center',
-      toggleActions: 'play none none reverse',
-    },
-    opacity: 1,
-  })
-})
-```
-
-### Anti-Pattern 3: Eager Media Loading
-
-**What:** Loading all videos/images on page load
-
-**Why bad:**
-- Massive initial payload
-- Slow LCP (Largest Contentful Paint)
-- Wasted bandwidth (user may not scroll)
-- Poor mobile experience
-
-**Instead:** Lazy load below-fold media with Intersection Observer
-
-### Anti-Pattern 4: Inline Styles for Animations
-
-**What:** Animating via inline styles instead of CSS/GSAP
-
-**Why bad:**
-- Forces style recalculation every frame
-- No GPU acceleration
-- Janky animations
-- Hard to maintain
-
-**Instead:** Use CSS transforms (GSAP does this automatically) for GPU-accelerated animations
-
-### Anti-Pattern 5: Global Animation Contexts
-
-**What:** Single GSAP timeline for entire page
-
-**Why bad:**
-- Memory leaks (no cleanup)
-- Conflicts between sections
-- Hard to debug
-- Breaks on route changes
-
-**Instead:** Use scoped GSAP contexts with `useGSAP` hook
+---
 
 ## Scalability Considerations
 
-| Concern | At Launch (3 pages) | At Scale (20+ projects) | At Enterprise (100+ pages) |
-|---------|-------------------|------------------------|---------------------------|
-| **Content Management** | Hardcoded JSON/TypeScript | Headless CMS (Sanity/Contentful) | Enterprise CMS + CDN |
-| **Image Storage** | `/public` folder | Cloudinary / Vercel Blob | Multi-region CDN + Image CDN |
-| **Video Delivery** | Self-hosted MP4 | Cloudinary Video / Mux | Adaptive streaming (HLS/DASH) |
-| **Animation Complexity** | GSAP + Lenis | Same (scales well) | Add virtual scrolling |
-| **Build Time** | <30s (static) | ISR for projects | ISR + On-Demand Revalidation |
-| **Deployment** | Vercel (serverless) | Vercel (Edge) | Multi-region Edge |
-| **Search/Filter** | Client-side filter | Algolia / Meilisearch | Elasticsearch + Faceting |
-| **Analytics** | Vercel Analytics | Custom events + PostHog | Full product analytics suite |
+| Concern | 200 photos | 1500 photos | 10,000+ photos |
+|---------|------------|-------------|-----------------|
+| Initial load | All at once feasible | Paginate (50/batch) | Paginate + virtual scroll |
+| DOM nodes | Manageable | Manageable with lazy load | Need virtualization |
+| Supabase queries | Single query | Cursor pagination | Add indexes, consider caching |
+| Storage egress | Well within free tier | May approach limits | Pro plan required |
+| Like count accuracy | Not an issue | Not an issue | Consider async count updates |
 
-### Migration Path (if needed later)
+For the 200-1500 photo range, pagination + lazy loading is sufficient. Virtualization (react-window, etc.) is premature optimization.
 
-**Phase 1 (Current):** Hardcoded content in TypeScript
-```tsx
-// lib/content.ts
-export const projects = [
-  { id: 1, title: 'Project A', ... },
-  // ...
-]
-```
-
-**Phase 2 (Growth):** MDX for project pages
-```tsx
-// content/projects/project-a.mdx
 ---
-title: Project A
-category: video
----
-Content here...
-```
 
-**Phase 3 (Scale):** Headless CMS
-```tsx
-// lib/sanity.ts
-export async function getProjects() {
-  return sanity.fetch('*[_type == "project"]')
+## TypeScript Types
+
+```typescript
+// types/gallery.ts
+
+export interface Photo {
+  id: string;
+  storage_path: string;
+  caption: string | null;
+  event_name: string;
+  width: number;
+  height: number;
+  blurhash: string | null;
+  sort_order: number;
+  like_count: number;
+  created_at: string;
+}
+
+export interface Comment {
+  id: string;
+  photo_id: string;
+  display_name: string;
+  body: string;
+  visitor_id: string;
+  created_at: string;
+}
+
+export interface Like {
+  id: string;
+  photo_id: string;
+  visitor_id: string;
+  created_at: string;
+}
+
+export interface LikeToggleResponse {
+  liked: boolean;
+  likeCount: number;
+}
+
+export interface CommentCreateResponse {
+  comment: Comment;
 }
 ```
 
-## Component Build Order (Dependencies)
-
-Build in this order to minimize rework:
-
-### Phase 1: Foundation (Week 1)
-1. **Next.js App Router setup** - File structure, routing
-2. **Layout components** - Header, Footer (Server Components)
-3. **Typography system** - Fonts, text styles, spacing
-4. **Color system** - Dark theme variables
-
-**Why first:** Everything else depends on these foundations
-
-### Phase 2: Core Infrastructure (Week 1-2)
-5. **ScrollController** - Lenis integration, GSAP ticker sync
-6. **AnimationEngine** - GSAP context provider
-7. **Image optimization pipeline** - next/image config, blur placeholders
-
-**Why second:** Animation and media systems needed before building pages
-
-### Phase 3: Page Shells (Week 2)
-8. **Home page structure** - Sections, layout (Server Components)
-9. **Portfolio page structure** - Grid layout (Server Component)
-10. **Services page structure** - Content + Calendly area
-
-**Why third:** Structure before interactivity
-
-### Phase 4: Interactive Components (Week 2-3)
-11. **VideoHero** - Lazy loading, autoplay, poster
-12. **FilterBar** - Portfolio category filtering
-13. **GridAnimator** - Portfolio item reveals
-14. **InteractiveMenu** - Mobile navigation
-
-**Why fourth:** Add interactivity to static shells
-
-### Phase 5: Animation Polish (Week 3)
-15. **Hero parallax** - ScrollTrigger animations
-16. **Section reveals** - Intersection Observer + GSAP
-17. **Micro-interactions** - Hover effects, button animations
-18. **Page transitions** - Route change animations (optional)
-
-**Why last:** Polish after core functionality works
-
-## Technology Decisions & Rationale
-
-| Decision | Technology | Why |
-|----------|-----------|-----|
-| **Framework** | Next.js 15 App Router | Server Components, built-in optimization, Vercel deployment |
-| **Styling** | Tailwind CSS | Utility-first, dark theme support, JIT compilation |
-| **Smooth Scroll** | Lenis | Lightweight (3KB), better than ScrollSmoother, easy GSAP sync |
-| **Animations** | GSAP + ScrollTrigger | Industry standard, GPU-accelerated, best performance |
-| **UI Animations** | GSAP (not Framer Motion) | Consistency, lighter bundle, more control |
-| **Video Optimization** | FFmpeg + CDN | Universal compatibility, adaptive quality |
-| **Image Optimization** | next/image | Automatic WebP/AVIF, lazy loading, blur placeholders |
-| **Font Loading** | next/font | Automatic optimization, zero layout shift |
-| **Deployment** | Vercel | Zero-config, Edge functions, automatic HTTPS |
-
-**Alternative considered:**
-- **Framer Motion** - Rejected: redundant with GSAP, larger bundle
-- **Locomotive Scroll** - Rejected: heavier than Lenis, harder to sync
-- **React Three Fiber** - Deferred: not needed for initial launch, adds complexity
-
-## Performance Budget
-
-To ensure fast load despite rich media:
-
-| Metric | Target | Strategy |
-|--------|--------|----------|
-| **First Contentful Paint** | <1.2s | Server Components, minimal client JS |
-| **Largest Contentful Paint** | <2.5s | Priority loading for hero, lazy load below fold |
-| **Time to Interactive** | <3.0s | Code splitting, defer non-critical JS |
-| **Cumulative Layout Shift** | <0.1 | Aspect ratio boxes, blur placeholders, font optimization |
-| **Client Bundle (initial)** | <100KB | Tree-shaking, Server Components, dynamic imports |
-| **Client Bundle (total)** | <250KB | Lazy load routes, defer analytics |
+---
 
 ## Sources
 
-**Architectural Patterns:**
-- [9 Best Animated Websites for Design Inspiration in 2026](https://www.designrush.com/best-designs/websites/trends/best-animated-websites)
-- [Next.js Architecture in 2026 — Server-First, Client-Islands](https://www.yogijs.tech/blog/nextjs-project-architecture-app-router)
-- [Next.js Getting Started: Server and Client Components](https://nextjs.org/docs/app/getting-started/server-and-client-components)
-- [React Architecture Pattern and Best Practices in 2025](https://www.geeksforgeeks.org/reactjs/react-architecture-pattern-and-best-practices/)
+- [Supabase: Creating a client for SSR](https://supabase.com/docs/guides/auth/server-side/creating-a-client) -- Client setup patterns
+- [Supabase: Storage Buckets Fundamentals](https://supabase.com/docs/guides/storage/buckets/fundamentals) -- Public vs private buckets
+- [Supabase: Image Transformations](https://supabase.com/docs/guides/storage/serving/image-transformations) -- Image optimization (Pro plan only)
+- [Supabase: Anonymous Sign-Ins](https://supabase.com/docs/guides/auth/auth-anonymous) -- Anonymous user patterns
+- [@supabase/supabase-js vs @supabase/ssr Discussion](https://github.com/orgs/supabase/discussions/28997) -- When SSR package is needed
+- [Next.js: Route Groups](https://nextjs.org/docs/app/api-reference/file-conventions/route-groups) -- Separate layouts via route groups
+- [Next.js: Route Handlers](https://nextjs.org/docs/app/getting-started/route-handlers) -- API endpoint patterns
+- [Supabase + Next.js Quickstart](https://supabase.com/docs/guides/getting-started/quickstarts/nextjs) -- Official integration guide
+- [Supabase Pricing](https://supabase.com/pricing) -- Free tier limits
+- [CSS Masonry and CSS Grid (CSS-Tricks)](https://css-tricks.com/css-masonry-css-grid/) -- Masonry implementation approaches
+- [Chrome: CSS Masonry Update](https://developer.chrome.com/blog/masonry-update) -- Browser support status
+- [Multiple Root Layouts in Next.js](https://www.nico.fyi/blog/next-js-multiple-root-layout) -- Route group layout patterns
+- [Managing Multiple Layouts in Next.js with Route Groups](https://dev.to/flcn16/managing-multiple-layouts-in-nextjs-13-with-app-router-and-route-groups-4pmg) -- Practical examples
 
-**Animation Architecture:**
-- [The Spark: Engineering an Immersive, Story-First Web Experience](https://tympanus.net/codrops/2026/01/09/the-spark-engineering-an-immersive-story-first-web-experience/)
-- [High-Performance Web Animation: GSAP, WebGL, and 60fps](https://dev.to/kolonatalie/high-performance-web-animation-gsap-webgl-and-the-secret-to-60fps-2l1g)
-- [Optimizing GSAP & Canvas for Smooth, Responsive Design](https://www.augustinfotech.com/blogs/optimizing-gsap-and-canvas-for-smooth-performance-and-responsive-design/)
-- [Building a Scroll-Driven Dual-Wave Text Animation with GSAP](https://tympanus.net/codrops/2026/01/15/building-a-scroll-driven-dual-wave-text-animation-with-gsap/)
+## Confidence Assessment
 
-**Scroll Integration:**
-- [GitHub: Lenis - Smooth scroll as it should be](https://github.com/darkroomengineering/lenis)
-- [How to implement smooth scrolling in Next.js with Lenis and GSAP](https://devdreaming.com/blogs/nextjs-smooth-scrolling-with-lenis-gsap)
-- [Scroll Animations with Intersection Observer](https://www.freecodecamp.org/news/scroll-animations-with-javascript-intersection-observer-api/)
-
-**Video & Media Optimization:**
-- [Next.js Guides: Videos](https://nextjs.org/docs/app/guides/videos)
-- [Lazy-Load Videos in Next.js Pages](https://cloudinary.com/blog/lazy-load-videos-in-next-js-pages)
-- [Next.js Guides: Lazy Loading](https://nextjs.org/docs/app/building-your-application/optimizing/lazy-loading)
-
-**Component Patterns:**
-- [React Three Fiber: Introduction](https://r3f.docs.pmnd.rs/)
-- [React Stack Patterns](https://www.patterns.dev/react/react-2026/)
-- [GitHub: GSAP React Integration](https://github.com/greensock/GSAP)
-
-**Performance Trends:**
-- [Top Web Design Trends for 2026 That Drive Engagement](https://directgraphix.com/trends-in-web-design-2026/)
-- [Motion UI Trends 2026: Interactive Design & Examples](https://lomatechnology.com/blog/motion-ui-trends-2026/2911)
+| Area | Confidence | Notes |
+|------|------------|-------|
+| Route group architecture | HIGH | Standard Next.js pattern, well-documented, verified |
+| CSS theme split with Tailwind v4 | HIGH | @theme scoping is by design in v4 |
+| Supabase client setup (no SSR pkg) | HIGH | Verified via official docs and GH discussions |
+| Public storage bucket for images | HIGH | Officially documented, correct for public photos |
+| Server Component data fetching | HIGH | Standard Next.js App Router pattern |
+| API Route Handlers for mutations | HIGH | Standard pattern, well-suited for rate limiting |
+| CSS columns for masonry | MEDIUM | Works well, but column-order (top-to-bottom) may not match user expectation; verify with real photos |
+| RLS policies for anonymous writes | MEDIUM | Policies correct, but real security comes from Route Handler validation |
+| Free tier sufficiency for 1500 photos | LOW | 1 GB storage tight; 2 GB egress may be limiting; auto-pause is a production risk |
+| CSS Grid masonry browser support | LOW | Only Firefox behind flag as of training data; verify current state |

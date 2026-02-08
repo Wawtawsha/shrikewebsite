@@ -1,9 +1,5 @@
 import type { Metadata } from "next";
 import { inter, geist, sourceCodePro } from "@/lib/fonts";
-import { Navigation } from "@/components/Navigation";
-import { Footer } from "@/components/Footer";
-import LenisProvider from "@/components/LenisProvider";
-import PageTransition from "@/components/PageTransition";
 import { siteMetadata, SITE_URL, generateOrganizationJsonLd } from "@/lib/metadata";
 import "./globals.css";
 
@@ -60,9 +56,9 @@ export default function RootLayout({
   const organizationJsonLd = generateOrganizationJsonLd();
 
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <body
-        className={`${inter.variable} ${geist.variable} ${sourceCodePro.variable} antialiased flex flex-col min-h-screen`}
+        className={`${inter.variable} ${geist.variable} ${sourceCodePro.variable} antialiased`}
       >
         <script
           type="application/ld+json"
@@ -71,11 +67,7 @@ export default function RootLayout({
         <a href="#main-content" className="skip-to-content">
           Skip to content
         </a>
-        <Navigation />
-        <LenisProvider>
-          <PageTransition>{children}</PageTransition>
-        </LenisProvider>
-        <Footer />
+        {children}
       </body>
     </html>
   );

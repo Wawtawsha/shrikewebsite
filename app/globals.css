@@ -1,32 +1,20 @@
 @import "tailwindcss";
 
-/* Dark mode variant */
+/* Dark mode variant — used by main site */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Cinematic dark theme with oklch colors */
-@theme {
-  /* Dark cinematic background colors */
-  --color-background: oklch(0.1 0.01 240);
-  --color-surface: oklch(0.15 0.01 240);
-  --color-surface-elevated: oklch(0.2 0.01 240);
+/* Reset and box-sizing */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-  /* Text colors */
-  --color-foreground: oklch(0.95 0.01 240);
-  --color-muted: oklch(0.65 0.01 240);
-  --color-subtle: oklch(0.45 0.01 240);
-
-  /* Accent gold/amber */
-  --color-accent: oklch(0.75 0.15 80);
-  --color-accent-hover: oklch(0.8 0.18 80);
-
-  /* Borders */
-  --color-border: oklch(0.25 0.01 240);
-  --color-border-subtle: oklch(0.18 0.01 240);
-
-  /* Font families */
-  --font-sans: var(--font-inter);
-  --font-display: var(--font-geist);
-  --font-mono: var(--font-mono);
+html, body {
+  width: 100%;
+  max-width: 100vw;
 }
 
 /* Skip to content link for accessibility */
@@ -46,43 +34,6 @@
   top: 0;
 }
 
-/* Button hover micro-interaction utility */
-.btn-hover {
-  transition: transform 0.2s ease, opacity 0.2s ease;
-}
-
-.btn-hover:hover {
-  transform: scale(1.03);
-}
-
-/* Navigation link underline animation */
-.nav-link::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: var(--color-accent);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.2s ease;
-}
-
-.nav-link:hover::after {
-  transform: scaleX(1);
-}
-
-/* Lenis smooth scroll compatibility */
-html.lenis,
-html.lenis body {
-  height: auto;
-}
-
-.lenis.lenis-smooth {
-  scroll-behavior: auto;
-}
-
 /* Smooth scrolling - respects prefers-reduced-motion */
 @media (prefers-reduced-motion: no-preference) {
   html {
@@ -100,38 +51,4 @@ html.lenis body {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-
-  /* Disable hover transforms for reduced motion */
-  .btn-hover:hover {
-    transform: none;
-  }
-
-  .nav-link::after {
-    transition: none;
-  }
-}
-
-/* Reset and box-sizing */
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* Base body styles */
-body {
-  background: var(--color-background);
-  color: var(--color-foreground);
-  font-family: var(--font-sans), system-ui, sans-serif;
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
-}
-
-html, body {
-  width: 100%;
-  max-width: 100vw;
 }

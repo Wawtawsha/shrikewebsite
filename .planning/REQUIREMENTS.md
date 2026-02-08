@@ -3,7 +3,7 @@
 **Defined:** 2026-01-30
 **Core Value:** When someone lands on this site, they must immediately feel they're looking at the work of elite creative engineers who can solve any problem.
 
-## v1 Requirements
+## v1 Requirements (Complete)
 
 ### Hero & Landing
 
@@ -19,8 +19,6 @@
 - [x] **PORT-03**: Lightbox / detail view expands on click with project description and media
 - [x] **PORT-04**: Projects animate in with scroll-driven reveal effects as user scrolls down
 
-> **Review gate:** PORT-01 through PORT-04 to be reviewed after implementation — owner wants to evaluate execution before committing to keeping all four.
-
 ### Services & Booking
 
 - [x] **SERV-01**: Services overview section describing media production and technical consulting
@@ -34,8 +32,6 @@
 - [x] **ANIM-02**: Cinematic page transitions between routes
 - [x] **ANIM-03**: Micro-interactions on hover effects, button animations, and subtle motion elements
 - [x] **ANIM-04**: Parallax depth effects on scroll for cinematic sections
-
-> **Review gate:** ANIM-01 through ANIM-04 to be reviewed after implementation — owner wants to evaluate execution before committing to keeping all four.
 
 ### Design & Visual
 
@@ -52,7 +48,43 @@
 - [x] **TECH-04**: Lighthouse performance score 90+ despite rich media and animations
 - [x] **TECH-05**: Optimized media loading — lazy loading, progressive video, WebP/AVIF images
 
-## v2 Requirements
+---
+
+## v1.1 Requirements — Event Photo Gallery
+
+**Goal:** Pinterest-style photo gallery for delivering event photos to clients, with anonymous social features.
+**Target audience:** Women 30-60, primarily mobile, not tech-savvy. Zero friction is non-negotiable.
+
+### Gallery Foundation
+
+- [ ] **GALL-01**: Route group architecture — `/gallery` with separate root layout, completely isolated from main site's dark theme, Navigation, Footer, and Lenis
+- [ ] **GALL-02**: Supabase backend on Free plan — public Storage bucket for photos, Postgres DB for metadata/likes/comments
+- [ ] **GALL-03**: Database schema — `events`, `photos`, `photo_likes`, `photo_comments` tables with RLS policies, indexes, and like-count trigger
+- [ ] **GALL-04**: Upload tooling — local Node script using `sharp` to resize photos (thumbnail ~400px + full-size ~1600px) and generate blurhash, then upload to Supabase Storage with metadata INSERT
+
+### Gallery Display
+
+- [ ] **GALL-05**: Pinterest-style masonry grid using `react-photo-album` MasonryPhotoAlbum with aspect-ratio-preserving layout
+- [ ] **GALL-06**: Progressive loading via "Load More" button — 50 photos per batch, progress indicator ("Showing 50 of 347 photos"), Server Component renders first batch
+- [ ] **GALL-07**: Photo lightbox via `yet-another-react-lightbox` — full-size image, pinch-to-zoom, swipe navigation, keyboard support
+- [ ] **GALL-08**: Blur placeholders — blurhash strings decoded client-side for instant visual feedback while images load
+
+### Gallery Social
+
+- [ ] **GALL-09**: Anonymous likes — localStorage device ID (`crypto.randomUUID()`), `UNIQUE(photo_id, device_id)` constraint, denormalized `like_count` via Postgres trigger, optimistic UI toggle
+- [ ] **GALL-10**: Anonymous comments — optional display name (default "Guest"), 500 char limit, DB constraints for length and non-empty
+- [ ] **GALL-11**: Spam protection — honeypot field + 2-second time check on comment form, `obscenity` npm package for profanity filter, Postgres trigger rate limit (max 3 comments per device per 5 minutes)
+- [ ] **GALL-12**: Post-hoc moderation — `is_visible` flag on comments, owner delete via service role key (admin secret in URL or separate endpoint)
+
+### Gallery Design
+
+- [ ] **GALL-13**: Warm/cute visual theme — oklch warm palette (cream background, coral accent, warm browns), completely distinct from dark cinematic main site
+- [ ] **GALL-14**: Mobile-first responsive layout — 2 cols phone, 3 cols tablet, 4-5 cols desktop; large tap targets (min 48px); intuitive for non-tech audience
+- [ ] **GALL-15**: One-tap photo download — download button in lightbox, uses native download attribute
+
+---
+
+## v2 Requirements (Future)
 
 ### Content Depth
 
@@ -71,59 +103,71 @@
 - **CMS-01**: Admin interface to add/edit portfolio items without code changes
 - **CMS-02**: Image/video upload pipeline with automatic optimization
 
-## Out of Scope
+## Out of Scope (v1.1)
 
 | Feature | Reason |
 |---------|--------|
-| About/Team page | Work speaks for itself — owner's explicit decision |
-| CMS or admin panel | Hardcoded content for v1 simplicity |
-| Blog | No content strategy yet; deferred to v2 |
-| E-commerce / payments | Booking through Calendly, no direct payment |
-| User accounts / auth | Public-facing portfolio site only |
-| Visible pricing / packages | Consultative "contact for pricing" model instead |
-| 3D / WebGL effects | High execution risk, can backfire if not perfect |
-| Real-time chat | Overkill for portfolio site |
+| Multi-event routing | Single `/gallery` route, re-skinned per event via query param |
+| Admin upload UI | Owner uploads via local script or Supabase dashboard |
+| Photo editing/cropping | Photos served as-is |
+| Real-time updates | Page refresh for new comments is fine |
+| User accounts / auth | Fully anonymous, device-based tracking |
+| Gallery link in main nav | Gallery is client-facing, shared via direct URL only |
+| Supabase Pro plan features | Staying on Free — sharp resize at upload time instead of transforms |
+| Browser fingerprinting | Privacy concerns, declining accuracy, overkill for private events |
+| CAPTCHA | Friction for non-tech audience, no bot threat on private URL |
+| Pre-moderation queue | Kills live event energy, burdens the host |
 
 ## Traceability
 
-| Requirement | Phase | Status |
-|-------------|-------|--------|
-| HERO-01 | Phase 2 | Complete |
-| HERO-02 | Phase 2 | Complete |
-| HERO-03 | Phase 2 | Complete |
-| HERO-04 | Phase 2 | Complete |
-| PORT-01 | Phase 2 | Complete |
-| PORT-02 | Phase 2 | Complete |
-| PORT-03 | Phase 2 | Complete |
-| PORT-04 | Phase 2 | Complete |
-| SERV-01 | Phase 2 | Complete |
-| SERV-02 | Phase 2 | Complete |
-| SERV-03 | Phase 2 | Complete |
-| SERV-04 | Phase 2 | Complete |
-| ANIM-01 | Phase 3 | Complete |
-| ANIM-02 | Phase 3 | Complete |
-| ANIM-03 | Phase 3 | Complete |
-| ANIM-04 | Phase 3 | Complete |
-| DSGN-01 | Phase 1 | Complete |
-| DSGN-02 | Phase 2 | Complete |
-| DSGN-03 | Phase 1 | Complete |
-| DSGN-04 | Phase 1 | Complete |
-| TECH-01 | Phase 1 | Complete |
-| TECH-02 | Phase 1 | Complete |
-| TECH-03 | Phase 1 | Complete |
-| TECH-04 | Phase 3 | Complete |
-| TECH-05 | Phase 1 | Complete |
+| Requirement | Milestone | Phase | Status |
+|-------------|-----------|-------|--------|
+| HERO-01 | v1 | Phase 2 | Complete |
+| HERO-02 | v1 | Phase 2 | Complete |
+| HERO-03 | v1 | Phase 2 | Complete |
+| HERO-04 | v1 | Phase 2 | Complete |
+| PORT-01 | v1 | Phase 2 | Complete |
+| PORT-02 | v1 | Phase 2 | Complete |
+| PORT-03 | v1 | Phase 2 | Complete |
+| PORT-04 | v1 | Phase 2 | Complete |
+| SERV-01 | v1 | Phase 2 | Complete |
+| SERV-02 | v1 | Phase 2 | Complete |
+| SERV-03 | v1 | Phase 2 | Complete |
+| SERV-04 | v1 | Phase 2 | Complete |
+| ANIM-01 | v1 | Phase 3 | Complete |
+| ANIM-02 | v1 | Phase 3 | Complete |
+| ANIM-03 | v1 | Phase 3 | Complete |
+| ANIM-04 | v1 | Phase 3 | Complete |
+| DSGN-01 | v1 | Phase 1 | Complete |
+| DSGN-02 | v1 | Phase 2 | Complete |
+| DSGN-03 | v1 | Phase 1 | Complete |
+| DSGN-04 | v1 | Phase 1 | Complete |
+| TECH-01 | v1 | Phase 1 | Complete |
+| TECH-02 | v1 | Phase 1 | Complete |
+| TECH-03 | v1 | Phase 1 | Complete |
+| TECH-04 | v1 | Phase 3 | Complete |
+| TECH-05 | v1 | Phase 1 | Complete |
+| GALL-01 | v1.1 | Phase 1 | Pending |
+| GALL-02 | v1.1 | Phase 1 | Pending |
+| GALL-03 | v1.1 | Phase 1 | Pending |
+| GALL-04 | v1.1 | Phase 1 | Pending |
+| GALL-05 | v1.1 | Phase 2 | Pending |
+| GALL-06 | v1.1 | Phase 2 | Pending |
+| GALL-07 | v1.1 | Phase 2 | Pending |
+| GALL-08 | v1.1 | Phase 2 | Pending |
+| GALL-09 | v1.1 | Phase 3 | Pending |
+| GALL-10 | v1.1 | Phase 3 | Pending |
+| GALL-11 | v1.1 | Phase 3 | Pending |
+| GALL-12 | v1.1 | Phase 3 | Pending |
+| GALL-13 | v1.1 | Phase 2 | Pending |
+| GALL-14 | v1.1 | Phase 2 | Pending |
+| GALL-15 | v1.1 | Phase 3 | Pending |
 
 **Coverage:**
-- v1 requirements: 25 total
-- Mapped to phases: 25
-- Unmapped: 0
-
-**Phase distribution:**
-- Phase 1 (Performance Foundation): 7 requirements
-- Phase 2 (Rich Media & Core Features): 13 requirements
-- Phase 3 (Cinematic Polish & Performance): 5 requirements
+- v1 requirements: 25/25 complete
+- v1.1 requirements: 15 total, 0 complete
+- Total: 40 requirements
 
 ---
 *Requirements defined: 2026-01-30*
-*Last updated: 2026-02-01 after Phase 3 completion — all v1 requirements complete*
+*v1.1 requirements added: 2026-02-08*

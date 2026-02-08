@@ -1,0 +1,35 @@
+/* Warm gallery theme with oklch colors */
+@theme {
+  /* Warm background colors */
+  --color-background: oklch(0.97 0.01 80);
+  --color-surface: oklch(0.94 0.01 80);
+  --color-surface-elevated: oklch(1 0 0);
+
+  /* Text colors */
+  --color-foreground: oklch(0.2 0.02 50);
+  --color-muted: oklch(0.45 0.02 50);
+  --color-subtle: oklch(0.65 0.01 50);
+
+  /* Accent coral */
+  --color-accent: oklch(0.65 0.18 25);
+  --color-accent-hover: oklch(0.6 0.2 25);
+
+  /* Borders */
+  --color-border: oklch(0.85 0.01 80);
+  --color-border-subtle: oklch(0.9 0.01 80);
+
+  /* Font families */
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-geist);
+  --font-mono: var(--font-mono);
+}
+
+/* Base body styles for gallery theme */
+.gallery-theme {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

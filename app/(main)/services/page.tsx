@@ -10,16 +10,16 @@ export const metadata: Metadata = {
 
 export default function ServicesPage() {
   return (
-    <main id="main-content" className="min-h-screen relative" style={{ padding: "80px 64px" }}>
+    <main id="main-content" className="min-h-screen relative flex items-center justify-center" style={{ padding: "80px 64px" }}>
       <WireframeBackground />
-      <div className="max-w-5xl mx-auto relative z-10">
+      <div className="w-full max-w-5xl mx-auto relative z-10 text-center">
         <h1
           className="text-5xl md:text-7xl font-bold mb-6 tracking-tight"
           style={{ fontFamily: "var(--font-display)" }}
         >
           Our Services
         </h1>
-        <p className="text-xl text-muted max-w-2xl leading-relaxed" style={{ marginBottom: '48px' }}>
+        <p className="text-xl text-muted mx-auto leading-relaxed" style={{ marginBottom: '48px' }}>
           Choose the service you need.
         </p>
 

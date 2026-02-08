@@ -1,344 +1,322 @@
-# Feature Landscape: High-End Creative Portfolio Website
+# Feature Landscape: Event Photo Gallery with Anonymous Social Features
 
-**Domain:** Creative Agency/Portfolio (Photography, Videography, Software)
-**Researched:** 2026-01-30
-**Confidence:** MEDIUM (based on WebSearch verified with multiple sources)
+**Domain:** Event photo delivery gallery (Pinterest-style, mobile-first, anonymous social)
+**Target audience:** Women 30-60 at winery events, primarily using phones, not tech-savvy
+**Researched:** 2026-02-08
+**Confidence:** MEDIUM-HIGH (multiple sources cross-referenced; iOS download behavior verified against official Apple/WebKit sources)
 
 ## Executive Summary
 
-High-end creative portfolio websites in 2026 have evolved beyond simple project galleries. The market now expects **performance as proof of competence**—a slow site signals poor attention to detail. The differentiation axis has shifted from "looks creative" to "proves technical mastery through execution." For Shrike Media specifically, the site itself must demonstrate software engineering capability while showcasing creative work.
+Event photo delivery galleries in 2026 have a clear competitive landscape. Professional platforms (Pixieset, Pic-Time, ShootProof) charge $10-50/month and focus on selling prints. Consumer-sharing platforms (GuestCam, Kululu, GUESTPIX) prioritize QR-code access and guest uploads. Neither category offers what Shrike Media needs: a branded, beautiful, warm-aesthetic gallery with anonymous social features that doubles as a portfolio piece proving Shrike's engineering capability.
 
-Key insight: **Clarity beats creativity in 2026.** Visitors evaluate performance, usability, and process transparency before they appreciate visual creativity. The WOW factor comes from seamless execution, not flashy gimmicks.
+The key insight for this audience: **every interaction must feel obvious.** These users do not experiment with UI. If the download button is not immediately apparent, they will screenshot the photo instead (losing quality). If commenting requires more than two taps, they will not comment. The UX bar is not "intuitive for a developer" -- it is "intuitive for someone who has never used anything except Facebook and the native Camera app."
+
+The biggest technical risk is **mobile image download.** iOS Safari does not reliably support the HTML5 `download` attribute, and cross-origin restrictions make direct `<a download>` links fail silently. Supabase Storage's `?download` query parameter with Content-Disposition headers is the correct solution, but the UX must account for iOS still sometimes opening images in a new tab rather than triggering a save dialog.
 
 ---
 
 ## Table Stakes
 
-Features users expect. Missing any = product feels incomplete or unprofessional.
+Features users expect from any photo delivery gallery. Missing any = "why didn't they just use Google Drive?"
 
-| Feature | Why Expected | Complexity | Phase | Notes |
-|---------|--------------|------------|-------|-------|
-| **Mobile-responsive design** | >50% of web traffic is mobile; mobile-first is hygiene | Medium | Phase 1 | Not optional—breaks trust if missing |
-| **Fast load times (<3s)** | Performance = brand perception in 2026; slow = unprofessional | High | Phase 1 | LCP, FID, CLS metrics critical |
-| **Full-screen hero section** | Standard for creative portfolios; establishes tone immediately | Low | Phase 1 | Video or static image with focal point |
-| **Clear navigation (5-7 items)** | Home, Portfolio, Services, About, Contact expected minimum | Low | Phase 1 | More = decision paralysis |
-| **Portfolio/work gallery** | Core purpose; must exist or visitors leave | Low | Phase 1 | Category filtering expected |
-| **Contact method** | Email, form, or booking—visitors expect 1-click contact | Low | Phase 1 | Friction = lost leads |
-| **About/team section** | Establishes credibility and human connection | Low | Phase 1-2 | Photos + brief bios sufficient |
-| **Professional imagery** | Low-quality images = amateur hour | Medium | Phase 1 | Optimization critical for performance |
-| **HTTPS/SSL** | Security baseline; Google penalizes HTTP sites | Low | Phase 1 | Non-negotiable in 2026 |
-| **Dark mode option** | Expected standard in 2026, not just trendy | Medium | Phase 2 | Toggle or system preference detection |
-| **SEO fundamentals** | Meta tags, structured data, semantic HTML | Medium | Phase 1-2 | No longer optional for visibility |
-| **Accessibility basics** | Alt text, keyboard nav, ARIA labels | Medium | Phase 1-2 | Legal + ethical requirement |
+| Feature | Why Expected | Complexity | Notes |
+|---------|--------------|------------|-------|
+| **Photo grid that loads fast** | Google Photos and iCloud set the bar. Any lag = "broken." | Medium | Must lazy-load. 200-1500 photos cannot load all at once. Blur placeholders (LQIP/BlurHash) prevent layout shift. |
+| **Full-screen photo view (lightbox)** | Every photo app has this. Users long-press to zoom natively. | Medium | Must support swipe-to-navigate, pinch-to-zoom. PhotoSwipe or similar. Native `<dialog>` is not enough -- need touch gestures. |
+| **Photo download** | The entire point. Users need their photos on their phone. | HIGH | This is the hardest "simple" feature. iOS Safari download attribute is broken for cross-origin URLs. Must proxy through same-origin or use Supabase's `?download` parameter. Test on real iPhones. |
+| **Mobile-responsive layout** | 80%+ of this audience will use phones | Low | Already proven in v1 codebase. Masonry must collapse to 2 columns on phone, 1 column is too sparse for photos. |
+| **No login or signup required** | Any friction = bounce. This audience will NOT create an account to see their event photos. | Low | Zero auth. Device-based tracking for likes via localStorage. |
+| **Fast initial load** | Users arrive via shared link (text message, QR code). If the page doesn't show photos within 3 seconds, they'll assume it's broken. | Medium | Initial batch of 20-30 photos, then infinite scroll. Skeleton/blur placeholders while loading. |
+| **Event branding** | Users need to know they're in the right place. "Napa Valley Wine Night - March 2026" | Low | Event title, date, maybe a banner image. Simple config object or env vars for re-skinning. |
+| **Share button (native)** | Users want to text photos to friends not at the event | Low | Use `navigator.share()` API on mobile (falls back to copy-link on desktop). This is what users expect -- the native share sheet they know from every app. |
 
 ---
 
 ## Differentiators
 
-Features that set products apart. Not expected, but provide competitive advantage and WOW factor.
+Features that make this better than "here's a Google Drive link" or "check the photographer's Pixieset page." These justify building a custom gallery instead of using an off-the-shelf service.
 
-| Feature | Value Proposition | Complexity | Phase | Notes |
-|---------|-------------------|------------|-------|-------|
-| **Scroll-driven animations** | Creates cinematic narrative; proves technical skill | High | Phase 2 | Use GSAP; respect prefers-reduced-motion |
-| **Deep case studies (process reveal)** | Builds trust > perfect final image; shows "how we work" | Medium | Phase 2-3 | Before/after, problem/solution, metrics |
-| **Video hero (full-screen, cinematic)** | Immediate emotional impact; premium feel | High | Phase 1 | 720p, <10s, <500KB, fallback image required |
-| **Performance as feature** | Site speed proves engineering capability | High | Phase 1 | Measurable (Lighthouse 90+); brandable |
-| **Interactive microinteractions** | Hover effects, animated CTAs—emotional engagement | Medium | Phase 2 | Subtle, not distracting; signals interactivity |
-| **Custom cursor/hover states** | Premium detail; shows craft | Low-Medium | Phase 3 | Only if theme-appropriate |
-| **Bento grid/asymmetric layout** | Modern, visual interest with structure | Medium | Phase 2 | Modular, card-like blocks |
-| **Kinetic typography** | Text that moves/reacts; storytelling element | Medium | Phase 3 | Must not harm readability |
-| **3-5 curated projects** | Quality > quantity; focused narrative | Low | Phase 1 | Industry best practice per research |
-| **Client testimonials (integrated)** | Social proof without dedicated page | Low | Phase 2 | Carousel or grid in About/Portfolio |
-| **Process transparency content** | "What it's like to work with us" reduces uncertainty | Low | Phase 2-3 | Clarifies timeline, communication style |
-| **Calendly booking integration** | Instant conversion; reduces friction vs form | Low | Phase 1-2 | Inline, popup, or floating widget |
-| **Video case studies** | Perfect for media company; shows vs tells | High | Phase 3 | For select flagship projects |
-| **Parallax effects (subtle)** | Depth, premium feel if done tastefully | Medium | Phase 2-3 | Easy to overdo; test performance |
-| **Real-time availability** | "Book a call" shows live calendar slots | Low | Phase 2 | Via Calendly; converts browsers to leads |
-| **Technical blog/insights** | Proves software engineering depth | Low | Phase 3+ | Optional; content maintenance burden |
+| Feature | Value Proposition | Complexity | Notes |
+|---------|-------------------|------------|-------|
+| **Anonymous likes (heart button)** | Creates social energy. Users see which photos are popular. Winery attendees will love tapping hearts on each other's candid shots. No login friction. | Low-Medium | localStorage + device fingerprint (simple hash, not FingerprintJS -- that's overkill). Store like count in Supabase. Optimistic UI update. |
+| **Anonymous comments** | Lets attendees reminisce: "OMG that's when Susan spilled the Merlot!" Creates emotional attachment to the gallery. | Medium | Must be dead simple: text field, submit button, name field (optional). Rate limit by device. Character limit (280 chars). No threading -- flat comments only. |
+| **Like count display** | Social proof drives engagement. "42 people loved this photo" makes users spend more time browsing. | Low | Simple counter on each photo thumbnail and in lightbox view. |
+| **Warm/cute aesthetic** | Pixieset and ShootProof are clinically clean. A warm, soft, slightly playful design feels more appropriate for a winery event gallery. This IS the brand differentiator. | Medium | Separate from main site's dark cinematic theme. Warm background tones, rounded corners, soft shadows, playful micro-interactions. Think "elegant Pinterest board" not "photographer portfolio." |
+| **Pinterest-style masonry grid** | Variable-height images look better in masonry than forced-aspect-ratio grids. Landscape and portrait photos coexist naturally. | Medium | CSS columns approach is simplest and most performant. Native CSS masonry (grid-lanes) arriving mid-2026 but not ready for production yet. Use CSS columns with break-inside: avoid as the proven approach. |
+| **Bulk download (select multiple)** | Power user feature: "I want all the photos of my table." Select mode with checkboxes, download as zip. | High | Server-side zip generation or client-side via JSZip. Defer to post-MVP -- single photo download is the priority. |
+| **QR code access** | Print a card at the event: "Scan to see your photos!" Eliminates typing URLs on phones. | Low | Generate QR code pointing to gallery URL. Static image, not runtime generation. Print on cards at the event. |
+| **Photo sorting (newest/most liked)** | Lets users find the "best" photos quickly, or browse chronologically to relive the event. | Low | Two sort options is enough. Default to chronological (event story order). |
+| **Smooth scroll experience** | Existing Lenis integration from v1 can make the gallery feel premium while scrolling through hundreds of photos. | Low | Already have Lenis in the stack. Wrap gallery page. May need to disable on lightbox. |
+| **"Find me" scroll prompt** | A gentle floating label: "Tap any photo to see it bigger, or just keep scrolling." Teaches the UI without a tutorial. | Low | Appears once, dismissed on first interaction. Stored in localStorage. Non-tech-savvy users need this. |
 
 ---
 
 ## Anti-Features
 
-Features to explicitly NOT build. Common mistakes in this domain.
+Features to explicitly NOT build. Each represents a trap that seems logical but will hurt this specific audience.
 
 | Anti-Feature | Why Avoid | What to Do Instead |
 |--------------|-----------|-------------------|
-| **Splash screen/intro animation** | Delays access to content; users bounce | Jump straight to hero; animation can be in-hero |
-| **Auto-play audio** | Universally hated; accessibility nightmare | User-initiated only; muted by default |
-| **Scroll jacking (overriding native scroll)** | Breaks user expectations; accessibility issue | Scroll-driven animations that listen, don't override |
-| **Too many portfolio items** | Decision paralysis; dilutes quality signal | 3-5 curated projects; "best of" not "all of" |
-| **Generic "contact us" form** | High friction; feels like shouting into void | Direct booking (Calendly) or personal email |
-| **Blog if no content plan** | Dead blog = abandoned site signal | Only add if committed to 1+ post/month |
-| **Complex mega-menu** | Overwhelming; creative sites should be simple nav | 5-7 top-level items max |
-| **Cookie-cutter linear process** | "Discovery > Design > Develop" = boring, no credibility | Show real work, including pivots and challenges |
-| **Flash/outdated tech** | Breaks on modern browsers; kills SEO | Modern web stack (React, Next.js, etc.) |
-| **Overly long videos (>30s)** | Users bounce; attention span limits | <10s hero video; longer only in case studies |
-| **Competing with project visuals** | Busy design obscures portfolio work | Whitespace, minimal chrome; let work breathe |
-| **"Under construction" pages** | Amateur signal; launches incomplete | Ship complete sections only; hide unfinished |
-| **Social media walls/feeds** | Cluttered; redirects attention away | Curated social links in footer |
-| **Overly complex animations** | Motion sickness; slow performance | Subtle, purposeful motion; prefers-reduced-motion |
-| **Portfolio without context** | Pretty pictures with no story = shallow | Every project gets: problem, solution, result |
+| **User accounts / login** | This audience will not sign up. Period. Any login gate = 50%+ bounce rate. They are here to see photos from last night, not to create a relationship with your platform. | Device-based anonymous tracking via localStorage. Accept that some users will lose their likes if they clear browser data. That's fine. |
+| **Photo upload by guests** | Turns the curated gallery into a dumping ground of blurry phone pics. Destroys the professional quality signal. Shrike shot these photos -- guest uploads dilute the brand. | Keep the gallery photographer-only. If guests want to share their own photos, they can use the event hashtag on Instagram. |
+| **Nested comment threads / replies** | Adds massive complexity. This audience does not want Reddit-style discussions under a photo of someone holding a wine glass. | Flat comments only. Most recent first. No threading, no replies, no upvotes on comments. |
+| **Facial recognition / "Find my photos"** | Privacy nightmare. Legally risky (GDPR, BIPA). Technically complex. And the audience doesn't expect it from a small media company's gallery. | Manual browsing. 200-1500 photos is browsable with a good masonry grid and infinite scroll. If needed later, add simple keyword tags per photo. |
+| **E-commerce / print sales** | This is a delivery gallery, not a storefront. Adding purchase flows complicates the UX and confuses the value prop. Shrike already handles booking through Calendly. | Free delivery. All photos are free to download. The value is the photography service, not per-photo sales. |
+| **Admin upload UI** | Building a CMS for photo management is a project unto itself. Direct Supabase Storage uploads via dashboard or CLI is faster for the photographer (you). | Upload directly to Supabase Storage bucket. Script or CLI tool to batch upload and generate thumbnails. |
+| **Real-time updates / WebSockets** | Adds complexity for negligible benefit. Photos are uploaded once after the event, not during it. Comments appearing in real-time is a nice-to-have that costs 10x the effort. | Page refresh to see new comments. Or polling every 60 seconds if feeling generous. |
+| **Infinite categories/albums** | Multi-album routing, album selection UI, breadcrumb navigation -- all complexity for a single-event gallery. | Single flat gallery. One event = one page. New event = re-skin the page with new photos and branding. |
+| **Complex moderation dashboard** | Building admin tools for a gallery that might get 5 inappropriate comments per event is not worth the engineering time. | Use Supabase dashboard to delete offensive comments directly from the database. Add a simple "report" button on comments that flags them in the DB. |
+| **Video playback in gallery** | Mixed media galleries are complex (different aspect ratios, loading behavior, autoplay policies). Event photos are photos. | Photos only. If event has video highlights, link to them separately (YouTube, Vimeo, or the main Shrike portfolio). |
+| **Dark mode toggle** | The warm/cute aesthetic is the design. A dark mode variant doubles the design work and confuses the visual identity of the gallery. The main Shrike site is already dark -- the gallery being warm and light IS the contrast. | Single light/warm theme. No toggle. |
+| **Search / text filtering** | There's nothing to search. Photos don't have meaningful text metadata that a winery attendee would query. "Search for photos of wine" returns all of them. | Sort by newest/most liked is sufficient. If the gallery is large, lazy loading with infinite scroll handles discovery. |
+| **Animated page transitions** | The main site has Motion-based page transitions. The gallery page should feel fast and immediate, not cinematic. The audience wants to see their photos, not watch an animation. | Instant page load. No entrance animation beyond subtle fade-in of photo tiles as they lazy-load. |
+| **Social media login ("Sign in with Facebook")** | Older audience sees this as suspicious ("why does a photo gallery need my Facebook?"). Creates privacy concerns. Adds OAuth complexity. | Fully anonymous. No login of any kind. |
 
 ---
 
 ## Feature Dependencies
 
 ```
-Foundation (Phase 1):
-  Mobile-responsive design
-  Fast load times
-  Full-screen hero (video or static)
-  Clear navigation
-  Portfolio gallery with filtering
-  Contact/booking integration
-       ↓
-Polish (Phase 2):
-  Scroll-driven animations (requires performant base)
-  Microinteractions (requires established UI patterns)
-  Dark mode (requires complete design system)
-  Deep case studies (requires portfolio structure)
-  Bento grid layout (requires content architecture)
-       ↓
-Advanced (Phase 3):
-  Kinetic typography (requires animation framework)
-  Video case studies (requires video pipeline)
-  Custom cursor (requires established interaction model)
-  Technical blog (requires content strategy)
-  Parallax effects (requires scroll framework)
+Foundation (must exist first):
+  Supabase project setup (Storage bucket + Database tables)
+  Photo upload pipeline (batch upload script or manual)
+  Gallery page route (/gallery)
+  Photo data model (URL, thumbnail URL, dimensions, created_at)
+       |
+       v
+Core Gallery (build second):
+  Masonry grid layout (CSS columns)
+  Lazy loading with blur placeholders
+  Infinite scroll (IntersectionObserver)
+  Photo lightbox with touch gestures (swipe, pinch-zoom)
+  Single photo download (Supabase ?download param)
+       |
+       v
+Social Layer (build third):
+  Anonymous likes (localStorage + Supabase counter)
+  Like count display on thumbnails and lightbox
+  Anonymous comments (text input + Supabase table)
+  Comment display in lightbox view
+  Basic spam protection (rate limit, char limit)
+       |
+       v
+Polish (build last):
+  Warm/cute visual theme
+  Event branding (title, date, banner)
+  Sort controls (newest / most liked)
+  Native share button
+  "Find me" onboarding prompt
+  QR code generation for print cards
 ```
 
-**Critical path:** Performance optimization MUST come first. Animations built on slow foundation = disaster.
+**Critical dependency:** The lightbox component is the hub for all social features. Likes, comments, download, and share all live in the lightbox. Build the lightbox well and the social features plug in cleanly.
 
-**Parallel tracks:**
-- Content development (case studies, copy) can happen alongside technical build
-- Design system + dark mode should be planned together, not retrofitted
+**Existing code reuse:**
+- `ProjectLightbox.tsx` uses native `<dialog>` -- good foundation but needs touch gesture support (swipe, pinch-zoom) for the photo gallery version
+- `useScrollReveal.ts` hook can trigger lazy-loading of photo tiles
+- `useReducedMotion.ts` for accessibility
+- Lenis provider for smooth scroll (already in layout)
+- Motion library already installed for subtle animations
 
 ---
 
 ## MVP Recommendation
 
-For MVP (Phase 1), prioritize proving competence through execution:
+For MVP, prioritize the features that make this better than texting a Google Drive link.
 
 ### MUST HAVE (Launch blockers):
-1. **Performance excellence** (Lighthouse 90+) — proves engineering skill
-2. **Full-screen video hero** (cinematic, <10s, optimized) — emotional impact
-3. **3-5 curated portfolio projects** — quality signal
-4. **Category filtering** (Photo/Video/Software) — navigability
-5. **Mobile-responsive** — table stakes
-6. **Calendly booking** — conversion mechanism
-7. **Clear navigation** (Home, Portfolio, Services, About, Contact) — usability
-8. **HTTPS, SEO basics** — hygiene
+1. **Masonry grid with lazy loading** -- the core browsing experience
+2. **Photo lightbox with swipe navigation** -- full-screen viewing
+3. **Single photo download** -- the entire point of the gallery
+4. **Event branding** (title, date) -- context for the user
+5. **Mobile-responsive** -- 80%+ phone users
+6. **Fast initial load** (<3s to first meaningful paint)
 
-### NICE TO HAVE (Phase 1.5):
-- Basic hover microinteractions on portfolio items
-- Smooth scroll behavior
-- Subtle entrance animations (fade-in on scroll)
+### SHOULD HAVE (First week after launch):
+7. **Anonymous likes** -- social energy with minimal complexity
+8. **Like count on thumbnails** -- drives browsing engagement
+9. **Warm/cute theme** -- visual differentiation from the main site
+10. **Native share button** -- organic distribution
 
-### Defer to Phase 2:
-- **Deep case studies:** MVP can show work without full process documentation
-- **Scroll-driven animations:** Impressive but not launch-critical
-- **Dark mode:** Desirable but can launch light-only
-- **Client testimonials:** Gather during beta period
-- **Bento grid:** Standard grid works for MVP
+### NICE TO HAVE (Post-launch iteration):
+11. **Anonymous comments** -- more complex, needs spam protection
+12. **Sort controls** -- useful once gallery has likes data
+13. **Onboarding prompt** -- evaluate if users struggle without it
+14. **QR code for print** -- only matters at next event
 
-### Defer to Phase 3+:
-- **Video case studies:** Content-heavy, requires production pipeline
-- **Kinetic typography:** Polish, not necessity
-- **Custom cursor:** Nice-to-have detail
-- **Blog:** Only add when content strategy exists
-- **Parallax effects:** Visual polish for post-launch
+### DEFER to v1.2+:
+- **Bulk download** -- complex, serves power users not primary audience
+- **Photo tagging/categorization** -- only if gallery sizes exceed 500 consistently
+- **Comment reporting** -- only if abuse becomes a problem
 
 ---
 
 ## Complexity Assessment
 
 ### Low Complexity (1-2 days):
-- Navigation structure
-- Contact forms/Calendly embed
-- Portfolio grid with filtering
-- Basic responsive design
-- About section with team bios
+- Event branding (title, date, banner)
+- Native share button (navigator.share)
+- Like count display
+- Sort controls (newest/most liked)
+- QR code generation (static image)
+- "Find me" onboarding prompt
 
 ### Medium Complexity (3-5 days):
-- Full-screen video hero with optimization
-- Scroll-triggered animations (basic)
-- Dark mode implementation
-- Microinteractions (hover states, button animations)
-- Case study page templates
-- Bento grid layout
+- Masonry grid with CSS columns
+- Lazy loading with blur placeholders (LQIP)
+- Infinite scroll via IntersectionObserver
+- Anonymous likes system (localStorage + Supabase)
+- Anonymous comments with spam protection
+- Warm/cute visual theme (distinct from main site)
 
 ### High Complexity (1-2 weeks):
-- Performance optimization (90+ Lighthouse)
-- Advanced scroll-driven animations (GSAP)
-- Video case studies (production + technical)
-- Kinetic typography system
-- Custom animation framework
+- Photo lightbox with touch gestures (swipe, pinch-zoom) -- PhotoSwipe integration or custom implementation
+- Photo download that works reliably on iOS Safari -- requires same-origin proxy or Supabase `?download` parameter, extensive device testing
+- Photo upload pipeline (batch processing, thumbnail generation, dimension extraction)
+- Supabase schema design and RLS policies for anonymous access
 
-### Very High Complexity (2+ weeks):
-- Full animation system with reduced-motion support
-- Advanced 3D/WebGL effects
-- Custom CMS integration
-- A/B testing infrastructure
+### Critical Risk Items:
+- **iOS Safari download:** Most likely source of user complaints. Must test on real iPhones (not just simulators). The `<a download>` attribute does NOT work for cross-origin URLs on iOS. Supabase `?download` query parameter sets Content-Disposition header server-side, which is the correct approach, but behavior varies by iOS version.
+- **Performance at scale:** 1500 photos with masonry layout, lazy loading, and like counts = many DOM nodes and database queries. Must virtualize or paginate aggressively.
 
 ---
 
-## Technical Execution as Differentiator
+## Mobile UX Patterns for Non-Tech-Savvy Users (30-60 age range)
 
-**Critical insight from research:** For a company offering software services, the website itself is a portfolio piece.
+Research on UX design for older adults reveals specific patterns critical for this audience.
 
-### Performance Metrics as Brand Signal
-- Target: Lighthouse score 90+ (Performance, Accessibility, Best Practices, SEO)
-- LCP (Largest Contentful Paint) < 2.5s
-- FID (First Input Delay) < 100ms
-- CLS (Cumulative Layout Shift) < 0.1
+### Touch Targets
+- **Minimum 48x48px** tap targets (Apple HIG recommends 44pt, Material Design recommends 48dp)
+- Heart/like button must be large and obvious, not a tiny icon
+- Download button must have both an icon AND text label ("Save Photo")
+- Comment submit button must be clearly labeled, not just an arrow icon
 
-Meeting these metrics is **brandable**—you can literally say "This site scores 95+ on all Lighthouse metrics because that's how we build."
+### Visual Clarity
+- **High contrast** between interactive elements and background
+- **Text labels on all icons** -- do not rely on icon-only buttons. A download icon (arrow-down) is ambiguous to this audience. "Save Photo" text next to the icon removes all doubt.
+- **Large readable text** -- 16px minimum body text, 14px minimum for metadata
+- **No gesture-only interactions** -- every action reachable via a visible button. Swipe-to-navigate is supplementary to visible prev/next arrows.
 
-### Video Optimization Standards
-- Resolution: 720p (1280x720) max for hero
-- Duration: <10s for hero, <30s for case studies
-- File size: <500KB hero video
-- Format: WebM with MP4 fallback
-- Fallback: Optimized poster image (same dimensions)
-- Mobile: Static image instead of video
+### Feedback and Confirmation
+- **Immediate visual feedback** when a like is tapped (heart fills, counter increments, brief scale animation)
+- **Success confirmation** after download: "Photo saved!" toast message. Otherwise users tap download 5 times because they aren't sure it worked.
+- **Error messages in plain language:** "Something went wrong. Try again." not "Network request failed: ERR_CROSS_ORIGIN"
 
-### Animation Philosophy
-- Scroll-driven, not time-based (user controls pace)
-- Respect `prefers-reduced-motion`
-- Subtle, purposeful motion (guides eye, doesn't distract)
-- Load hero content first, animation assets after
-- GSAP for production-grade smoothness
+### Cognitive Load
+- **No multi-step flows.** Download = one tap. Like = one tap. Comment = type + tap "Post."
+- **No modals on top of modals.** The lightbox IS the modal. Social actions happen inside it, not in a sub-modal.
+- **No hidden menus or overflow menus.** Every action visible. Three-dot menus are invisible to this audience.
+- **Default to the most common action.** The lightbox opens with the download and like buttons already visible, not behind a "more" button.
 
----
+### Navigation
+- **Visible scroll indicator** on the main grid if content extends below the fold
+- **"Back to top" button** after scrolling past 20+ photos -- this audience does not know they can tap the status bar to scroll to top on iOS
+- **No horizontal scrolling.** Vertical scroll only. Horizontal swipe is reserved for lightbox photo navigation.
 
-## Mobile-Specific Considerations
-
-| Feature | Desktop | Mobile | Rationale |
-|---------|---------|--------|-----------|
-| Hero video | Full-screen looping | Static poster image | Performance + data usage |
-| Navigation | Horizontal menu | Hamburger menu | Screen real estate |
-| Portfolio grid | 3-4 columns | 1-2 columns | Touch targets |
-| Hover effects | Interactive | Tap-based alternative | No hover on touch |
-| Parallax | Enabled | Disabled or minimal | Performance + mobile UX |
-| Scroll animations | Full experience | Simplified | Performance budget |
-
-**Key principle:** Mobile isn't "scaled-down desktop," it's a different experience optimized for touch and performance constraints.
+### Error Recovery
+- **No dead ends.** If download fails, show retry button immediately.
+- **Forgiving input.** Comment field should not reject input silently. If character limit reached, show "You've reached the limit" not just stop accepting characters.
+- **Offline tolerance.** If user loses connection while scrolling, show cached photos and a "No internet connection" banner, not a blank page.
 
 ---
 
-## Competitive Analysis Insights
+## Competitive Positioning
 
-Based on research, high-end creative portfolios in 2026 cluster around these patterns:
+### Why not use existing platforms?
 
-### Common winning formula:
-1. Dark or high-contrast theme (cinematic feel)
-2. Full-screen hero (video or striking image)
-3. Minimal navigation (5-7 items)
-4. Project-first layout (work above the fold)
-5. Deep case studies (process, not just results)
-6. Fast load times (performance = professionalism)
+| Platform | Monthly Cost | Why Not Sufficient |
+|----------|-------------|-------------------|
+| **Google Drive** | Free | Ugly, no social features, terrible mobile browsing, no branding |
+| **Pixieset** | $10-26/mo | Focused on print sales, clinical design, not warm/cute aesthetic |
+| **Pic-Time** | $15-50/mo | Feature-heavy, complex for simple event delivery |
+| **ShootProof** | $12-40/mo | Business-focused, overkill for anonymous social gallery |
+| **GuestCam/GUESTPIX** | Free-$50/mo | Guest upload focused (not what we want), generic design |
+| **Custom Shrike gallery** | Free (hosting) | Branded, warm aesthetic, anonymous social, proves engineering skill |
 
-### Differentiation opportunities:
-- **Process transparency** (most sites show results, few show "how")
-- **Performance excellence** (many creative sites are bloated/slow)
-- **Software credibility** (few photo/video agencies prove dev chops)
-- **Real-time booking** (most still use contact forms)
-
-### Market gaps Shrike can fill:
-- "Creative agency that actually understands code"
-- "Portfolio site that loads faster than competitor sites"
-- "We build the tools, not just use them"
+### Why build custom?
+1. **Portfolio piece** -- the gallery itself demonstrates Shrike's engineering capability
+2. **Brand control** -- warm/cute aesthetic perfectly matched to winery clientele
+3. **Zero recurring cost** -- Supabase free tier covers storage and DB for this scale
+4. **Audience-specific UX** -- designed for this exact demographic, not generic
+5. **Re-skinnable** -- swap photos and theme for each new event without platform fees
 
 ---
 
-## Content Requirements Per Feature
+## Content Requirements
 
-| Feature | Content Needed | Format | Source |
-|---------|---------------|--------|--------|
-| Hero video | 5-15s showcase reel | MP4/WebM, 720p | Existing work compilation |
-| Portfolio items | 3-5 projects minimum | Images (2000x1200 optimized) | Photography/video portfolio |
-| Case studies | Problem, solution, result | 500-1000 words + images | Retro on completed projects |
-| Services page | 3 service categories | 200-300 words each | Photography, Videography, Software |
-| About section | Team bios + company story | 300-500 words + headshots | Write + photo shoot |
-| Contact | CTA copy | 50-100 words | Simple, direct |
-| Testimonials | 3-5 client quotes | 50-100 words each | Request from past clients |
-
-**Content bottleneck:** Case studies require most effort. Can launch MVP with basic project descriptions, add deep dives post-launch.
+| Content | Format | Source | When Needed |
+|---------|--------|--------|-------------|
+| Event photos (200-1500) | JPEG, various aspect ratios | Shrike photography | Before gallery launch |
+| Thumbnails (auto-generated) | JPEG, ~400px wide | Generated from originals via script or Supabase transforms | During upload pipeline |
+| Blur placeholders | BlurHash strings or tiny base64 | Generated during upload | During upload pipeline |
+| Event title | Text string | Client/event details | Configuration |
+| Event date | Date string | Client/event details | Configuration |
+| Event banner (optional) | JPEG/PNG, landscape | Shrike photography or stock | Configuration |
 
 ---
 
 ## Sources
 
-This research draws from multiple 2026 sources across design trends, technical best practices, and competitive analysis:
+**Event Photo Gallery Platforms:**
+- [Pixieset Blog - Best Photo Gallery 2026](https://blog.pixieset.com/blog/best-photo-gallery/)
+- [TurtlePic - Best Client Gallery Platforms 2026](https://turtlepic.com/blog/best-client-gallery-platforms-for-photographers/)
+- [Fast.io - Photography Client Galleries 2026](https://www.fast.io/resources/photography-client-gallery/)
+- [Pic-Time vs Pixieset Review 2026](https://greenhousecreativestudios.com/pic-time-review/)
+- [Pixieset vs Pic-Time Feature Comparison](https://picflow.com/compare/pixieset-vs-pic-time)
+- [GuestCam - Event Photo Sharing](https://guestcam.co/)
+- [Kululu - Event Photo Sharing](https://www.kululu.com/)
+- [GUESTPIX - Event Photo Sharing](https://guestpix.com/)
 
-**Design & Trends:**
-- [Best design portfolio inspiration sites in 2026](https://www.adhamdannaway.com/blog/web-design/design-portfolio-inspiration)
-- [The 2026 Website Playbook for Creative Service Brands](https://creative7designs.com/2026-website-playbook-for-creative-service-brands/)
-- [20 Top Web Design Trends 2026](https://www.theedigital.com/blog/web-design-trends)
-- [Portfolio Websites: 25+ Inspiring Examples (2026)](https://www.sitebuilderreport.com/inspiration/portfolio-websites)
-- [Creative Director Portfolio Websites: 15+ Inspiring Examples (2026)](https://www.sitebuilderreport.com/inspiration/creative-director-portfolios)
+**Mobile UX for Older Adults:**
+- [Eleken - UX Design for Seniors](https://www.eleken.co/blog-posts/examples-of-ux-design-for-seniors)
+- [Toptal - Interface Design for Older Adults](https://www.toptal.com/designers/ui/ui-design-for-older-adults)
+- [NN/g - Senior Citizens on the Web](https://www.nngroup.com/reports/senior-citizens-on-the-web/)
+- [PMC - Design Guidelines for Mobile Apps for Older Adults](https://pmc.ncbi.nlm.nih.gov/articles/PMC10557006/)
+- [UX Collective - Designing for Older Audiences](https://uxdesign.cc/designing-for-older-audiences-checklist-best-practices-b6ca3ec5bcbf)
 
-**Photography/Videography Specific:**
-- [19 Best Photography & Videography Portfolio Websites](https://knapsackcreative.com/photographer-videographer-websites)
-- [Photography Websites: 30+ Inspiring Examples (2026)](https://www.sitebuilderreport.com/inspiration/photography-website-examples)
+**Masonry Layout & Photo Gallery UX:**
+- [MDN - CSS Masonry Layout](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout/Masonry_layout)
+- [Chrome Developers - CSS Masonry Update](https://developer.chrome.com/blog/masonry-update)
+- [CSS-Tricks - Making Masonry Layout That Works Today](https://css-tricks.com/making-a-masonry-layout-that-works-today/)
+- [PhotoSwipe - Responsive Image Gallery](https://photoswipe.com/)
+- [lightGallery - JavaScript Gallery](https://www.lightgalleryjs.com/)
 
-**Technical/Performance:**
-- [How to Optimize a Silent Background Video for Your Website's Hero Area](https://designtlc.com/how-to-optimize-a-silent-background-video-for-your-websites-hero-area/)
-- [Hero Video Tips for Websites | Filming, Placement & Performance](https://www.thegeckoagency.com/best-practices-for-filming-choosing-and-placing-a-hero-video-on-your-website/)
-- [Fast and Responsive Hero Videos for Great UX](https://simonhearne.com/2021/fast-responsive-videos/)
-- [Hero Section Design: Best Practices & Examples for 2026](https://www.perfectafternoon.com/2025/hero-section-design/)
+**Image Download on Mobile:**
+- [WebKit Bug 167341 - iOS download attribute](https://bugs.webkit.org/show_bug.cgi?id=167341)
+- [Supabase Storage - Serving Downloads](https://supabase.com/docs/guides/storage/serving/downloads)
+- [Supabase Storage - CDN Fundamentals](https://supabase.com/docs/guides/storage/cdn/fundamentals)
+- [Supabase Storage - Image Transformations](https://supabase.com/docs/guides/storage/serving/image-transformations)
 
-**Case Studies & Content:**
-- [How to Write and Leverage Agency Case Studies](https://prosal.com/blog/guide-to-case-studies-for-agencies-consultants)
-- [How to write the perfect web design case study to win more clients](https://webflow.com/blog/write-the-perfect-case-study)
+**Anonymous Interaction Patterns:**
+- [FingerprintJS - Storing Anonymous Preferences](https://fingerprint.com/blog/storing-anonymous-browser-preferences/)
+- [Picdrop - Photo Sharing Without Login](https://www.picdrop.com/web/how-it-works/photo-sharing-for-photographers)
 
-**Booking/Contact:**
-- [How to add scheduling to your website with Calendly](https://calendly.com/blog/embed-scheduling-website)
-- [Embed Calendly Scheduling Integration](https://calendly.com/integration/embed)
+**Performance & Loading:**
+- [Cloudinary - LQIP Explained](https://cloudinary.com/blog/low_quality_image_placeholders_lqip_explained)
+- [ImageKit - Lazy Loading Complete Guide](https://imagekit.io/blog/lazy-loading-images-complete-guide/)
+- [imgix - LQIP for Fast Loading](https://www.imgix.com/blog/lqip-your-images)
 
-**Animations & Interactions:**
-- [CSS scroll-driven animations - MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Scroll-driven_animations)
-- [Scroll animations for your website: types, examples, and best practices](https://www.halo-lab.com/blog/scroll-animations-for-your-website)
-- [Website Animations in 2026: Pros, Cons & Best Practices](https://www.shadowdigital.cc/resources/do-you-need-website-animations)
-- [10 Micro-interactions Examples and How They Boost UX](https://www.vev.design/blog/micro-interaction-examples/)
-- [Microinteractions: What they are and why they matter](https://webflow.com/blog/microinteractions)
-
-**Mistakes/Anti-Patterns:**
-- [8 Common Website Design Mistakes to Avoid in 2026](https://www.zachsean.com/post/8-common-website-design-mistakes-to-avoid-in-2026-for-better-conversions-and-user-experience)
-- [8 Mistakes to Avoid in UI/UX Design Portfolio](https://www.pixpa.com/blog/mistakes-to-avoid-in-ui-ux-design-portfolio)
-- [Five development portfolio anti-patterns and how to avoid them](https://nitor.com/en/articles/five-development-portfolio-anti-patterns-and-how-to-avoid-them)
-
-**Dark Theme/Cinematic:**
-- [15 Best Dark Theme Website Designs](https://www.designrush.com/best-designs/websites/trends/best-dark-themed-website-designs)
-- [Top 2026 Web Design Color Trends to Boost User Engagement](https://www.loungelizard.com/blog/web-design-color-trends/)
+**Winery Marketing Context:**
+- [Crafted ERP - Instagram Marketing for Wineries](https://craftederp.com/the-buzz/instagram-marketing-for-wineries)
+- [Walls.io - Social Wall for Events](https://walls.io/)
 
 ---
 
 ## Confidence Assessment
 
-**Overall confidence: MEDIUM**
-
-**Rationale:**
-- All findings based on WebSearch across multiple current (2026) sources
-- Cross-verified patterns across design blogs, portfolio examples, and technical resources
-- No access to Context7 or official framework documentation for technical specifics
-- Video optimization numbers (720p, <500KB) verified across multiple sources (HIGH confidence)
-- Animation best practices verified through MDN and multiple design resources (HIGH confidence)
-- Portfolio content recommendations (3-5 projects) verified across multiple industry sources (HIGH confidence)
-- Dark theme trends and microinteractions verified through multiple 2026-dated sources (MEDIUM confidence)
-- Case study format recommendations verified through multiple agency/portfolio resources (MEDIUM confidence)
-
-**What would increase confidence:**
-- Direct analysis of top-performing creative agency sites (Awwwards winners)
-- User testing data on portfolio conversion rates
-- Framework-specific best practices from Context7 (React, Next.js, GSAP)
-- Performance benchmarks from Lighthouse database
-- A/B testing results on booking vs contact form conversion
+| Area | Confidence | Rationale |
+|------|------------|-----------|
+| Table stakes features | HIGH | Cross-referenced across 8+ gallery platforms, consistent patterns |
+| Anti-features | HIGH | Based on audience analysis and competitive review, strongly opinionated |
+| Mobile UX patterns | HIGH | NN/g and PMC research papers, well-established guidelines |
+| iOS download behavior | HIGH | Verified via WebKit bug tracker and Apple Developer Forums |
+| Masonry layout approach | MEDIUM-HIGH | CSS columns proven, native grid-lanes not production-ready until mid-2026 |
+| Anonymous likes implementation | MEDIUM | localStorage approach is standard, but device fingerprinting edge cases exist (private browsing, clearing data) |
+| Comment spam prevention | MEDIUM | Rate limiting and char limits are standard, but effectiveness depends on actual abuse patterns |
+| Supabase at this scale | MEDIUM | Free tier should handle 200-1500 photos, but CDN egress costs with 100+ concurrent users untested |
 
 **Known gaps:**
-- Specific framework/library recommendations (covered in STACK.md)
-- Hosting and deployment considerations
-- Analytics and conversion tracking features
-- Budget implications for video production
-- Timeline for content development (case studies, copywriting)
+- Supabase Storage egress costs at scale (need to check free tier limits for photo-heavy galleries)
+- Exact BlurHash generation approach (during upload script vs build-time)
+- PhotoSwipe vs custom lightbox tradeoff (need to evaluate bundle size impact)
+- Whether CSS columns or a JS masonry library performs better with 1500+ items and lazy loading
