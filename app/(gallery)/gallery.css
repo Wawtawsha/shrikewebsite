@@ -13,6 +13,10 @@
   /* Accent coral */
   --color-accent: oklch(0.65 0.18 25);
   --color-accent-hover: oklch(0.6 0.2 25);
+  --color-accent-soft: oklch(0.92 0.06 25);
+
+  /* Heart color for Phase 3 likes */
+  --color-heart: oklch(0.6 0.22 15);
 
   /* Borders */
   --color-border: oklch(0.85 0.01 80);
@@ -32,4 +36,67 @@
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Gallery container with responsive padding */
+.gallery-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+@media (min-width: 768px) {
+  .gallery-container {
+    padding: 0 24px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .gallery-container {
+    padding: 0 32px;
+  }
+}
+
+/* Tap target utility for interactive elements */
+.gallery-tap-target {
+  min-height: 48px;
+  min-width: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Photo styling in masonry grid */
+.react-photo-album--photo {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Lightbox warm theme overrides */
+.yarl__root {
+  --yarl__color_backdrop: rgba(30, 20, 15, 0.92);
+}
+
+/* Loading spinner */
+@keyframes gallery-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.gallery-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: gallery-spin 0.6s linear infinite;
+}
+
+/* Reduced motion: disable animations */
+@media (prefers-reduced-motion: reduce) {
+  .gallery-spinner {
+    animation: none;
+  }
 }

@@ -43,7 +43,7 @@ Plans:
 
 ---
 
-### Phase 2: Gallery Display & Design
+### Phase 2: Gallery Display & Design — COMPLETE
 
 **Goal:** Build the visible gallery experience — masonry grid, lightbox, progressive loading, warm visual design, and mobile-first responsive layout.
 
@@ -66,8 +66,8 @@ Plans:
 **Plans:** 2 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — Masonry grid + progressive loading + blurhash placeholders + Server Component data flow
-- [ ] 02-02-PLAN.md — Lightbox with zoom/swipe + warm theme CSS polish + mobile-first responsive design
+- [x] 02-01-PLAN.md — Masonry grid + progressive loading + blurhash placeholders + Server Component data flow
+- [x] 02-02-PLAN.md — Lightbox with zoom/swipe + warm theme CSS polish + mobile-first responsive design
 
 ---
 
@@ -106,7 +106,7 @@ Plans:
 | v1 Phase 2 | Complete | 13 | 3/3 | 100% |
 | v1 Phase 3 | Complete | 5 | 2/2 | 100% |
 | v1.1 Phase 1 - Foundation | Complete | 4 | 2/2 | 100% |
-| v1.1 Phase 2 - Display & Design | Planned | 6 | 2 plans | 0% |
+| v1.1 Phase 2 - Display & Design | Complete | 6 | 2/2 | 100% |
 | v1.1 Phase 3 - Social & Polish | Pending | 5 | 0/2 | 0% |
 
 **v1 Total:** 25 requirements, 7 plans — COMPLETE
