@@ -107,7 +107,7 @@ Plans:
 | v1 Phase 3 | Complete | 5 | 2/2 | 100% |
 | v1.1 Phase 1 - Foundation | Complete | 4 | 2/2 | 100% |
 | v1.1 Phase 2 - Display & Design | Complete | 6 | 2/2 | 100% |
-| v1.1 Phase 3 - Social & Polish | Pending | 5 | 0/2 | 0% |
+| v1.1 Phase 3 - Social & Polish | Planned | 5 | 2 plans | 0% |
 
 **v1 Total:** 25 requirements, 7 plans — COMPLETE
 **v1.1 Total:** 15 requirements, 6 plans — IN PROGRESS
@@ -153,3 +153,4 @@ v1.1 Phase 3 (Social) — depends on gallery UI being in place to add interactio
 *v1 phases complete: 2026-02-01*
 *v1.1 roadmap added: 2026-02-08*
 *v1.1 Phase 2 planned: 2026-02-08*
+*v1.1 Phase 3 planned: 2026-02-08*
