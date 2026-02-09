@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { GalleryEvent, GalleryPhoto } from "@/types/gallery";
 import { MasonryGrid } from "@/components/gallery/MasonryGrid";
 import { GuestBookBlade } from "@/components/gallery/GuestBookBlade";
+import { useNessusTracking } from "@/hooks/useNessusTracking";
 
 interface GalleryContentProps {
   event: GalleryEvent;
@@ -14,6 +15,7 @@ interface GalleryContentProps {
 
 export function GalleryContent({ event, initialPhotos, totalCount, hasMore }: GalleryContentProps) {
   const [bladeOpen, setBladeOpen] = useState(false);
+  useNessusTracking(`Gallery — ${event.title}`);
 
   const formattedDate = new Date(event.date).toLocaleDateString("en-US", {
     year: "numeric",
