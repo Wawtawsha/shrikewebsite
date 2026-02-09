@@ -19,14 +19,25 @@ interface GalleryLightboxProps {
   onClose: () => void;
 }
 
+async function toJpegBlob(blob: Blob): Promise<Blob> {
+  if (blob.type === "image/jpeg") return blob;
+  const bitmap = await createImageBitmap(blob);
+  const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
+  const ctx = canvas.getContext("2d")!;
+  ctx.drawImage(bitmap, 0, 0);
+  return canvas.convertToBlob({ type: "image/jpeg", quality: 0.92 });
+}
+
 async function downloadPhoto(src: string) {
   try {
     const response = await fetch(src);
-    const blob = await response.blob();
+    const raw = await response.blob();
+    const blob = await toJpegBlob(raw);
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = src.split("/").pop() || "photo.jpg";
+    const filename = src.split("/").pop() || "photo.jpg";
+    a.download = filename.replace(/\.\w+$/, ".jpg");
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

@@ -95,27 +95,26 @@ async function main() {
     const filePath = join(dir, file);
     const rawBuffer = await readFile(filePath);
     const name = basename(file, extname(file));
-    const ext = ".webp"; // normalize output to webp
 
-    // Process images
+    // Process images — thumbs as webp (display-only), full as jpeg (downloadable)
     const thumbBuffer = await sharp(rawBuffer)
       .resize(THUMB_WIDTH, null, { withoutEnlargement: true })
       .webp({ quality: 80 })
       .toBuffer();
 
-    const fullImage = sharp(rawBuffer)
+    const fullBuffer = await sharp(rawBuffer)
       .resize(FULL_WIDTH, null, { withoutEnlargement: true })
-      .webp({ quality: 85 });
+      .jpeg({ quality: 85 })
+      .toBuffer();
 
-    const fullBuffer = await fullImage.toBuffer();
     const fullMetadata = await sharp(fullBuffer).metadata();
 
     // Generate blurhash from thumbnail
     const blurhash = await generateBlurhash(thumbBuffer);
 
     // Upload to storage
-    const thumbPath = `${event}/thumb/${name}${ext}`;
-    const fullPath = `${event}/full/${name}${ext}`;
+    const thumbPath = `${event}/thumb/${name}.webp`;
+    const fullPath = `${event}/full/${name}.jpg`;
 
     const { error: thumbErr } = await supabase.storage
       .from("event-photos")
@@ -128,7 +127,7 @@ async function main() {
 
     const { error: fullErr } = await supabase.storage
       .from("event-photos")
-      .upload(fullPath, fullBuffer, { contentType: "image/webp", upsert: true });
+      .upload(fullPath, fullBuffer, { contentType: "image/jpeg", upsert: true });
 
     if (fullErr) {
       console.error(`  Failed to upload full image for ${file}: ${fullErr.message}`);
