@@ -40,6 +40,7 @@ export function BlurhashPlaceholder({ blurhash, width, height }: BlurhashPlaceho
         width: "100%",
         height: "100%",
         objectFit: "cover",
+        zIndex: 0,
       }}
     />
   );

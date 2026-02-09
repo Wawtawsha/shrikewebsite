@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useMemo, useEffect, useRef } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import { MasonryPhotoAlbum, type RenderImageProps } from "react-photo-album";
 import "react-photo-album/masonry.css";
 import { supabase } from "@/lib/supabase";
@@ -49,14 +49,7 @@ function ImageWithPlaceholder({
   isLiked: boolean;
   onPhotoClick: () => void;
 }) {
-  const [loaded, setLoaded] = useState(false);
-  const imgRef = useRef<HTMLImageElement>(null);
   const { style, ...rest } = imgProps;
-
-  // Handle cached images where onLoad may not fire
-  useEffect(() => {
-    if (imgRef.current?.complete) setLoaded(true);
-  }, []);
 
   return (
     <div
@@ -66,7 +59,7 @@ function ImageWithPlaceholder({
       onKeyDown={(e) => { if (e.key === "Enter") onPhotoClick(); }}
       style={{ position: "relative", width: "100%", height: "100%", cursor: "pointer" }}
     >
-      {!loaded && photo.galleryPhoto.blurhash && (
+      {photo.galleryPhoto.blurhash && (
         <BlurhashPlaceholder
           blurhash={photo.galleryPhoto.blurhash}
           width={photo.galleryPhoto.width}
@@ -74,12 +67,10 @@ function ImageWithPlaceholder({
         />
       )}
       <img
-        ref={imgRef}
         {...rest}
-        style={{ ...style, display: "block", width: "100%", height: "100%" }}
+        style={{ ...style, display: "block", width: "100%", height: "100%", position: "relative", zIndex: 1 }}
         loading="lazy"
         decoding="async"
-        onLoad={() => setLoaded(true)}
       />
       <LikeButton
         photoId={photo.galleryPhoto.id}
