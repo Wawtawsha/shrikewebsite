@@ -106,16 +106,9 @@ export function CommentSection({ eventId, firstPhotoId }: CommentSectionProps) {
   const visibleComments = showAll ? comments : comments.slice(0, 20);
 
   return (
-    <section className="mt-12 pt-8" style={{ borderTop: "1px solid var(--color-border-subtle)" }}>
-      <h2
-        className="text-xl md:text-2xl font-bold text-center mb-8"
-        style={{ fontFamily: "var(--font-display)" }}
-      >
-        Guest Book
-      </h2>
-
+    <div>
       {/* Comment Form */}
-      <form onSubmit={handleSubmit} className="comment-form max-w-lg mx-auto mb-10">
+      <form onSubmit={handleSubmit} className="comment-form mb-6">
         {/* Honeypot — invisible to humans, attracts bots */}
         <div style={{ position: "absolute", left: "-9999px" }} aria-hidden="true">
           <input
@@ -159,7 +152,7 @@ export function CommentSection({ eventId, firstPhotoId }: CommentSectionProps) {
         <button
           type="submit"
           disabled={!body.trim() || submitting}
-          className="w-full sm:w-auto rounded-full px-8 py-3 text-base font-medium text-white transition-colors disabled:opacity-50"
+          className="rounded-full px-10 py-4 text-base font-medium text-white transition-colors disabled:opacity-50"
           style={{
             backgroundColor: "var(--color-accent)",
             minHeight: "48px",
@@ -186,7 +179,7 @@ export function CommentSection({ eventId, firstPhotoId }: CommentSectionProps) {
           No comments yet — be the first!
         </p>
       ) : (
-        <div className="max-w-lg mx-auto space-y-3">
+        <div className="space-y-3">
           {visibleComments.map((comment) => (
             <div key={comment.id} className="comment-card">
               <div className="flex justify-between items-baseline mb-1">
@@ -213,6 +206,6 @@ export function CommentSection({ eventId, firstPhotoId }: CommentSectionProps) {
           )}
         </div>
       )}
-    </section>
+    </div>
   );
 }

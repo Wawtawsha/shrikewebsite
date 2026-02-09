@@ -1,8 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import type { GalleryEvent, GalleryPhoto } from "@/types/gallery";
 import { MasonryGrid } from "@/components/gallery/MasonryGrid";
-import { CommentSection } from "@/components/gallery/CommentSection";
+import { GuestBookBlade } from "@/components/gallery/GuestBookBlade";
 
 interface GalleryContentProps {
   event: GalleryEvent;
@@ -12,6 +13,8 @@ interface GalleryContentProps {
 }
 
 export function GalleryContent({ event, initialPhotos, totalCount, hasMore }: GalleryContentProps) {
+  const [bladeOpen, setBladeOpen] = useState(false);
+
   const formattedDate = new Date(event.date).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
@@ -19,7 +22,14 @@ export function GalleryContent({ event, initialPhotos, totalCount, hasMore }: Ga
   });
 
   return (
-    <main id="main-content" className="min-h-screen py-8">
+    <main
+      id="main-content"
+      className="min-h-screen py-8"
+      style={{
+        paddingRight: bladeOpen ? "min(380px, 50vw)" : undefined,
+        transition: "padding-right 0.3s ease",
+      }}
+    >
       <div className="gallery-container">
         <header className="text-center mb-8 pb-6" style={{ borderBottom: "1px solid var(--color-border-subtle)" }}>
           <h1
@@ -37,22 +47,23 @@ export function GalleryContent({ event, initialPhotos, totalCount, hasMore }: Ga
             <p className="text-muted">Photos are on their way! Check back soon.</p>
           </div>
         ) : (
-          <>
-            <MasonryGrid
-              initialPhotos={initialPhotos}
-              totalCount={totalCount}
-              hasMore={hasMore}
-              eventId={event.id}
-            />
-            {initialPhotos[0] && (
-              <CommentSection
-                eventId={event.id}
-                firstPhotoId={initialPhotos[0].id}
-              />
-            )}
-          </>
+          <MasonryGrid
+            initialPhotos={initialPhotos}
+            totalCount={totalCount}
+            hasMore={hasMore}
+            eventId={event.id}
+          />
         )}
       </div>
+
+      {initialPhotos[0] && (
+        <GuestBookBlade
+          open={bladeOpen}
+          onToggle={() => setBladeOpen((prev) => !prev)}
+          eventId={event.id}
+          firstPhotoId={initialPhotos[0].id}
+        />
+      )}
     </main>
   );
 }
