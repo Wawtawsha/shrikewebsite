@@ -71,7 +71,7 @@ Plans:
 
 ---
 
-### Phase 3: Social Features & Polish
+### Phase 3: Social Features & Polish — COMPLETE
 
 **Goal:** Add anonymous like/comment interactions with spam protection, moderation capability, photo download, and final UX polish.
 
@@ -93,8 +93,8 @@ Plans:
 **Plans:** 2 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — Anonymous likes with device ID + optimistic UI + anonymous comments with form/display
-- [ ] 03-02-PLAN.md — Spam protection layers + moderation endpoint + photo download + final UX polish
+- [x] 03-01-PLAN.md — Anonymous likes with device ID + optimistic UI + anonymous comments with form/display
+- [x] 03-02-PLAN.md — Spam protection layers + moderation endpoint + photo download + final UX polish
 
 ---
 
@@ -107,10 +107,10 @@ Plans:
 | v1 Phase 3 | Complete | 5 | 2/2 | 100% |
 | v1.1 Phase 1 - Foundation | Complete | 4 | 2/2 | 100% |
 | v1.1 Phase 2 - Display & Design | Complete | 6 | 2/2 | 100% |
-| v1.1 Phase 3 - Social & Polish | Planned | 5 | 2 plans | 0% |
+| v1.1 Phase 3 - Social & Polish | Complete | 5 | 2/2 | 100% |
 
 **v1 Total:** 25 requirements, 7 plans — COMPLETE
-**v1.1 Total:** 15 requirements, 6 plans — IN PROGRESS
+**v1.1 Total:** 15 requirements, 6 plans — COMPLETE
 
 ---
 
@@ -154,3 +154,5 @@ v1.1 Phase 3 (Social) — depends on gallery UI being in place to add interactio
 *v1.1 roadmap added: 2026-02-08*
 *v1.1 Phase 2 planned: 2026-02-08*
 *v1.1 Phase 3 planned: 2026-02-08*
+*v1.1 Phase 3 complete: 2026-02-08*
+*v1.1 milestone complete: 2026-02-08*

@@ -1,5 +1,10 @@
 import { supabase } from "./supabase";
-import type { GalleryEvent, GalleryPhoto, PhotoBatch } from "@/types/gallery";
+import type {
+  GalleryEvent,
+  GalleryPhoto,
+  GalleryComment,
+  PhotoBatch,
+} from "@/types/gallery";
 
 export function getStorageUrl(path: string): string {
   return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/event-photos/${path}`;
@@ -45,4 +50,49 @@ export async function fetchPhotos(
     totalCount,
     hasMore: offset + limit < totalCount,
   };
+}
+
+export async function fetchUserLikes(
+  eventId: string,
+  deviceId: string
+): Promise<Set<string>> {
+  const { data: photos } = await supabase
+    .from("photos")
+    .select("id")
+    .eq("event_id", eventId);
+
+  if (!photos || photos.length === 0) return new Set();
+
+  const photoIds = photos.map((p) => p.id);
+
+  const { data: likes } = await supabase
+    .from("photo_likes")
+    .select("photo_id")
+    .eq("device_id", deviceId)
+    .in("photo_id", photoIds);
+
+  return new Set((likes ?? []).map((l) => l.photo_id));
+}
+
+export async function fetchComments(
+  eventId: string
+): Promise<GalleryComment[]> {
+  const { data: photos } = await supabase
+    .from("photos")
+    .select("id")
+    .eq("event_id", eventId);
+
+  if (!photos || photos.length === 0) return [];
+
+  const photoIds = photos.map((p) => p.id);
+
+  const { data } = await supabase
+    .from("photo_comments")
+    .select("*")
+    .in("photo_id", photoIds)
+    .eq("is_visible", true)
+    .order("created_at", { ascending: false })
+    .limit(100);
+
+  return (data as GalleryComment[]) ?? [];
 }

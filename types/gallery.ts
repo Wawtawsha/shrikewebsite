@@ -29,3 +29,13 @@ export interface PhotoBatch {
   totalCount: number;
   hasMore: boolean;
 }
+
+export interface GalleryComment {
+  id: string;
+  photo_id: string;
+  device_id: string;
+  author_name: string;
+  body: string;
+  is_visible: boolean;
+  created_at: string;
+}

@@ -2,6 +2,7 @@
 
 import type { GalleryEvent, GalleryPhoto } from "@/types/gallery";
 import { MasonryGrid } from "@/components/gallery/MasonryGrid";
+import { CommentSection } from "@/components/gallery/CommentSection";
 
 interface GalleryContentProps {
   event: GalleryEvent;
@@ -36,12 +37,20 @@ export function GalleryContent({ event, initialPhotos, totalCount, hasMore }: Ga
             <p className="text-muted">Photos are on their way! Check back soon.</p>
           </div>
         ) : (
-          <MasonryGrid
-            initialPhotos={initialPhotos}
-            totalCount={totalCount}
-            hasMore={hasMore}
-            eventId={event.id}
-          />
+          <>
+            <MasonryGrid
+              initialPhotos={initialPhotos}
+              totalCount={totalCount}
+              hasMore={hasMore}
+              eventId={event.id}
+            />
+            {initialPhotos[0] && (
+              <CommentSection
+                eventId={event.id}
+                firstPhotoId={initialPhotos[0].id}
+              />
+            )}
+          </>
         )}
       </div>
     </main>

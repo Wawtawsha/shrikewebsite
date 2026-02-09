@@ -57,30 +57,30 @@
 
 ### Gallery Foundation
 
-- [ ] **GALL-01**: Route group architecture — `/gallery` with separate root layout, completely isolated from main site's dark theme, Navigation, Footer, and Lenis
-- [ ] **GALL-02**: Supabase backend on Free plan — public Storage bucket for photos, Postgres DB for metadata/likes/comments
-- [ ] **GALL-03**: Database schema — `events`, `photos`, `photo_likes`, `photo_comments` tables with RLS policies, indexes, and like-count trigger
-- [ ] **GALL-04**: Upload tooling — local Node script using `sharp` to resize photos (thumbnail ~400px + full-size ~1600px) and generate blurhash, then upload to Supabase Storage with metadata INSERT
+- [x] **GALL-01**: Route group architecture — `/gallery` with separate root layout, completely isolated from main site's dark theme, Navigation, Footer, and Lenis
+- [x] **GALL-02**: Supabase backend on Free plan — public Storage bucket for photos, Postgres DB for metadata/likes/comments
+- [x] **GALL-03**: Database schema — `events`, `photos`, `photo_likes`, `photo_comments` tables with RLS policies, indexes, and like-count trigger
+- [x] **GALL-04**: Upload tooling — local Node script using `sharp` to resize photos (thumbnail ~400px + full-size ~1600px) and generate blurhash, then upload to Supabase Storage with metadata INSERT
 
 ### Gallery Display
 
-- [ ] **GALL-05**: Pinterest-style masonry grid using `react-photo-album` MasonryPhotoAlbum with aspect-ratio-preserving layout
-- [ ] **GALL-06**: Progressive loading via "Load More" button — 50 photos per batch, progress indicator ("Showing 50 of 347 photos"), Server Component renders first batch
-- [ ] **GALL-07**: Photo lightbox via `yet-another-react-lightbox` — full-size image, pinch-to-zoom, swipe navigation, keyboard support
-- [ ] **GALL-08**: Blur placeholders — blurhash strings decoded client-side for instant visual feedback while images load
+- [x] **GALL-05**: Pinterest-style masonry grid using `react-photo-album` MasonryPhotoAlbum with aspect-ratio-preserving layout
+- [x] **GALL-06**: Progressive loading via "Load More" button — 50 photos per batch, progress indicator ("Showing 50 of 347 photos"), Server Component renders first batch
+- [x] **GALL-07**: Photo lightbox via `yet-another-react-lightbox` — full-size image, pinch-to-zoom, swipe navigation, keyboard support
+- [x] **GALL-08**: Blur placeholders — blurhash strings decoded client-side for instant visual feedback while images load
 
 ### Gallery Social
 
-- [ ] **GALL-09**: Anonymous likes — localStorage device ID (`crypto.randomUUID()`), `UNIQUE(photo_id, device_id)` constraint, denormalized `like_count` via Postgres trigger, optimistic UI toggle
-- [ ] **GALL-10**: Anonymous comments — optional display name (default "Guest"), 500 char limit, DB constraints for length and non-empty
-- [ ] **GALL-11**: Spam protection — honeypot field + 2-second time check on comment form, `obscenity` npm package for profanity filter, Postgres trigger rate limit (max 3 comments per device per 5 minutes)
-- [ ] **GALL-12**: Post-hoc moderation — `is_visible` flag on comments, owner delete via service role key (admin secret in URL or separate endpoint)
+- [x] **GALL-09**: Anonymous likes — localStorage device ID (`crypto.randomUUID()`), `UNIQUE(photo_id, device_id)` constraint, denormalized `like_count` via Postgres trigger, optimistic UI toggle
+- [x] **GALL-10**: Anonymous comments — optional display name (default "Guest"), 500 char limit, DB constraints for length and non-empty
+- [x] **GALL-11**: Spam protection — honeypot field + 2-second time check on comment form, `obscenity` npm package for profanity filter, Postgres trigger rate limit (max 3 comments per device per 5 minutes)
+- [x] **GALL-12**: Post-hoc moderation — `is_visible` flag on comments, owner delete via service role key (admin secret in URL or separate endpoint)
 
 ### Gallery Design
 
-- [ ] **GALL-13**: Warm/cute visual theme — oklch warm palette (cream background, coral accent, warm browns), completely distinct from dark cinematic main site
-- [ ] **GALL-14**: Mobile-first responsive layout — 2 cols phone, 3 cols tablet, 4-5 cols desktop; large tap targets (min 48px); intuitive for non-tech audience
-- [ ] **GALL-15**: One-tap photo download — download button in lightbox, uses native download attribute
+- [x] **GALL-13**: Warm/cute visual theme — oklch warm palette (cream background, coral accent, warm browns), completely distinct from dark cinematic main site
+- [x] **GALL-14**: Mobile-first responsive layout — 2 cols phone, 3 cols tablet, 4-5 cols desktop; large tap targets (min 48px); intuitive for non-tech audience
+- [x] **GALL-15**: One-tap photo download — download button in lightbox, uses native download attribute
 
 ---
 
@@ -147,26 +147,26 @@
 | TECH-03 | v1 | Phase 1 | Complete |
 | TECH-04 | v1 | Phase 3 | Complete |
 | TECH-05 | v1 | Phase 1 | Complete |
-| GALL-01 | v1.1 | Phase 1 | Pending |
-| GALL-02 | v1.1 | Phase 1 | Pending |
-| GALL-03 | v1.1 | Phase 1 | Pending |
-| GALL-04 | v1.1 | Phase 1 | Pending |
-| GALL-05 | v1.1 | Phase 2 | Pending |
-| GALL-06 | v1.1 | Phase 2 | Pending |
-| GALL-07 | v1.1 | Phase 2 | Pending |
-| GALL-08 | v1.1 | Phase 2 | Pending |
-| GALL-09 | v1.1 | Phase 3 | Pending |
-| GALL-10 | v1.1 | Phase 3 | Pending |
-| GALL-11 | v1.1 | Phase 3 | Pending |
-| GALL-12 | v1.1 | Phase 3 | Pending |
-| GALL-13 | v1.1 | Phase 2 | Pending |
-| GALL-14 | v1.1 | Phase 2 | Pending |
-| GALL-15 | v1.1 | Phase 3 | Pending |
+| GALL-01 | v1.1 | Phase 1 | Complete |
+| GALL-02 | v1.1 | Phase 1 | Complete |
+| GALL-03 | v1.1 | Phase 1 | Complete |
+| GALL-04 | v1.1 | Phase 1 | Complete |
+| GALL-05 | v1.1 | Phase 2 | Complete |
+| GALL-06 | v1.1 | Phase 2 | Complete |
+| GALL-07 | v1.1 | Phase 2 | Complete |
+| GALL-08 | v1.1 | Phase 2 | Complete |
+| GALL-09 | v1.1 | Phase 3 | Complete |
+| GALL-10 | v1.1 | Phase 3 | Complete |
+| GALL-11 | v1.1 | Phase 3 | Complete |
+| GALL-12 | v1.1 | Phase 3 | Complete |
+| GALL-13 | v1.1 | Phase 2 | Complete |
+| GALL-14 | v1.1 | Phase 2 | Complete |
+| GALL-15 | v1.1 | Phase 3 | Complete |
 
 **Coverage:**
 - v1 requirements: 25/25 complete
-- v1.1 requirements: 15 total, 0 complete
-- Total: 40 requirements
+- v1.1 requirements: 15/15 complete
+- Total: 40/40 requirements complete
 
 ---
 *Requirements defined: 2026-01-30*

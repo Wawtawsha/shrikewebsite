@@ -1,13 +1,15 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import { MasonryPhotoAlbum, type RenderImageProps } from "react-photo-album";
 import "react-photo-album/masonry.css";
 import { supabase } from "@/lib/supabase";
-import { getStorageUrl } from "@/lib/gallery";
+import { getStorageUrl, fetchUserLikes } from "@/lib/gallery";
 import type { GalleryPhoto } from "@/types/gallery";
 import { BlurhashPlaceholder } from "./BlurhashPlaceholder";
 import { GalleryLightbox } from "./GalleryLightbox";
+import { LikeButton } from "./LikeButton";
+import { useDeviceId } from "@/hooks/useDeviceId";
 
 interface MasonryGridProps {
   initialPhotos: GalleryPhoto[];
@@ -37,15 +39,27 @@ function toAlbumPhotos(photos: GalleryPhoto[]): GalleryPhotoAlbumPhoto[] {
 function ImageWithPlaceholder({
   imgProps,
   photo,
+  deviceId,
+  isLiked,
+  onPhotoClick,
 }: {
   imgProps: RenderImageProps;
   photo: GalleryPhotoAlbumPhoto;
+  deviceId: string | null;
+  isLiked: boolean;
+  onPhotoClick: () => void;
 }) {
   const [loaded, setLoaded] = useState(false);
   const { style, ...rest } = imgProps;
 
   return (
-    <div style={{ position: "relative", width: "100%", height: "100%", cursor: "pointer" }}>
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={onPhotoClick}
+      onKeyDown={(e) => { if (e.key === "Enter") onPhotoClick(); }}
+      style={{ position: "relative", width: "100%", height: "100%", cursor: "pointer" }}
+    >
       {!loaded && photo.galleryPhoto.blurhash && (
         <BlurhashPlaceholder
           blurhash={photo.galleryPhoto.blurhash}
@@ -60,6 +74,12 @@ function ImageWithPlaceholder({
         decoding="async"
         onLoad={() => setLoaded(true)}
       />
+      <LikeButton
+        photoId={photo.galleryPhoto.id}
+        initialCount={photo.galleryPhoto.like_count}
+        isLiked={isLiked}
+        deviceId={deviceId}
+      />
     </div>
   );
 }
@@ -69,6 +89,13 @@ export function MasonryGrid({ initialPhotos, totalCount, hasMore, eventId }: Mas
   const [loading, setLoading] = useState(false);
   const [hasMoreState, setHasMoreState] = useState(hasMore);
   const [lightboxIndex, setLightboxIndex] = useState(-1);
+  const [userLikes, setUserLikes] = useState<Set<string>>(new Set());
+  const deviceId = useDeviceId();
+
+  useEffect(() => {
+    if (!deviceId) return;
+    fetchUserLikes(eventId, deviceId).then(setUserLikes);
+  }, [deviceId, eventId]);
 
   const albumPhotos = toAlbumPhotos(photos);
 
@@ -113,14 +140,19 @@ export function MasonryGrid({ initialPhotos, totalCount, hasMore, eventId }: Mas
         }}
         spacing={8}
         defaultContainerWidth={1200}
-        onClick={({ index }) => setLightboxIndex(index)}
         render={{
-          image: (props, context) => (
-            <ImageWithPlaceholder
-              imgProps={props}
-              photo={context.photo as GalleryPhotoAlbumPhoto}
-            />
-          ),
+          image: (props, context) => {
+            const photo = context.photo as GalleryPhotoAlbumPhoto;
+            return (
+              <ImageWithPlaceholder
+                imgProps={props}
+                photo={photo}
+                deviceId={deviceId}
+                isLiked={userLikes.has(photo.galleryPhoto.id)}
+                onPhotoClick={() => setLightboxIndex(context.index)}
+              />
+            );
+          },
         }}
       />
 
