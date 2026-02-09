@@ -104,7 +104,7 @@ export function MasonryGrid({ initialPhotos, totalCount, hasMore, eventId }: Mas
     fetchUserLikes(eventId, deviceId).then(setUserLikes);
   }, [deviceId, eventId]);
 
-  const albumPhotos = toAlbumPhotos(photos);
+  const albumPhotos = useMemo(() => toAlbumPhotos(photos), [photos]);
 
   const slides = useMemo(
     () =>
