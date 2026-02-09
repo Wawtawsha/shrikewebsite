@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useMemo, useEffect } from "react";
+import { useState, useCallback, useMemo, useEffect, useRef } from "react";
 import { MasonryPhotoAlbum, type RenderImageProps } from "react-photo-album";
 import "react-photo-album/masonry.css";
 import { supabase } from "@/lib/supabase";
@@ -50,7 +50,13 @@ function ImageWithPlaceholder({
   onPhotoClick: () => void;
 }) {
   const [loaded, setLoaded] = useState(false);
+  const imgRef = useRef<HTMLImageElement>(null);
   const { style, ...rest } = imgProps;
+
+  // Handle cached images where onLoad may not fire
+  useEffect(() => {
+    if (imgRef.current?.complete) setLoaded(true);
+  }, []);
 
   return (
     <div
@@ -68,6 +74,7 @@ function ImageWithPlaceholder({
         />
       )}
       <img
+        ref={imgRef}
         {...rest}
         style={{ ...style, display: "block", width: "100%", height: "100%" }}
         loading="lazy"
