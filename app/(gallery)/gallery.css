@@ -117,6 +117,57 @@
   text-transform: uppercase;
 }
 
+/* Tip links */
+.gallery-tip-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.gallery-tip-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  border-radius: 20px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  min-height: 36px;
+}
+
+.gallery-tip-link:hover {
+  transform: translateY(-1px);
+}
+
+.gallery-tip-link:active {
+  transform: translateY(0);
+}
+
+.gallery-tip-paypal {
+  background: #0070ba;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 112, 186, 0.25);
+}
+
+.gallery-tip-paypal:hover {
+  box-shadow: 0 4px 14px rgba(0, 112, 186, 0.35);
+}
+
+.gallery-tip-cashapp {
+  background: #00d632;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 214, 50, 0.25);
+}
+
+.gallery-tip-cashapp:hover {
+  box-shadow: 0 4px 14px rgba(0, 214, 50, 0.35);
+}
+
 .gallery-header-rule {
   width: 48px;
   height: 1.5px;
