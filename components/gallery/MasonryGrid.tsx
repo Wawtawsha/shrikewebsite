@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useMemo, useEffect } from "react";
+import { useState, useCallback, useMemo, useEffect, useRef } from "react";
 import { MasonryPhotoAlbum, type RenderImageProps } from "react-photo-album";
 import "react-photo-album/masonry.css";
 import { supabase } from "@/lib/supabase";
@@ -89,6 +89,8 @@ export function MasonryGrid({ initialPhotos, totalCount, hasMore, eventId }: Mas
   const [lightboxIndex, setLightboxIndex] = useState(-1);
   const [userLikes, setUserLikes] = useState<Set<string>>(new Set());
   const deviceId = useDeviceId();
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const loadingRef = useRef(false);
 
   useEffect(() => {
     if (!deviceId) return;
@@ -108,7 +110,10 @@ export function MasonryGrid({ initialPhotos, totalCount, hasMore, eventId }: Mas
   );
 
   const loadMore = useCallback(async () => {
+    if (loadingRef.current) return;
+    loadingRef.current = true;
     setLoading(true);
+
     const offset = photos.length;
     const limit = 50;
 
@@ -124,7 +129,26 @@ export function MasonryGrid({ initialPhotos, totalCount, hasMore, eventId }: Mas
       setHasMoreState(offset + limit < totalCount);
     }
     setLoading(false);
+    loadingRef.current = false;
   }, [photos.length, eventId, totalCount]);
+
+  // Infinite scroll via IntersectionObserver
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel || !hasMoreState) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          loadMore();
+        }
+      },
+      { rootMargin: "600px" }
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [hasMoreState, loadMore]);
 
   return (
     <div>
@@ -160,14 +184,9 @@ export function MasonryGrid({ initialPhotos, totalCount, hasMore, eventId }: Mas
         </p>
 
         {hasMoreState && (
-          <button
-            onClick={loadMore}
-            disabled={loading}
-            className="gallery-load-more"
-          >
-            {loading && <span className="gallery-spinner" />}
-            {loading ? "Loading..." : "See More Photos"}
-          </button>
+          <div ref={sentinelRef} style={{ padding: "24px 0", textAlign: "center" }}>
+            {loading && <span className="gallery-spinner" style={{ margin: "0 auto" }} />}
+          </div>
         )}
       </div>
 

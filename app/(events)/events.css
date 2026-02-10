@@ -1,0 +1,301 @@
+/* Dark choco-memphis theme */
+@theme {
+  /* Deep chocolate backgrounds */
+  --color-background: oklch(0.11 0.02 55);
+  --color-surface: oklch(0.15 0.02 55);
+  --color-surface-elevated: oklch(0.19 0.02 55);
+
+  /* Warm cream text on dark */
+  --color-foreground: oklch(0.92 0.02 75);
+  --color-muted: oklch(0.58 0.03 55);
+  --color-subtle: oklch(0.42 0.02 55);
+
+  /* Orange/gold accent */
+  --color-accent: oklch(0.68 0.14 65);
+  --color-accent-hover: oklch(0.62 0.16 65);
+  --color-accent-soft: oklch(0.22 0.05 65);
+
+  /* Warm amber heart */
+  --color-heart: oklch(0.65 0.17 50);
+
+  /* Dark borders */
+  --color-border: oklch(0.22 0.02 55);
+  --color-border-subtle: oklch(0.18 0.02 55);
+
+  /* Font families */
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-syne);
+  --font-mono: var(--font-mono);
+}
+
+/* Base body styles for events theme */
+.events-theme {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Gallery container with responsive padding */
+.gallery-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+@media (min-width: 768px) {
+  .gallery-container {
+    padding: 0 24px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .gallery-container {
+    padding: 0 32px;
+  }
+}
+
+/* Tap target utility for interactive elements */
+.gallery-tap-target {
+  min-height: 48px;
+  min-width: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Photo styling in masonry grid */
+.react-photo-album--photo {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Lightbox warm dark backdrop */
+.yarl__root {
+  --yarl__color_backdrop: rgba(15, 12, 10, 0.94);
+}
+
+.yarl__button--download {
+  color: white;
+}
+
+/* Loading spinner */
+@keyframes gallery-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.gallery-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: gallery-spin 0.6s linear infinite;
+}
+
+/* Like button overlay on photos */
+.like-button-overlay {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 8px;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  border: none;
+  cursor: pointer;
+  z-index: 1;
+  transition: background 0.2s;
+}
+
+.like-button-overlay:hover {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+/* Heart pop animation */
+@keyframes heart-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+.heart-pop {
+  animation: heart-pop 300ms ease;
+}
+
+/* Comment card */
+.comment-card {
+  background: var(--color-surface);
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid var(--color-border-subtle);
+}
+
+/* Comment form inputs */
+.comment-form-input,
+.comment-form-textarea {
+  font-family: inherit;
+  font-size: 0.875rem;
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 12px;
+  color: var(--color-foreground);
+  transition: border-color 0.2s;
+}
+
+.comment-form-input:focus,
+.comment-form-textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.comment-form-textarea {
+  resize: none;
+  min-height: 80px;
+}
+
+.comment-form-input::placeholder,
+.comment-form-textarea::placeholder {
+  color: var(--color-subtle);
+}
+
+/* Guest Book blade panel */
+.guestbook-blade {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(380px, 50vw);
+  background: var(--color-background);
+  border-left: 1px solid var(--color-border);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+}
+
+.guestbook-blade--open {
+  transform: translateX(0);
+}
+
+.guestbook-blade-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-border-subtle);
+  flex-shrink: 0;
+}
+
+.guestbook-blade-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-muted);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.guestbook-blade-close:hover {
+  background: var(--color-surface);
+  color: var(--color-foreground);
+}
+
+.guestbook-blade-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+/* Floating toggle button — gold glow on dark */
+.guestbook-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: var(--color-accent);
+  color: white;
+  border: none;
+  border-radius: 24px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 20px oklch(0.68 0.14 65 / 0.2);
+  transition: background 0.2s, transform 0.2s;
+  min-height: 48px;
+}
+
+.guestbook-fab:hover {
+  background: var(--color-accent-hover);
+  transform: translateY(-1px);
+}
+
+/* Memphis geometric divider */
+.memphis-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px 0;
+}
+
+.memphis-circle {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: oklch(0.68 0.14 65);
+}
+
+.memphis-square {
+  width: 8px;
+  height: 8px;
+  background: oklch(0.35 0.05 55);
+  transform: rotate(45deg);
+}
+
+.memphis-triangle {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 10px solid oklch(0.55 0.12 50);
+}
+
+/* Reduced motion: disable animations */
+@media (prefers-reduced-motion: reduce) {
+  .gallery-spinner {
+    animation: none;
+  }
+
+  .heart-pop {
+    animation: none;
+  }
+
+  .guestbook-blade {
+    transition: none;
+  }
+
+  .guestbook-fab {
+    transition: none;
+  }
+}
