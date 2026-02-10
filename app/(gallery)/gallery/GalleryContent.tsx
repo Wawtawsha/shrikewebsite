@@ -5,6 +5,7 @@ import type { GalleryEvent, GalleryPhoto } from "@/types/gallery";
 import { MasonryGrid } from "@/components/gallery/MasonryGrid";
 import { GuestBookBlade } from "@/components/gallery/GuestBookBlade";
 import { useNessusTracking } from "@/hooks/useNessusTracking";
+import { ThemeSwitcher } from "@/components/gallery/ThemeSwitcher";
 
 interface GalleryContentProps {
   event: GalleryEvent;
@@ -26,22 +27,26 @@ export function GalleryContent({ event, initialPhotos, totalCount, hasMore }: Ga
   return (
     <main
       id="main-content"
-      className="min-h-screen py-8"
+      className="min-h-screen"
       style={{
-        paddingRight: bladeOpen ? "min(380px, 50vw)" : undefined,
-        transition: "padding-right 0.3s ease",
+        paddingRight: bladeOpen ? "min(400px, 50vw)" : undefined,
+        transition: "padding-right 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
       }}
     >
       <div className="gallery-container">
-        <header className="text-center mb-8 pb-6" style={{ borderBottom: "1px solid var(--color-border-subtle)" }}>
-          <h1
-            className="text-2xl md:text-4xl font-bold mb-2 tracking-tight"
-            style={{ fontFamily: "var(--font-display)" }}
-          >
+        <header className="gallery-header">
+          <div className="gallery-header-toggle">
+            <ThemeSwitcher />
+          </div>
+          <h1 className="gallery-title">
             {event.title}
           </h1>
-          <p className="text-muted mb-2">{formattedDate}</p>
-          <p className="text-sm text-subtle">{totalCount} photos</p>
+          <div className="gallery-meta">
+            <span className="gallery-meta-date">{formattedDate}</span>
+            <span className="gallery-meta-divider" aria-hidden="true" />
+            <span className="gallery-meta-count">{totalCount} Photos</span>
+          </div>
+          <div className="gallery-header-rule" />
         </header>
 
         {totalCount === 0 ? (

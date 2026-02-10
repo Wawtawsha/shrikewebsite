@@ -61,6 +61,7 @@ export const LikeButton = memo(function LikeButton({
       onClick={handleClick}
       className="gallery-tap-target like-button-overlay"
       aria-label={liked ? "Unlike photo" : "Like photo"}
+      data-liked={liked ? "true" : undefined}
     >
       <svg
         width="20"

@@ -136,7 +136,7 @@ export function MasonryGrid({ initialPhotos, totalCount, hasMore, eventId }: Mas
           if (containerWidth < 1200) return 4;
           return 5;
         }}
-        spacing={8}
+        spacing={12}
         defaultContainerWidth={1200}
         render={{
           image: (props, context) => {
@@ -154,8 +154,8 @@ export function MasonryGrid({ initialPhotos, totalCount, hasMore, eventId }: Mas
         }}
       />
 
-      <div className="text-center mt-8">
-        <p className="text-muted text-sm mb-4">
+      <div className="gallery-footer">
+        <p className="gallery-footer-count">
           Showing {photos.length} of {totalCount} photos
         </p>
 
@@ -163,21 +163,10 @@ export function MasonryGrid({ initialPhotos, totalCount, hasMore, eventId }: Mas
           <button
             onClick={loadMore}
             disabled={loading}
-            className="inline-flex items-center justify-center gap-2 rounded-full px-8 py-3 text-base font-medium text-white transition-colors w-full sm:w-auto"
-            style={{
-              backgroundColor: "var(--color-accent)",
-              minHeight: "48px",
-              minWidth: "48px",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "var(--color-accent-hover)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "var(--color-accent)";
-            }}
+            className="gallery-load-more"
           >
             {loading && <span className="gallery-spinner" />}
-            {loading ? "Loading..." : "See more photos"}
+            {loading ? "Loading..." : "See More Photos"}
           </button>
         )}
       </div>

@@ -20,12 +20,12 @@ export function GuestBookBlade({ open, onToggle, eventId, firstPhotoId }: GuestB
           aria-label="Open guest book"
         >
           <svg
-            width="20"
-            height="20"
+            width="18"
+            height="18"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            strokeWidth="2"
+            strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
           >
@@ -42,8 +42,11 @@ export function GuestBookBlade({ open, onToggle, eventId, firstPhotoId }: GuestB
       >
         <div className="guestbook-blade-header">
           <h2
-            className="text-lg font-bold"
-            style={{ fontFamily: "var(--font-display)" }}
+            className="text-lg font-semibold tracking-wide"
+            style={{
+              fontFamily: "var(--font-display), Georgia, serif",
+              letterSpacing: "0.04em",
+            }}
           >
             Guest Book
           </h2>
@@ -53,12 +56,12 @@ export function GuestBookBlade({ open, onToggle, eventId, firstPhotoId }: GuestB
             aria-label="Close guest book"
           >
             <svg
-              width="20"
-              height="20"
+              width="16"
+              height="16"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              strokeWidth="2"
+              strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
             >

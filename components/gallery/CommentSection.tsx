@@ -152,18 +152,7 @@ export function CommentSection({ eventId, firstPhotoId }: CommentSectionProps) {
         <button
           type="submit"
           disabled={!body.trim() || submitting}
-          className="rounded-full px-10 py-4 text-base font-medium text-white transition-colors disabled:opacity-50"
-          style={{
-            backgroundColor: "var(--color-accent)",
-            minHeight: "48px",
-          }}
-          onMouseEnter={(e) => {
-            if (!e.currentTarget.disabled)
-              e.currentTarget.style.backgroundColor = "var(--color-accent-hover)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = "var(--color-accent)";
-          }}
+          className="comment-submit-btn"
         >
           {submitting ? "Posting..." : "Post Comment"}
         </button>
@@ -175,9 +164,14 @@ export function CommentSection({ eventId, firstPhotoId }: CommentSectionProps) {
           <span className="gallery-spinner inline-block" />
         </div>
       ) : comments.length === 0 ? (
-        <p className="text-center text-muted py-8">
-          No comments yet — be the first!
-        </p>
+        <div className="text-center py-12" style={{ color: "var(--color-subtle)" }}>
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ margin: "0 auto 12px", opacity: 0.5 }}>
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+          </svg>
+          <p className="text-sm" style={{ fontStyle: "italic" }}>
+            No comments yet — be the first!
+          </p>
+        </div>
       ) : (
         <div className="space-y-3">
           {visibleComments.map((comment) => (

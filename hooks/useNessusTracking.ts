@@ -23,10 +23,10 @@ function getSessionId(): string {
  * Tracks a page visit to the Nessus CRM analytics system.
  * Same pattern as Ausfaller: sendBeacon to track-visitor edge function.
  */
-export function useNessusTracking(pagePath: string) {
+export function useNessusTracking(pagePath: string, clientId?: string) {
   useEffect(() => {
     const data = {
-      client_id: CLIENT_ID,
+      client_id: clientId ?? CLIENT_ID,
       page_path: pagePath,
       referrer: document.referrer || null,
       user_agent: navigator.userAgent,
@@ -43,5 +43,5 @@ export function useNessusTracking(pagePath: string) {
     }).catch(() => {
       // Silently fail — don't impact user experience
     });
-  }, [pagePath]);
+  }, [pagePath, clientId]);
 }
