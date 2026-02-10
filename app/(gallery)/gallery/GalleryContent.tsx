@@ -33,7 +33,7 @@ export function GalleryContent({ event, initialPhotos, totalCount, hasMore }: Ga
         transition: "padding-right 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
       }}
     >
-      <div className="gallery-container">
+      <div className="gallery-banner">
         <header className="gallery-header">
           <div className="gallery-header-toggle">
             <ThemeSwitcher />
@@ -73,9 +73,10 @@ export function GalleryContent({ event, initialPhotos, totalCount, hasMore }: Ga
               CashApp
             </a>
           </div>
-          <div className="gallery-header-rule" />
         </header>
+      </div>
 
+      <div className="gallery-container">
         {totalCount === 0 ? (
           <div className="text-center py-16">
             <p className="text-muted">Photos are on their way! Check back soon.</p>
