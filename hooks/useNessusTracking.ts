@@ -33,20 +33,15 @@ export function useNessusTracking(pagePath: string) {
       session_id: getSessionId(),
     };
 
-    if (navigator.sendBeacon) {
-      const blob = new Blob([JSON.stringify(data)], {
-        type: "application/json",
-      });
-      navigator.sendBeacon(TRACKING_ENDPOINT, blob);
-    } else {
-      fetch(TRACKING_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-        keepalive: true,
-      }).catch(() => {
-        // Silently fail — don't impact user experience
-      });
-    }
+    // Use fetch instead of sendBeacon — sendBeacon with application/json
+    // triggers CORS preflight which it can't handle, silently failing.
+    fetch(TRACKING_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+      keepalive: true,
+    }).catch(() => {
+      // Silently fail — don't impact user experience
+    });
   }, [pagePath]);
 }
