@@ -46,6 +46,9 @@ export function GalleryContent({ event, initialPhotos, totalCount, hasMore }: Ga
             <span className="gallery-meta-divider" aria-hidden="true" />
             <span className="gallery-meta-count">{totalCount} Photos</span>
           </div>
+          <p className="gallery-tip-message">
+            If you like your photos, and would like to donate something in return, please consider tipping. We sincerely appreciate it.
+          </p>
           <div className="gallery-tip-row">
             <a
               href="https://paypal.me/Wawtawsha"
