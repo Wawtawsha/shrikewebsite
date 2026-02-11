@@ -85,6 +85,45 @@ export default async function PhotographyPage() {
         </div>
       </section>
 
+      {/* ─── CTA ─── */}
+      <section className="px-6 md:px-16 lg:px-24 py-20 border-t border-border/30">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+          <div>
+            <h2
+              className="text-3xl md:text-4xl font-bold tracking-tight"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
+              Ready to shoot?
+            </h2>
+            <p className="text-muted mt-2 text-lg">
+              Book a free consultation. We&apos;ll discuss your vision, timeline,
+              and deliverables.
+            </p>
+          </div>
+          <a
+            href={CALENDLY_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex items-center gap-3 bg-accent hover:bg-accent-hover text-background font-semibold px-8 py-4 rounded-full transition-all duration-300 hover:scale-[1.03] shrink-0"
+          >
+            Book Photography Session
+            <svg
+              className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M13 7l5 5m0 0l-5 5m5-5H6"
+              />
+            </svg>
+          </a>
+        </div>
+      </section>
+
       {/* ─── Portfolio Showcase ─── */}
       <section className="px-6 md:px-16 lg:px-24 py-20">
         <div className="max-w-7xl mx-auto">
@@ -192,44 +231,6 @@ export default async function PhotographyPage() {
         </div>
       </section>
 
-      {/* ─── CTA ─── */}
-      <section className="px-6 md:px-16 lg:px-24 py-20 border-t border-border/30">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
-          <div>
-            <h2
-              className="text-3xl md:text-4xl font-bold tracking-tight"
-              style={{ fontFamily: "var(--font-display)" }}
-            >
-              Ready to shoot?
-            </h2>
-            <p className="text-muted mt-2 text-lg">
-              Book a free consultation. We&apos;ll discuss your vision, timeline,
-              and deliverables.
-            </p>
-          </div>
-          <a
-            href={CALENDLY_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group inline-flex items-center gap-3 bg-accent hover:bg-accent-hover text-background font-semibold px-8 py-4 rounded-full transition-all duration-300 hover:scale-[1.03] shrink-0"
-          >
-            Book Photography Session
-            <svg
-              className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M13 7l5 5m0 0l-5 5m5-5H6"
-              />
-            </svg>
-          </a>
-        </div>
-      </section>
     </main>
   );
 }
