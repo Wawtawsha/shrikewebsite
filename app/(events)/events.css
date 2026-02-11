@@ -250,6 +250,66 @@
   transform: translateY(-1px);
 }
 
+/* Tip section */
+.gallery-tip-message {
+  max-width: 480px;
+  margin: 0 auto 14px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--color-muted);
+  text-align: center;
+}
+
+.gallery-tip-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.gallery-tip-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: inherit;
+  text-decoration: none;
+  transition: transform 0.15s, box-shadow 0.15s;
+  min-height: 36px;
+}
+
+.gallery-tip-link:hover {
+  transform: translateY(-1px);
+}
+
+.gallery-tip-link:active {
+  transform: translateY(0);
+}
+
+.gallery-tip-paypal {
+  background: #0070ba;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 112, 186, 0.25);
+}
+
+.gallery-tip-paypal:hover {
+  box-shadow: 0 4px 14px rgba(0, 112, 186, 0.35);
+}
+
+.gallery-tip-cashapp {
+  background: #00d632;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 214, 50, 0.25);
+}
+
+.gallery-tip-cashapp:hover {
+  box-shadow: 0 4px 14px rgba(0, 214, 50, 0.35);
+}
+
 /* Memphis geometric divider */
 .memphis-divider {
   display: flex;
