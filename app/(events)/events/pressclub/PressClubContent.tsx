@@ -6,7 +6,7 @@ import { MasonryGrid } from "@/components/gallery/MasonryGrid";
 import { GuestBookBlade } from "@/components/gallery/GuestBookBlade";
 import { useNessusTracking } from "@/hooks/useNessusTracking";
 
-const PRESS_CLUB_CLIENT_ID = "a99822bb-030a-4111-a612-f52674e828c3";
+const PRESS_CLUB_CLIENT_ID = "8e408c1b-6e36-4026-8344-25d0c32f8d31";
 const PROMO_DISMISSED_KEY = "pressclub-promo-dismissed";
 const LEAD_ENDPOINT = "https://rjudjhjcfivugbyztnce.supabase.co/functions/v1/submit-lead";
 
