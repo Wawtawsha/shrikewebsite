@@ -34,6 +34,7 @@ export function GalleryContent({ event, initialPhotos, totalCount, hasMore }: Ga
         transition: "padding-right 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
       }}
     >
+      <BookingPopup />
       <div className="gallery-banner">
         <header className="gallery-header">
           <div className="gallery-header-toggle">
@@ -101,7 +102,6 @@ export function GalleryContent({ event, initialPhotos, totalCount, hasMore }: Ga
         />
       )}
 
-      <BookingPopup />
     </main>
   );
 }
