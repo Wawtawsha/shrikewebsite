@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, type FormEvent } from "react";
+import { useState, useEffect, useRef, useCallback, type FormEvent } from "react";
 import type { GalleryEvent, GalleryPhoto } from "@/types/gallery";
 import { MasonryGrid } from "@/components/gallery/MasonryGrid";
 import { GuestBookBlade } from "@/components/gallery/GuestBookBlade";
@@ -26,8 +26,18 @@ export function PressClubContent({ event, initialPhotos, totalCount, hasMore }: 
   const { trackEvent } = useNessusTracking("2016 Night at Press Club", PRESS_CLUB_CLIENT_ID);
 
   // Lead form state
+  const leadRef = useRef<HTMLDialogElement>(null);
   const [leadStatus, setLeadStatus] = useState<LeadFormStatus>("idle");
   const [preferredContact, setPreferredContact] = useState("email");
+
+  const openLeadForm = useCallback(() => {
+    leadRef.current?.showModal();
+    trackEvent("lead_form_opened");
+  }, [trackEvent]);
+
+  const closeLeadForm = useCallback(() => {
+    leadRef.current?.close();
+  }, []);
 
   useEffect(() => {
     setPromoDismissed(!!sessionStorage.getItem(PROMO_DISMISSED_KEY));
@@ -125,22 +135,37 @@ export function PressClubContent({ event, initialPhotos, totalCount, hasMore }: 
       </button>
 
       <div className="gallery-container">
-        <header className="text-center mb-8 pb-6" style={{ borderBottom: "1px solid var(--color-border-subtle)" }}>
-          <h1
-            className="text-3xl md:text-5xl font-extrabold mb-2 tracking-tight"
-            style={{ fontFamily: "var(--font-display)" }}
-          >
-            {event.title}
-          </h1>
-          <div className="memphis-divider">
-            <span className="memphis-triangle" />
-            <span className="memphis-circle" />
-            <span className="memphis-square" />
-            <span className="memphis-circle" />
-            <span className="memphis-triangle" />
+        <header className="pressclub-header mb-8 pb-6" style={{ borderBottom: "1px solid var(--color-border-subtle)" }}>
+          <div className="pressclub-header-top">
+            <div className="pressclub-header-center">
+              <h1
+                className="text-3xl md:text-5xl font-extrabold mb-2 tracking-tight"
+                style={{ fontFamily: "var(--font-display)" }}
+              >
+                {event.title}
+              </h1>
+              <div className="memphis-divider">
+                <span className="memphis-triangle" />
+                <span className="memphis-circle" />
+                <span className="memphis-square" />
+                <span className="memphis-circle" />
+                <span className="memphis-triangle" />
+              </div>
+            </div>
+            <button
+              type="button"
+              className="lead-trigger-btn"
+              onClick={openLeadForm}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                <polyline points="22,6 12,13 2,6" />
+              </svg>
+              Get in Touch
+            </button>
           </div>
-          <p style={{ color: "var(--color-muted)" }} className="mb-2">{formattedDate}</p>
-          <p className="text-sm mb-4" style={{ color: "var(--color-subtle)" }}>{totalCount} photos</p>
+          <p style={{ color: "var(--color-muted)" }} className="mb-2 text-center">{formattedDate}</p>
+          <p className="text-sm mb-4 text-center" style={{ color: "var(--color-subtle)" }}>{totalCount} photos</p>
           <p className="gallery-tip-message">
             If you like your photos, and would like to donate something in return, please consider tipping. We sincerely appreciate it.
           </p>
@@ -186,9 +211,14 @@ export function PressClubContent({ event, initialPhotos, totalCount, hasMore }: 
         )}
       </div>
 
-      {/* Lead Capture Form */}
-      <section className="lead-section">
+      {/* Lead Capture Dialog */}
+      <dialog ref={leadRef} className="lead-dialog" onClick={(e) => { if (e.target === e.currentTarget) closeLeadForm(); }}>
         <div className="lead-form">
+          <button className="lead-dialog-close" onClick={closeLeadForm} aria-label="Close">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+          </button>
           {leadStatus === "success" ? (
             <div className="lead-form-success">
               <div className="lead-form-success-icon" aria-hidden="true">&#10003;</div>
@@ -299,7 +329,7 @@ export function PressClubContent({ event, initialPhotos, totalCount, hasMore }: 
             </>
           )}
         </div>
-      </section>
+      </dialog>
 
       {!bladeOpen && (
         <a
