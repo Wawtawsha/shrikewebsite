@@ -252,6 +252,35 @@
   padding: 20px;
 }
 
+/* Book Us floating button — stacked above Guest Book FAB */
+.book-us-fab {
+  position: fixed;
+  bottom: 84px;
+  right: 24px;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: var(--color-surface-elevated);
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  border-radius: 24px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: background 0.2s, transform 0.2s;
+  min-height: 48px;
+}
+
+.book-us-fab:hover {
+  background: var(--color-accent-soft);
+  transform: translateY(-1px);
+}
+
 /* Floating toggle button — gold glow on dark */
 .guestbook-fab {
   position: fixed;
