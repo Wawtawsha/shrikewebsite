@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { GalleryEvent, GalleryPhoto } from "@/types/gallery";
 import { MasonryGrid } from "@/components/gallery/MasonryGrid";
 import { GuestBookBlade } from "@/components/gallery/GuestBookBlade";
 import { useNessusTracking } from "@/hooks/useNessusTracking";
 
 const PRESS_CLUB_CLIENT_ID = "a1b2c3d4-e5f6-7890-abcd-ef1234567890";
+const PROMO_DISMISSED_KEY = "pressclub-promo-dismissed";
 
 interface PressClubContentProps {
   event: GalleryEvent;
@@ -17,7 +18,19 @@ interface PressClubContentProps {
 
 export function PressClubContent({ event, initialPhotos, totalCount, hasMore }: PressClubContentProps) {
   const [bladeOpen, setBladeOpen] = useState(false);
+  const promoRef = useRef<HTMLDialogElement>(null);
   useNessusTracking("2016 Night at Press Club", PRESS_CLUB_CLIENT_ID);
+
+  useEffect(() => {
+    if (!sessionStorage.getItem(PROMO_DISMISSED_KEY)) {
+      promoRef.current?.showModal();
+    }
+  }, []);
+
+  function dismissPromo() {
+    promoRef.current?.close();
+    sessionStorage.setItem(PROMO_DISMISSED_KEY, "1");
+  }
 
   const formattedDate = new Date(event.date).toLocaleDateString("en-US", {
     year: "numeric",
@@ -102,6 +115,46 @@ export function PressClubContent({ event, initialPhotos, totalCount, hasMore }: 
           firstPhotoId={initialPhotos[0].id}
         />
       )}
+      <dialog ref={promoRef} className="promo-dialog" onClick={(e) => { if (e.target === e.currentTarget) dismissPromo(); }}>
+        <div className="promo-content">
+          <button className="promo-close" onClick={dismissPromo} aria-label="Close">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+          </button>
+          <div className="promo-badge">Limited Time</div>
+          <h2 className="promo-title">Shrike Media Specials</h2>
+          <div className="memphis-divider">
+            <span className="memphis-triangle" />
+            <span className="memphis-circle" />
+            <span className="memphis-square" />
+            <span className="memphis-circle" />
+            <span className="memphis-triangle" />
+          </div>
+          <div className="promo-offers">
+            <div className="promo-offer">
+              <h3 className="promo-offer-title">Instagram Carousels</h3>
+              <p className="promo-offer-desc">
+                Get a professionally edited Instagram Carousel post at a discounted rate. Perfect for showcasing your best moments from the night.
+              </p>
+            </div>
+            <div className="promo-offer">
+              <h3 className="promo-offer-title">Sorority &amp; Fraternity Formals</h3>
+              <p className="promo-offer-desc">
+                Now booking photography for Sorority and Fraternity Formals. Contact us to lock in your date.
+              </p>
+            </div>
+          </div>
+          <a
+            href="https://www.instagram.com/realshrikeproductions/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="promo-cta"
+          >
+            Contact Us on Instagram
+          </a>
+        </div>
+      </dialog>
     </main>
   );
 }
