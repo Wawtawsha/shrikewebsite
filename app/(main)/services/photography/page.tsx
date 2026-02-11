@@ -124,6 +124,53 @@ export default async function PhotographyPage() {
         </div>
       </section>
 
+      {/* ─── What's Included ─── */}
+      <section className="px-6 md:px-16 lg:px-24 py-20 border-t border-border/30">
+        <div className="max-w-7xl mx-auto">
+          <RevealSection>
+            <p className="text-amber-400/80 text-[11px] font-medium tracking-[0.3em] uppercase mb-12">
+              What You Get
+            </p>
+          </RevealSection>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              {
+                title: "Professional Lighting & Equipment",
+                desc: "Studio and location shoots with cinema-grade gear — Profoto strobes, Sony Alpha series, premium glass.",
+              },
+              {
+                title: "Full Post-Production",
+                desc: "Expert retouching, color grading, and compositing. Every image polished to commercial standards.",
+              },
+              {
+                title: "High-Res Deliverables",
+                desc: "Print-ready files in multiple formats — TIFF, JPEG, PNG. Web-optimized versions included.",
+              },
+              {
+                title: "Commercial Usage Rights",
+                desc: "Full licensing for advertising, social media, web, and print. No hidden fees or per-use charges.",
+              },
+            ].map((item, i) => (
+              <RevealSection key={item.title} delay={i * 0.1}>
+                <div className="group p-6 rounded-xl bg-surface/50 border border-border/20 hover:border-amber-500/20 transition-colors duration-500">
+                  <div className="h-px w-8 bg-amber-500/50 mb-5 group-hover:w-12 transition-all duration-500" />
+                  <h3
+                    className="text-lg font-bold mb-2 tracking-tight"
+                    style={{ fontFamily: "var(--font-display)" }}
+                  >
+                    {item.title}
+                  </h3>
+                  <p className="text-muted text-sm leading-relaxed">
+                    {item.desc}
+                  </p>
+                </div>
+              </RevealSection>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ─── Portfolio Showcase ─── */}
       <section className="px-6 md:px-16 lg:px-24 py-20">
         <div className="max-w-7xl mx-auto">
@@ -181,53 +228,6 @@ export default async function PhotographyPage() {
               ))}
             </div>
           </RevealSection>
-        </div>
-      </section>
-
-      {/* ─── What's Included ─── */}
-      <section className="px-6 md:px-16 lg:px-24 py-20 border-t border-border/30">
-        <div className="max-w-7xl mx-auto">
-          <RevealSection>
-            <p className="text-amber-400/80 text-[11px] font-medium tracking-[0.3em] uppercase mb-12">
-              What You Get
-            </p>
-          </RevealSection>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              {
-                title: "Professional Lighting & Equipment",
-                desc: "Studio and location shoots with cinema-grade gear — Profoto strobes, Sony Alpha series, premium glass.",
-              },
-              {
-                title: "Full Post-Production",
-                desc: "Expert retouching, color grading, and compositing. Every image polished to commercial standards.",
-              },
-              {
-                title: "High-Res Deliverables",
-                desc: "Print-ready files in multiple formats — TIFF, JPEG, PNG. Web-optimized versions included.",
-              },
-              {
-                title: "Commercial Usage Rights",
-                desc: "Full licensing for advertising, social media, web, and print. No hidden fees or per-use charges.",
-              },
-            ].map((item, i) => (
-              <RevealSection key={item.title} delay={i * 0.1}>
-                <div className="group p-6 rounded-xl bg-surface/50 border border-border/20 hover:border-amber-500/20 transition-colors duration-500">
-                  <div className="h-px w-8 bg-amber-500/50 mb-5 group-hover:w-12 transition-all duration-500" />
-                  <h3
-                    className="text-lg font-bold mb-2 tracking-tight"
-                    style={{ fontFamily: "var(--font-display)" }}
-                  >
-                    {item.title}
-                  </h3>
-                  <p className="text-muted text-sm leading-relaxed">
-                    {item.desc}
-                  </p>
-                </div>
-              </RevealSection>
-            ))}
-          </div>
         </div>
       </section>
 
