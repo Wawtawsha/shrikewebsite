@@ -178,7 +178,7 @@ export function PressClubContent({ event, initialPhotos, totalCount, hasMore }: 
             <div className="promo-offer">
               <h3 className="promo-offer-title">Instagram Carousels</h3>
               <p className="promo-offer-desc">
-                Get a professionally edited Instagram Carousel post at a discounted rate. Perfect for showcasing your best moments from the night.
+                Book a custom Instagram Carousel shoot — we handle the photography, editing, and delivery at a discounted rate.
               </p>
             </div>
             <div className="promo-offer">
