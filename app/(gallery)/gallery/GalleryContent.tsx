@@ -53,7 +53,7 @@ export function GalleryContent({ event, initialPhotos, totalCount, hasMore }: Ga
           </p>
           <div className="gallery-tip-row">
             <a
-              href="https://paypal.me/Wawtawsha"
+              href="https://www.paypal.com/biz/profile/shrikemedia"
               target="_blank"
               rel="noopener noreferrer"
               className="gallery-tip-link gallery-tip-paypal"
