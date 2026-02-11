@@ -2,14 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import {
   RevealSection,
-  PricingCard,
   PortfolioPlaceholder,
 } from "../ServicePageSections";
 
 export const metadata: Metadata = {
   title: "Photography — Shrike Media",
   description:
-    "Editorial portraits, commercial product shoots, and brand imagery crafted with cinematic precision. View packages and book your session.",
+    "Editorial portraits, commercial product shoots, and brand imagery crafted with cinematic precision. Book your session today.",
 };
 
 const CALENDLY_URL =
@@ -150,84 +149,6 @@ export default function PhotographyPage() {
                 </div>
               </RevealSection>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ─── Pricing ─── */}
-      <section className="px-6 md:px-16 lg:px-24 py-20 border-t border-border/30">
-        <div className="max-w-7xl mx-auto">
-          <RevealSection>
-            <p className="text-amber-400/80 text-[11px] font-medium tracking-[0.3em] uppercase mb-4">
-              Investment
-            </p>
-            <h2
-              className="text-3xl md:text-5xl font-bold tracking-tight mb-4"
-              style={{ fontFamily: "var(--font-display)" }}
-            >
-              Choose Your Package
-            </h2>
-            <p className="text-muted text-lg max-w-xl mb-16">
-              Every package includes professional equipment, post-production,
-              and full commercial licensing.
-            </p>
-          </RevealSection>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <RevealSection delay={0}>
-              <PricingCard
-                tier="Essential"
-                price="$750"
-                description="Perfect for headshots, small product lines, or personal branding."
-                features={[
-                  "2-hour session",
-                  "1 location",
-                  "15 edited images",
-                  "48-hour turnaround",
-                  "Web-optimized files",
-                ]}
-                accentColor="text-amber-400"
-                ctaHref={CALENDLY_URL}
-                ctaText="Get Started"
-              />
-            </RevealSection>
-            <RevealSection delay={0.1}>
-              <PricingCard
-                tier="Signature"
-                price="$1,800"
-                description="Our most popular package for brands and commercial campaigns."
-                features={[
-                  "Half-day session (4 hours)",
-                  "Up to 3 locations",
-                  "40 edited images",
-                  "Art direction included",
-                  "Print-ready TIFF files",
-                  "Priority 24-hour delivery",
-                ]}
-                accentColor="text-amber-400"
-                highlighted
-                ctaHref={CALENDLY_URL}
-              />
-            </RevealSection>
-            <RevealSection delay={0.2}>
-              <PricingCard
-                tier="Legacy"
-                price="$3,500+"
-                description="Full-day production for campaigns that demand everything."
-                features={[
-                  "Full-day session (8+ hours)",
-                  "Unlimited locations",
-                  "100+ edited images",
-                  "Creative direction & styling",
-                  "All formats included",
-                  "Same-day preview gallery",
-                  "Dedicated project manager",
-                ]}
-                accentColor="text-amber-400"
-                ctaHref={CALENDLY_URL}
-                ctaText="Let's Talk"
-              />
-            </RevealSection>
           </div>
         </div>
       </section>

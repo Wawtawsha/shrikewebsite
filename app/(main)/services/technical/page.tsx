@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { RevealSection, PricingCard } from "../ServicePageSections";
+import { RevealSection } from "../ServicePageSections";
 
 export const metadata: Metadata = {
   title: "Technical Consultation — Shrike Media",
@@ -117,84 +117,6 @@ export default function TechnicalPage() {
                 </div>
               </RevealSection>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ─── Pricing ─── */}
-      <section className="px-6 md:px-16 lg:px-24 py-20 border-t border-border/30">
-        <div className="max-w-7xl mx-auto">
-          <RevealSection>
-            <p className="text-emerald-400/80 text-[11px] font-medium tracking-[0.3em] uppercase mb-4">
-              Investment
-            </p>
-            <h2
-              className="text-3xl md:text-5xl font-bold tracking-tight mb-4"
-              style={{ fontFamily: "var(--font-display)" }}
-            >
-              Engagement Models
-            </h2>
-            <p className="text-muted text-lg max-w-xl mb-16">
-              Flexible consulting structures designed around your timeline
-              and budget. Start with a single session or retain ongoing support.
-            </p>
-          </RevealSection>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <RevealSection delay={0}>
-              <PricingCard
-                tier="Advisory"
-                price="$200/hr"
-                description="On-demand expert guidance for specific technical challenges."
-                features={[
-                  "1-hour minimum sessions",
-                  "Architecture review",
-                  "Code review & audit",
-                  "Technology recommendations",
-                  "Follow-up documentation",
-                ]}
-                accentColor="text-emerald-400"
-                ctaHref={CALENDLY_URL}
-                ctaText="Book Session"
-              />
-            </RevealSection>
-            <RevealSection delay={0.1}>
-              <PricingCard
-                tier="Project"
-                price="$5,000+"
-                description="Dedicated consulting for defined projects with clear deliverables."
-                features={[
-                  "Scoped project engagement",
-                  "Architecture & design docs",
-                  "Implementation guidance",
-                  "Weekly check-ins",
-                  "Knowledge transfer sessions",
-                  "30-day post-project support",
-                ]}
-                accentColor="text-emerald-400"
-                highlighted
-                ctaHref={CALENDLY_URL}
-              />
-            </RevealSection>
-            <RevealSection delay={0.2}>
-              <PricingCard
-                tier="Retainer"
-                price="$3,000/mo"
-                description="Ongoing technical partnership with priority access and guaranteed availability."
-                features={[
-                  "20 hours/month included",
-                  "Priority response (< 4 hrs)",
-                  "Slack/Teams integration",
-                  "Monthly strategy reviews",
-                  "Team training sessions",
-                  "Architecture governance",
-                  "Rollover unused hours",
-                ]}
-                accentColor="text-emerald-400"
-                ctaHref={CALENDLY_URL}
-                ctaText="Let's Talk"
-              />
-            </RevealSection>
           </div>
         </div>
       </section>

@@ -2,14 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import {
   RevealSection,
-  PricingCard,
   PortfolioPlaceholder,
 } from "../ServicePageSections";
 
 export const metadata: Metadata = {
   title: "Videography — Shrike Media",
   description:
-    "Brand films, event coverage, and narrative storytelling in stunning 4K. View packages and book your production.",
+    "Brand films, event coverage, and narrative storytelling in stunning 4K. Book your production today.",
 };
 
 const CALENDLY_URL =
@@ -144,86 +143,6 @@ export default function VideographyPage() {
                 </div>
               </RevealSection>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ─── Pricing ─── */}
-      <section className="px-6 md:px-16 lg:px-24 py-20 border-t border-border/30">
-        <div className="max-w-7xl mx-auto">
-          <RevealSection>
-            <p className="text-sky-400/80 text-[11px] font-medium tracking-[0.3em] uppercase mb-4">
-              Investment
-            </p>
-            <h2
-              className="text-3xl md:text-5xl font-bold tracking-tight mb-4"
-              style={{ fontFamily: "var(--font-display)" }}
-            >
-              Choose Your Package
-            </h2>
-            <p className="text-muted text-lg max-w-xl mb-16">
-              Every package includes 4K production, professional audio,
-              color grading, and licensed music.
-            </p>
-          </RevealSection>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <RevealSection delay={0}>
-              <PricingCard
-                tier="Essential"
-                price="$1,500"
-                description="Short-form content for social media and web — reels, teasers, and event highlights."
-                features={[
-                  "Half-day shoot (4 hours)",
-                  "1 location",
-                  "1 edited video (60-90s)",
-                  "Licensed music",
-                  "Social-optimized exports",
-                ]}
-                accentColor="text-sky-400"
-                ctaHref={CALENDLY_URL}
-                ctaText="Get Started"
-              />
-            </RevealSection>
-            <RevealSection delay={0.1}>
-              <PricingCard
-                tier="Signature"
-                price="$3,500"
-                description="Our most popular package for brand films and commercial campaigns."
-                features={[
-                  "Full-day shoot (8 hours)",
-                  "Up to 3 locations",
-                  "1 hero video (2-4 min)",
-                  "3 social cutdowns",
-                  "Aerial/drone footage",
-                  "Professional voiceover",
-                  "Priority 5-day delivery",
-                ]}
-                accentColor="text-sky-400"
-                highlighted
-                ctaHref={CALENDLY_URL}
-              />
-            </RevealSection>
-            <RevealSection delay={0.2}>
-              <PricingCard
-                tier="Legacy"
-                price="$7,000+"
-                description="Multi-day productions for campaigns that demand cinematic excellence."
-                features={[
-                  "Multi-day production",
-                  "Unlimited locations",
-                  "Documentary or campaign film",
-                  "Unlimited social cutdowns",
-                  "Storyboarding & scripting",
-                  "Talent coordination",
-                  "Dedicated project manager",
-                  "Raw footage archive",
-                ]}
-                accentColor="text-sky-400"
-                ctaHref={CALENDLY_URL}
-                ctaText="Let's Talk"
-              />
-            </RevealSection>
           </div>
         </div>
       </section>
