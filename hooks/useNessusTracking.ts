@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 
 const TRACKING_ENDPOINT =
   "https://rjudjhjcfivugbyztnce.supabase.co/functions/v1/track-visitor";
@@ -20,28 +20,48 @@ function getSessionId(): string {
 }
 
 /**
- * Tracks a page visit to the Nessus CRM analytics system.
- * Same pattern as Ausfaller: sendBeacon to track-visitor edge function.
+ * Tracks page visits and custom events to the Nessus CRM analytics system.
+ * Returns { trackEvent } for granular interaction tracking.
  */
 export function useNessusTracking(pagePath: string, clientId?: string) {
+  const resolvedClientId = clientId ?? CLIENT_ID;
+
   useEffect(() => {
     const data = {
-      client_id: clientId ?? CLIENT_ID,
+      client_id: resolvedClientId,
       page_path: pagePath,
       referrer: document.referrer || null,
       user_agent: navigator.userAgent,
       session_id: getSessionId(),
     };
 
-    // Use fetch instead of sendBeacon — sendBeacon with application/json
-    // triggers CORS preflight which it can't handle, silently failing.
     fetch(TRACKING_ENDPOINT, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
       keepalive: true,
-    }).catch(() => {
-      // Silently fail — don't impact user experience
-    });
-  }, [pagePath, clientId]);
+    }).catch(() => {});
+  }, [pagePath, resolvedClientId]);
+
+  const trackEvent = useCallback(
+    (eventName: string, eventData?: Record<string, unknown>) => {
+      fetch(TRACKING_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          client_id: resolvedClientId,
+          page_path: pagePath,
+          event_name: eventName,
+          event_data: eventData ?? null,
+          session_id: getSessionId(),
+          referrer: document.referrer || null,
+          user_agent: navigator.userAgent,
+        }),
+        keepalive: true,
+      }).catch(() => {});
+    },
+    [pagePath, resolvedClientId]
+  );
+
+  return { trackEvent };
 }
