@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
-import {
-  RevealSection,
-  PortfolioPlaceholder,
-} from "../ServicePageSections";
+import { supabase } from "@/lib/supabase";
+import { getStorageUrl } from "@/lib/gallery";
+import { RevealSection } from "../ServicePageSections";
 
 export const metadata: Metadata = {
   title: "Photography — Shrike Media",
@@ -11,10 +11,31 @@ export const metadata: Metadata = {
     "Editorial portraits, commercial product shoots, and brand imagery crafted with cinematic precision. Book your session today.",
 };
 
+// Re-shuffle photos every 60 seconds
+export const revalidate = 60;
+
 const CALENDLY_URL =
   "https://calendly.com/realshrikeproductions/technical-consultation";
 
-export default function PhotographyPage() {
+/** Fetch random photos from all events for the showcase grid. */
+async function getShowcasePhotos(count: number) {
+  // Grab a random sample using Postgres random ordering
+  const { data } = await supabase
+    .from("photos")
+    .select("id, thumb_path, width, height")
+    .order("id") // need a base order for range to work
+    .limit(200); // fetch a pool to shuffle from
+
+  if (!data || data.length === 0) return [];
+
+  // Shuffle in JS and take what we need
+  const shuffled = data.sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, count);
+}
+
+export default async function PhotographyPage() {
+  const photos = await getShowcasePhotos(7);
+
   return (
     <main id="main-content" className="min-h-screen">
       {/* ─── Hero ─── */}
@@ -69,38 +90,56 @@ export default function PhotographyPage() {
         <div className="max-w-7xl mx-auto">
           <RevealSection>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
-              <div className="col-span-2 row-span-2">
-                <PortfolioPlaceholder
-                  gradient="from-amber-900/80 via-orange-950/50 to-stone-950"
-                  aspectRatio="4/3"
-                  label="Featured Work"
-                />
-              </div>
-              <PortfolioPlaceholder
-                gradient="from-stone-800/80 via-amber-950/40 to-stone-950"
-                aspectRatio="1/1"
-                label="Portrait"
-              />
-              <PortfolioPlaceholder
-                gradient="from-amber-800/60 via-stone-900/50 to-stone-950"
-                aspectRatio="1/1"
-                label="Product"
-              />
-              <PortfolioPlaceholder
-                gradient="from-orange-900/50 via-amber-950/40 to-stone-950"
-                aspectRatio="3/2"
-                label="Editorial"
-              />
-              <PortfolioPlaceholder
-                gradient="from-stone-700/60 via-amber-900/30 to-stone-950"
-                aspectRatio="3/2"
-                label="Brand"
-              />
-              <PortfolioPlaceholder
-                gradient="from-amber-800/50 via-stone-800/40 to-stone-950"
-                aspectRatio="3/2"
-                label="Events"
-              />
+              {/* Large featured image — col-span-2 row-span-2 */}
+              {photos[0] && (
+                <div
+                  className="col-span-2 row-span-2 relative rounded-xl overflow-hidden bg-surface"
+                  style={{ aspectRatio: "4/3" }}
+                >
+                  <Image
+                    src={getStorageUrl(photos[0].thumb_path)}
+                    alt="Featured photography work"
+                    width={photos[0].width}
+                    height={photos[0].height}
+                    className="object-cover w-full h-full"
+                    sizes="(max-width: 768px) 100vw, 66vw"
+                  />
+                </div>
+              )}
+              {/* Two square images stacked on the right */}
+              {photos.slice(1, 3).map((photo) => (
+                <div
+                  key={photo.id}
+                  className="relative rounded-xl overflow-hidden bg-surface"
+                  style={{ aspectRatio: "1/1" }}
+                >
+                  <Image
+                    src={getStorageUrl(photo.thumb_path)}
+                    alt="Photography sample"
+                    width={photo.width}
+                    height={photo.height}
+                    className="object-cover w-full h-full"
+                    sizes="(max-width: 768px) 50vw, 33vw"
+                  />
+                </div>
+              ))}
+              {/* Bottom row — 3 landscape images */}
+              {photos.slice(3, 6).map((photo) => (
+                <div
+                  key={photo.id}
+                  className="relative rounded-xl overflow-hidden bg-surface"
+                  style={{ aspectRatio: "3/2" }}
+                >
+                  <Image
+                    src={getStorageUrl(photo.thumb_path)}
+                    alt="Photography sample"
+                    width={photo.width}
+                    height={photo.height}
+                    className="object-cover w-full h-full"
+                    sizes="(max-width: 768px) 50vw, 33vw"
+                  />
+                </div>
+              ))}
             </div>
           </RevealSection>
         </div>
@@ -164,7 +203,7 @@ export default function PhotographyPage() {
               Ready to shoot?
             </h2>
             <p className="text-muted mt-2 text-lg">
-              Book a free consultation. We'll discuss your vision, timeline,
+              Book a free consultation. We&apos;ll discuss your vision, timeline,
               and deliverables.
             </p>
           </div>
