@@ -6,6 +6,7 @@ import { MasonryGrid } from "@/components/gallery/MasonryGrid";
 import { GuestBookBlade } from "@/components/gallery/GuestBookBlade";
 import { useNessusTracking } from "@/hooks/useNessusTracking";
 import { ThemeSwitcher } from "@/components/gallery/ThemeSwitcher";
+import { BookingPopup } from "@/components/gallery/BookingPopup";
 
 interface GalleryContentProps {
   event: GalleryEvent;
@@ -99,6 +100,8 @@ export function GalleryContent({ event, initialPhotos, totalCount, hasMore }: Ga
           firstPhotoId={initialPhotos[0].id}
         />
       )}
+
+      <BookingPopup />
     </main>
   );
 }

@@ -554,6 +554,127 @@ div[role="button"]:hover .like-button-overlay,
   color: oklch(0.15 0.02 265);
 }
 
+/* ===== BOOKING POPUP ===== */
+.booking-popup {
+  border: none;
+  border-radius: 16px;
+  padding: 0;
+  max-width: 440px;
+  width: calc(100% - 32px);
+  background: oklch(0.97 0.01 80);
+  color: oklch(0.2 0.02 50);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.2), 0 4px 16px rgba(0, 0, 0, 0.1);
+  overflow: visible;
+}
+
+.booking-popup::backdrop {
+  background: rgba(20, 15, 10, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.booking-popup-content {
+  position: relative;
+  padding: 40px 32px 32px;
+  text-align: center;
+}
+
+.booking-popup-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: oklch(0.5 0.02 50);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.booking-popup-close:hover {
+  background: oklch(0.92 0.01 80);
+  color: oklch(0.25 0.02 50);
+}
+
+.booking-popup-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: oklch(0.4 0.18 15 / 0.1);
+  color: oklch(0.4 0.18 15);
+  margin-bottom: 20px;
+}
+
+.booking-popup-title {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0 0 12px;
+  color: oklch(0.15 0.02 50);
+}
+
+.booking-popup-body {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: oklch(0.4 0.02 50);
+  margin: 0 0 28px;
+}
+
+.booking-popup-cta {
+  display: block;
+  width: 100%;
+  padding: 16px 24px;
+  border-radius: 12px;
+  border: none;
+  background: oklch(0.4 0.18 15);
+  color: #fff;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  min-height: 48px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 2px 8px oklch(0.4 0.18 15 / 0.3);
+}
+
+.booking-popup-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px oklch(0.4 0.18 15 / 0.4);
+}
+
+.booking-popup-cta:active {
+  transform: translateY(0);
+}
+
+.booking-popup-dismiss {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  color: oklch(0.55 0.01 50);
+  font-family: inherit;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.booking-popup-dismiss:hover {
+  color: oklch(0.3 0.02 50);
+}
+
 /* Reduced motion: disable animations */
 @media (prefers-reduced-motion: reduce) {
   .gallery-theme {
