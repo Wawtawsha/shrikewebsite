@@ -416,6 +416,40 @@ div[role="button"]:hover .like-button-overlay,
   padding: 24px;
 }
 
+/* Book Us floating button */
+.book-us-fab {
+  position: fixed;
+  bottom: 84px;
+  right: 28px;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 24px;
+  background: oklch(0.4 0.18 15);
+  color: #fff;
+  border: none;
+  border-radius: 28px;
+  cursor: pointer;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  box-shadow: 0 4px 20px oklch(0.4 0.18 15 / 0.25), 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-height: 48px;
+}
+
+.book-us-fab:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px oklch(0.4 0.18 15 / 0.35), 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.book-us-fab:active {
+  transform: translateY(0);
+}
+
 /* Floating toggle button */
 .guestbook-fab {
   position: fixed;
