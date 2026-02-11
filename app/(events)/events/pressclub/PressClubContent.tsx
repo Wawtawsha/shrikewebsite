@@ -122,7 +122,9 @@ export function PressClubContent({ event, initialPhotos, totalCount, hasMore }: 
               <path d="M18 6L6 18M6 6l12 12" />
             </svg>
           </button>
-          <div className="promo-badge">Limited Time</div>
+          <div className="promo-ribbon" aria-hidden="true">
+            <span>SPECIAL OFFER</span>
+          </div>
           <h2 className="promo-title">Shrike Media Specials</h2>
           <div className="memphis-divider">
             <span className="memphis-triangle" />
