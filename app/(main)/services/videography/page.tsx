@@ -1,103 +1,271 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { WireframeBackground } from "@/components/WireframeBackground";
+import {
+  RevealSection,
+  PricingCard,
+  PortfolioPlaceholder,
+} from "../ServicePageSections";
 
 export const metadata: Metadata = {
-  title: "Videography",
-  description: "Cinematic video production for commercials, brand films, and events.",
+  title: "Videography — Shrike Media",
+  description:
+    "Brand films, event coverage, and narrative storytelling in stunning 4K. View packages and book your production.",
 };
+
+const CALENDLY_URL =
+  "https://calendly.com/realshrikeproductions/technical-consultation";
 
 export default function VideographyPage() {
   return (
-    <main id="main-content" className="min-h-screen relative" style={{ padding: "80px 64px" }}>
-      <WireframeBackground />
-      <div className="max-w-4xl mx-auto relative z-10">
-        <Link
-          href="/services"
-          className="inline-flex items-center gap-2 text-muted hover:text-white transition-colors mb-8 group"
-        >
-          <svg className="h-4 w-4 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-          </svg>
-          Back to Services
-        </Link>
+    <main id="main-content" className="min-h-screen">
+      {/* ─── Hero ─── */}
+      <section className="relative px-6 md:px-16 lg:px-24 pt-32 md:pt-40 pb-16 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-sky-950/40 via-background to-background pointer-events-none" />
 
-        <h1
-          className="text-5xl md:text-7xl font-bold mb-6 tracking-tight"
-          style={{ fontFamily: "var(--font-display)" }}
-        >
-          Videography
-        </h1>
+        <div className="relative max-w-7xl mx-auto">
+          <Link
+            href="/services"
+            className="inline-flex items-center gap-2 text-muted hover:text-foreground transition-colors mb-10 group"
+          >
+            <svg
+              className="h-4 w-4 transition-transform group-hover:-translate-x-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+            <span className="text-sm">All Services</span>
+          </Link>
 
-        <p className="text-xl text-muted mb-12 leading-relaxed max-w-2xl">
-          Cinematic storytelling that captivates your audience. From concept to final cut,
-          we produce videos that leave a lasting impression.
-        </p>
+          <p className="text-sky-400/80 text-[11px] font-medium tracking-[0.3em] uppercase mb-5">
+            02 — Videography
+          </p>
 
-        <div className="mb-16">
-          <div className="bg-gradient-to-br from-surface via-surface to-surface/80 border border-border/50 rounded-2xl p-10 md:p-12 shadow-xl shadow-black/20 backdrop-blur-sm">
-            <div className="flex items-center gap-4 mb-8">
-              <div className="p-3 rounded-xl bg-blue-500/10 border border-blue-500/20">
-                <svg className="h-7 w-7 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <h2 className="text-3xl font-bold tracking-tight">What's Included</h2>
+          <h1
+            className="text-5xl md:text-7xl lg:text-[5.5rem] font-bold tracking-tight leading-[0.95] mb-8"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
+            Motion Creates
+            <br />
+            <span className="text-muted">Emotion.</span>
+          </h1>
+
+          <p className="text-muted text-lg md:text-xl max-w-lg leading-relaxed">
+            Brand films, event coverage, and narrative storytelling — shot in
+            stunning 4K with cinematic color science and professional audio.
+          </p>
+        </div>
+      </section>
+
+      {/* ─── Showreel / Portfolio ─── */}
+      <section className="px-6 md:px-16 lg:px-24 py-20">
+        <div className="max-w-7xl mx-auto">
+          <RevealSection>
+            {/* 16:9 hero reel placeholder */}
+            <div className="mb-4">
+              <PortfolioPlaceholder
+                gradient="from-sky-900/80 via-blue-950/50 to-slate-950"
+                aspectRatio="16/9"
+                label="Showreel"
+              />
             </div>
-            <ul className="space-y-5">
-              <li className="flex items-start gap-4 p-4 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.04] transition-colors">
-                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center mt-0.5">
-                  <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-                </span>
-                <div>
-                  <p className="text-white font-medium text-lg">4K cinematic footage</p>
-                  <p className="text-muted text-sm mt-1">Ultra-high definition for stunning clarity</p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+              <PortfolioPlaceholder
+                gradient="from-slate-800/80 via-sky-950/40 to-slate-950"
+                aspectRatio="16/9"
+                label="Brand Film"
+              />
+              <PortfolioPlaceholder
+                gradient="from-sky-800/60 via-slate-900/50 to-slate-950"
+                aspectRatio="16/9"
+                label="Event"
+              />
+              <PortfolioPlaceholder
+                gradient="from-blue-900/50 via-sky-950/40 to-slate-950"
+                aspectRatio="16/9"
+                label="Commercial"
+              />
+              <PortfolioPlaceholder
+                gradient="from-slate-700/60 via-sky-900/30 to-slate-950"
+                aspectRatio="16/9"
+                label="Narrative"
+              />
+            </div>
+          </RevealSection>
+        </div>
+      </section>
+
+      {/* ─── What's Included ─── */}
+      <section className="px-6 md:px-16 lg:px-24 py-20 border-t border-border/30">
+        <div className="max-w-7xl mx-auto">
+          <RevealSection>
+            <p className="text-sky-400/80 text-[11px] font-medium tracking-[0.3em] uppercase mb-12">
+              What You Get
+            </p>
+          </RevealSection>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              {
+                title: "4K Cinematic Footage",
+                desc: "Shot on RED and Sony cinema cameras with premium lenses. Ultra-high definition for any screen.",
+              },
+              {
+                title: "Professional Audio",
+                desc: "Wireless lavs, shotgun mics, and studio recording. Crystal-clear sound capture and mixing.",
+              },
+              {
+                title: "Color Grading & Post",
+                desc: "DaVinci Resolve color science, motion graphics, and visual effects. Broadcast-ready output.",
+              },
+              {
+                title: "Multi-Format Delivery",
+                desc: "Optimized exports for web, social (9:16, 1:1, 16:9), broadcast, and digital signage.",
+              },
+            ].map((item, i) => (
+              <RevealSection key={item.title} delay={i * 0.1}>
+                <div className="group p-6 rounded-xl bg-surface/50 border border-border/20 hover:border-sky-500/20 transition-colors duration-500">
+                  <div className="h-px w-8 bg-sky-500/50 mb-5 group-hover:w-12 transition-all duration-500" />
+                  <h3
+                    className="text-lg font-bold mb-2 tracking-tight"
+                    style={{ fontFamily: "var(--font-display)" }}
+                  >
+                    {item.title}
+                  </h3>
+                  <p className="text-muted text-sm leading-relaxed">
+                    {item.desc}
+                  </p>
                 </div>
-              </li>
-              <li className="flex items-start gap-4 p-4 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.04] transition-colors">
-                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center mt-0.5">
-                  <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-                </span>
-                <div>
-                  <p className="text-white font-medium text-lg">Professional audio recording</p>
-                  <p className="text-muted text-sm mt-1">Crystal-clear sound capture and mixing</p>
-                </div>
-              </li>
-              <li className="flex items-start gap-4 p-4 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.04] transition-colors">
-                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center mt-0.5">
-                  <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-                </span>
-                <div>
-                  <p className="text-white font-medium text-lg">Color grading and post-production</p>
-                  <p className="text-muted text-sm mt-1">Cinematic color treatment and visual effects</p>
-                </div>
-              </li>
-              <li className="flex items-start gap-4 p-4 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.04] transition-colors">
-                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center mt-0.5">
-                  <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-                </span>
-                <div>
-                  <p className="text-white font-medium text-lg">Multiple format deliverables</p>
-                  <p className="text-muted text-sm mt-1">Optimized for web, social, and broadcast</p>
-                </div>
-              </li>
-            </ul>
+              </RevealSection>
+            ))}
           </div>
         </div>
+      </section>
 
-        <a
-          href="https://calendly.com/realshrikeproductions/technical-consultation"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-3 rounded-full border-2 border-white text-white text-lg font-semibold tracking-wide transition-all duration-300 hover:bg-white hover:text-black hover:scale-105"
-          style={{ padding: "16px 40px", backgroundColor: "rgba(255, 255, 255, 0.15)" }}
-        >
-          Book Videography Session
-          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-          </svg>
-        </a>
-      </div>
+      {/* ─── Pricing ─── */}
+      <section className="px-6 md:px-16 lg:px-24 py-20 border-t border-border/30">
+        <div className="max-w-7xl mx-auto">
+          <RevealSection>
+            <p className="text-sky-400/80 text-[11px] font-medium tracking-[0.3em] uppercase mb-4">
+              Investment
+            </p>
+            <h2
+              className="text-3xl md:text-5xl font-bold tracking-tight mb-4"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
+              Choose Your Package
+            </h2>
+            <p className="text-muted text-lg max-w-xl mb-16">
+              Every package includes 4K production, professional audio,
+              color grading, and licensed music.
+            </p>
+          </RevealSection>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <RevealSection delay={0}>
+              <PricingCard
+                tier="Essential"
+                price="$1,500"
+                description="Short-form content for social media and web — reels, teasers, and event highlights."
+                features={[
+                  "Half-day shoot (4 hours)",
+                  "1 location",
+                  "1 edited video (60-90s)",
+                  "Licensed music",
+                  "Social-optimized exports",
+                ]}
+                accentColor="text-sky-400"
+                ctaHref={CALENDLY_URL}
+                ctaText="Get Started"
+              />
+            </RevealSection>
+            <RevealSection delay={0.1}>
+              <PricingCard
+                tier="Signature"
+                price="$3,500"
+                description="Our most popular package for brand films and commercial campaigns."
+                features={[
+                  "Full-day shoot (8 hours)",
+                  "Up to 3 locations",
+                  "1 hero video (2-4 min)",
+                  "3 social cutdowns",
+                  "Aerial/drone footage",
+                  "Professional voiceover",
+                  "Priority 5-day delivery",
+                ]}
+                accentColor="text-sky-400"
+                highlighted
+                ctaHref={CALENDLY_URL}
+              />
+            </RevealSection>
+            <RevealSection delay={0.2}>
+              <PricingCard
+                tier="Legacy"
+                price="$7,000+"
+                description="Multi-day productions for campaigns that demand cinematic excellence."
+                features={[
+                  "Multi-day production",
+                  "Unlimited locations",
+                  "Documentary or campaign film",
+                  "Unlimited social cutdowns",
+                  "Storyboarding & scripting",
+                  "Talent coordination",
+                  "Dedicated project manager",
+                  "Raw footage archive",
+                ]}
+                accentColor="text-sky-400"
+                ctaHref={CALENDLY_URL}
+                ctaText="Let's Talk"
+              />
+            </RevealSection>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── CTA ─── */}
+      <section className="px-6 md:px-16 lg:px-24 py-20 border-t border-border/30">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+          <div>
+            <h2
+              className="text-3xl md:text-4xl font-bold tracking-tight"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
+              Ready to roll?
+            </h2>
+            <p className="text-muted mt-2 text-lg">
+              Book a free consultation. We'll discuss your concept, timeline,
+              and production needs.
+            </p>
+          </div>
+          <a
+            href={CALENDLY_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex items-center gap-3 bg-accent hover:bg-accent-hover text-background font-semibold px-8 py-4 rounded-full transition-all duration-300 hover:scale-[1.03] shrink-0"
+          >
+            Book Video Production
+            <svg
+              className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M13 7l5 5m0 0l-5 5m5-5H6"
+              />
+            </svg>
+          </a>
+        </div>
+      </section>
     </main>
   );
 }

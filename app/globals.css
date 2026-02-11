@@ -3,15 +3,35 @@
 /* Dark mode variant — used by main site */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Reset and box-sizing */
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* Design tokens — main site defaults.
+   Gallery overrides these via .gallery-theme CSS custom properties. */
+@theme {
+  /* Dark cinematic background colors */
+  --color-background: oklch(0.1 0.01 240);
+  --color-surface: oklch(0.15 0.01 240);
+  --color-surface-elevated: oklch(0.2 0.01 240);
+
+  /* Text colors */
+  --color-foreground: oklch(0.95 0.01 240);
+  --color-muted: oklch(0.65 0.01 240);
+  --color-subtle: oklch(0.45 0.01 240);
+
+  /* Accent gold/amber */
+  --color-accent: oklch(0.75 0.15 80);
+  --color-accent-hover: oklch(0.8 0.18 80);
+
+  /* Borders */
+  --color-border: oklch(0.25 0.01 240);
+  --color-border-subtle: oklch(0.18 0.01 240);
+
+  /* Font families */
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-geist);
+  --font-mono: var(--font-mono);
 }
 
+/* Tailwind preflight handles box-sizing, margin/padding resets.
+   Only add rules here that preflight doesn't cover. */
 html, body {
   width: 100%;
   max-width: 100vw;

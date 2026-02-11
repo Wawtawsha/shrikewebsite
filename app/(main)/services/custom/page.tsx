@@ -1,104 +1,304 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { WireframeBackground } from "@/components/WireframeBackground";
+import { RevealSection } from "../ServicePageSections";
 
 export const metadata: Metadata = {
-  title: "Custom Package",
-  description: "Tailored creative solutions combining photography, videography, and technical services.",
+  title: "Custom Package — Shrike Media",
+  description:
+    "Bespoke creative solutions combining photography, videography, and technical consulting — tailored exactly to your vision.",
 };
+
+const CALENDLY_URL =
+  "https://calendly.com/realshrikeproductions/technical-consultation";
+
+const serviceBlocks = [
+  {
+    label: "Photography",
+    items: [
+      "Product & lifestyle shoots",
+      "Editorial portraits",
+      "Event documentation",
+      "Brand imagery library",
+    ],
+    color: "text-amber-400/80",
+    borderColor: "border-amber-500/20",
+    bgColor: "bg-amber-500/5",
+  },
+  {
+    label: "Videography",
+    items: [
+      "Brand films & commercials",
+      "Social media content",
+      "Event highlight reels",
+      "Documentary storytelling",
+    ],
+    color: "text-sky-400/80",
+    borderColor: "border-sky-500/20",
+    bgColor: "bg-sky-500/5",
+  },
+  {
+    label: "Technical",
+    items: [
+      "Architecture consulting",
+      "Data engineering",
+      "Creative technology",
+      "Workflow automation",
+    ],
+    color: "text-emerald-400/80",
+    borderColor: "border-emerald-500/20",
+    bgColor: "bg-emerald-500/5",
+  },
+];
 
 export default function CustomPage() {
   return (
-    <main id="main-content" className="min-h-screen relative" style={{ padding: "80px 64px" }}>
-      <WireframeBackground />
-      <div className="max-w-4xl mx-auto relative z-10">
-        <Link
-          href="/services"
-          className="inline-flex items-center gap-2 text-muted hover:text-white transition-colors mb-8 group"
-        >
-          <svg className="h-4 w-4 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-          </svg>
-          Back to Services
-        </Link>
+    <main id="main-content" className="min-h-screen">
+      {/* ─── Hero ─── */}
+      <section className="relative px-6 md:px-16 lg:px-24 pt-32 md:pt-40 pb-16 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-violet-950/40 via-background to-background pointer-events-none" />
 
-        <h1
-          className="text-5xl md:text-7xl font-bold mb-6 tracking-tight"
-          style={{ fontFamily: "var(--font-display)" }}
-        >
-          Custom Package
-        </h1>
+        <div className="relative max-w-7xl mx-auto">
+          <Link
+            href="/services"
+            className="inline-flex items-center gap-2 text-muted hover:text-foreground transition-colors mb-10 group"
+          >
+            <svg
+              className="h-4 w-4 transition-transform group-hover:-translate-x-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+            <span className="text-sm">All Services</span>
+          </Link>
 
-        <p className="text-xl text-muted mb-12 leading-relaxed max-w-2xl">
-          Every project is unique. Let's build a custom package that combines exactly what you need —
-          photography, videography, technical work, or all of the above.
-        </p>
+          <p className="text-violet-400/80 text-[11px] font-medium tracking-[0.3em] uppercase mb-5">
+            04 — Custom Package
+          </p>
 
-        <div className="mb-16">
-          <div className="bg-gradient-to-br from-surface via-surface to-surface/80 border border-border/50 rounded-2xl p-10 md:p-12 shadow-xl shadow-black/20 backdrop-blur-sm">
-            <div className="flex items-center gap-4 mb-8">
-              <div className="p-3 rounded-xl bg-purple-500/10 border border-purple-500/20">
-                <svg className="h-7 w-7 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-              </div>
-              <h2 className="text-3xl font-bold tracking-tight">How It Works</h2>
-            </div>
-            <ul className="space-y-5">
-              <li className="flex items-start gap-4 p-4 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.04] transition-colors">
-                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-500/20 flex items-center justify-center mt-0.5">
-                  <span className="text-purple-400 font-bold text-sm">1</span>
-                </span>
-                <div>
-                  <p className="text-white font-medium text-lg">Tell us about your project and goals</p>
-                  <p className="text-muted text-sm mt-1">Share your vision and requirements</p>
+          <h1
+            className="text-5xl md:text-7xl lg:text-[5.5rem] font-bold tracking-tight leading-[0.95] mb-8"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
+            Your Vision,
+            <br />
+            <span className="text-muted">Our Craft.</span>
+          </h1>
+
+          <p className="text-muted text-lg md:text-xl max-w-lg leading-relaxed">
+            Not every project fits a standard package. We build bespoke
+            solutions that combine photography, videography, and technical
+            expertise — tailored exactly to what you need.
+          </p>
+        </div>
+      </section>
+
+      {/* ─── Mix & Match Services ─── */}
+      <section className="px-6 md:px-16 lg:px-24 py-20">
+        <div className="max-w-7xl mx-auto">
+          <RevealSection>
+            <p className="text-violet-400/80 text-[11px] font-medium tracking-[0.3em] uppercase mb-4">
+              Build Your Package
+            </p>
+            <h2
+              className="text-3xl md:text-5xl font-bold tracking-tight mb-4"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
+              Mix & Match
+            </h2>
+            <p className="text-muted text-lg max-w-xl mb-16">
+              Pick from any combination of our services. Every custom package
+              includes dedicated project management and a single point of
+              contact.
+            </p>
+          </RevealSection>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {serviceBlocks.map((block, i) => (
+              <RevealSection key={block.label} delay={i * 0.1}>
+                <div
+                  className={`p-8 rounded-xl bg-surface/50 border ${block.borderColor} hover:bg-surface transition-colors duration-500`}
+                >
+                  <p
+                    className={`text-[11px] font-medium tracking-[0.25em] uppercase mb-6 ${block.color}`}
+                  >
+                    {block.label}
+                  </p>
+                  <ul className="space-y-3">
+                    {block.items.map((item) => (
+                      <li
+                        key={item}
+                        className="flex items-center gap-3 text-sm"
+                      >
+                        <span
+                          className={`w-1.5 h-1.5 rounded-full ${block.bgColor} border ${block.borderColor}`}
+                        />
+                        <span className="text-foreground/80">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              </li>
-              <li className="flex items-start gap-4 p-4 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.04] transition-colors">
-                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-500/20 flex items-center justify-center mt-0.5">
-                  <span className="text-purple-400 font-bold text-sm">2</span>
-                </span>
-                <div>
-                  <p className="text-white font-medium text-lg">We'll propose a tailored solution</p>
-                  <p className="text-muted text-sm mt-1">Custom-crafted approach for your needs</p>
-                </div>
-              </li>
-              <li className="flex items-start gap-4 p-4 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.04] transition-colors">
-                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-500/20 flex items-center justify-center mt-0.5">
-                  <span className="text-purple-400 font-bold text-sm">3</span>
-                </span>
-                <div>
-                  <p className="text-white font-medium text-lg">Flexible pricing based on scope</p>
-                  <p className="text-muted text-sm mt-1">Transparent costs that fit your budget</p>
-                </div>
-              </li>
-              <li className="flex items-start gap-4 p-4 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.04] transition-colors">
-                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-500/20 flex items-center justify-center mt-0.5">
-                  <span className="text-purple-400 font-bold text-sm">4</span>
-                </span>
-                <div>
-                  <p className="text-white font-medium text-lg">Dedicated project management</p>
-                  <p className="text-muted text-sm mt-1">Your personal point of contact throughout</p>
-                </div>
-              </li>
-            </ul>
+              </RevealSection>
+            ))}
           </div>
         </div>
+      </section>
 
-        <a
-          href="https://calendly.com/realshrikeproductions/technical-consultation"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-3 rounded-full border-2 border-white text-white text-lg font-semibold tracking-wide transition-all duration-300 hover:bg-white hover:text-black hover:scale-105"
-          style={{ padding: "16px 40px", backgroundColor: "rgba(255, 255, 255, 0.15)" }}
-        >
-          Discuss Your Project
-          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-          </svg>
-        </a>
-      </div>
+      {/* ─── How It Works ─── */}
+      <section className="px-6 md:px-16 lg:px-24 py-20 border-t border-border/30">
+        <div className="max-w-7xl mx-auto">
+          <RevealSection>
+            <p className="text-violet-400/80 text-[11px] font-medium tracking-[0.3em] uppercase mb-16">
+              How It Works
+            </p>
+          </RevealSection>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8">
+            {[
+              {
+                num: "01",
+                title: "Tell Us Your Vision",
+                text: "Share your goals, timeline, and budget. We'll listen carefully and ask the right questions.",
+              },
+              {
+                num: "02",
+                title: "We Design a Solution",
+                text: "A custom proposal combining the exact services and scope your project demands.",
+              },
+              {
+                num: "03",
+                title: "Transparent Pricing",
+                text: "Clear, itemized pricing with no hidden fees. You know exactly what you're paying for.",
+              },
+              {
+                num: "04",
+                title: "Dedicated Management",
+                text: "One project manager, one point of contact, from kickoff through final delivery.",
+              },
+            ].map((step, i) => (
+              <RevealSection key={step.num} delay={i * 0.1}>
+                <div className="relative">
+                  <span
+                    className="text-[5rem] font-bold leading-none text-white/[0.03] absolute -top-4 -left-2 select-none pointer-events-none"
+                    style={{ fontFamily: "var(--font-display)" }}
+                  >
+                    {step.num}
+                  </span>
+                  <div className="relative">
+                    <div className="h-px w-10 bg-violet-500/40 mb-5" />
+                    <h3
+                      className="text-lg font-bold mb-2 tracking-tight"
+                      style={{ fontFamily: "var(--font-display)" }}
+                    >
+                      {step.title}
+                    </h3>
+                    <p className="text-muted text-sm leading-relaxed">
+                      {step.text}
+                    </p>
+                  </div>
+                </div>
+              </RevealSection>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Past Custom Projects (Social Proof) ─── */}
+      <section className="px-6 md:px-16 lg:px-24 py-20 border-t border-border/30">
+        <div className="max-w-7xl mx-auto">
+          <RevealSection>
+            <p className="text-violet-400/80 text-[11px] font-medium tracking-[0.3em] uppercase mb-4">
+              Client Stories
+            </p>
+            <h2
+              className="text-3xl md:text-4xl font-bold tracking-tight mb-16"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
+              What Custom Looks Like
+            </h2>
+          </RevealSection>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {[
+              {
+                quote:
+                  "Shrike delivered a complete brand package — photos, promo video, and a custom analytics dashboard — all in one engagement. Seamless.",
+                client: "Marketing Director, Tech Startup",
+                services: "Photography + Videography + Technical",
+              },
+              {
+                quote:
+                  "We needed event coverage with a same-day highlight reel and social media assets. They assembled the perfect team and nailed every deliverable.",
+                client: "Event Coordinator, Nonprofit",
+                services: "Photography + Videography",
+              },
+            ].map((testimonial, i) => (
+              <RevealSection key={i} delay={i * 0.12}>
+                <div className="p-8 rounded-xl bg-surface/50 border border-border/20">
+                  <blockquote className="text-foreground/90 text-lg leading-relaxed mb-6 italic">
+                    &ldquo;{testimonial.quote}&rdquo;
+                  </blockquote>
+                  <div>
+                    <p className="text-sm font-medium">
+                      {testimonial.client}
+                    </p>
+                    <p className="text-violet-400/60 text-xs tracking-wide mt-1">
+                      {testimonial.services}
+                    </p>
+                  </div>
+                </div>
+              </RevealSection>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── CTA ─── */}
+      <section className="px-6 md:px-16 lg:px-24 py-20 border-t border-border/30">
+        <div className="max-w-7xl mx-auto text-center">
+          <RevealSection>
+            <h2
+              className="text-3xl md:text-5xl font-bold tracking-tight mb-4"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
+              Let's Build Something
+              <br />
+              <span className="text-muted">Together.</span>
+            </h2>
+            <p className="text-muted text-lg max-w-md mx-auto mb-10">
+              Tell us about your project. We'll put together a custom proposal
+              within 48 hours.
+            </p>
+            <a
+              href={CALENDLY_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-3 bg-accent hover:bg-accent-hover text-background font-semibold px-10 py-4 rounded-full transition-all duration-300 hover:scale-[1.03]"
+            >
+              Discuss Your Project
+              <svg
+                className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M13 7l5 5m0 0l-5 5m5-5H6"
+                />
+              </svg>
+            </a>
+          </RevealSection>
+        </div>
+      </section>
     </main>
   );
 }

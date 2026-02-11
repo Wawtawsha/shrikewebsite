@@ -1,5 +1,5 @@
-/* Warm gallery theme with oklch colors */
-@theme {
+/* Warm gallery theme — overrides globals.css @theme defaults */
+.gallery-theme {
   /* Warm background colors */
   --color-background: oklch(0.97 0.01 80);
   --color-surface: oklch(0.94 0.01 80);
@@ -22,10 +22,7 @@
   --color-border: oklch(0.85 0.01 80);
   --color-border-subtle: oklch(0.9 0.01 80);
 
-}
-
-/* Base body styles for gallery theme */
-.gallery-theme {
+  /* Gallery-specific font */
   --font-display: var(--font-playfair);
   background: var(--color-background);
   color: var(--color-foreground);

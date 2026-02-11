@@ -1,28 +1,5 @@
-/* Cinematic dark theme with oklch colors */
-@theme {
-  /* Dark cinematic background colors */
-  --color-background: oklch(0.1 0.01 240);
-  --color-surface: oklch(0.15 0.01 240);
-  --color-surface-elevated: oklch(0.2 0.01 240);
-
-  /* Text colors */
-  --color-foreground: oklch(0.95 0.01 240);
-  --color-muted: oklch(0.65 0.01 240);
-  --color-subtle: oklch(0.45 0.01 240);
-
-  /* Accent gold/amber */
-  --color-accent: oklch(0.75 0.15 80);
-  --color-accent-hover: oklch(0.8 0.18 80);
-
-  /* Borders */
-  --color-border: oklch(0.25 0.01 240);
-  --color-border-subtle: oklch(0.18 0.01 240);
-
-  /* Font families */
-  --font-sans: var(--font-inter);
-  --font-display: var(--font-geist);
-  --font-mono: var(--font-mono);
-}
+/* Theme tokens are now in globals.css @theme block.
+   This file contains main-site-specific styles only. */
 
 /* Base body styles for dark theme */
 body {
