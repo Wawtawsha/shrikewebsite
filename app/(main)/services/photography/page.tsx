@@ -22,7 +22,7 @@ async function getShowcasePhotos(count: number) {
   // Grab a random sample using Postgres random ordering
   const { data } = await supabase
     .from("photos")
-    .select("id, thumb_path, width, height")
+    .select("id, storage_path, width, height")
     .order("id") // need a base order for range to work
     .limit(200); // fetch a pool to shuffle from
 
@@ -97,7 +97,7 @@ export default async function PhotographyPage() {
                   style={{ aspectRatio: "4/3" }}
                 >
                   <Image
-                    src={getStorageUrl(photos[0].thumb_path)}
+                    src={getStorageUrl(photos[0].storage_path)}
                     alt="Featured photography work"
                     width={photos[0].width}
                     height={photos[0].height}
@@ -114,7 +114,7 @@ export default async function PhotographyPage() {
                   style={{ aspectRatio: "1/1" }}
                 >
                   <Image
-                    src={getStorageUrl(photo.thumb_path)}
+                    src={getStorageUrl(photo.storage_path)}
                     alt="Photography sample"
                     width={photo.width}
                     height={photo.height}
@@ -131,7 +131,7 @@ export default async function PhotographyPage() {
                   style={{ aspectRatio: "3/2" }}
                 >
                   <Image
-                    src={getStorageUrl(photo.thumb_path)}
+                    src={getStorageUrl(photo.storage_path)}
                     alt="Photography sample"
                     width={photo.width}
                     height={photo.height}
