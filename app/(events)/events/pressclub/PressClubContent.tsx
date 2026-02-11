@@ -155,7 +155,7 @@ export function PressClubContent({ event, initialPhotos, totalCount, hasMore }: 
               Book a Consultation
             </a>
             <a
-              href="https://www.instagram.com/realshrikeproductions/"
+              href="https://www.instagram.com/shrikeproductions/"
               target="_blank"
               rel="noopener noreferrer"
               className="promo-cta-secondary"
