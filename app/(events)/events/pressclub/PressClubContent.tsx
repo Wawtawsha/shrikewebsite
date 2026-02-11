@@ -145,14 +145,24 @@ export function PressClubContent({ event, initialPhotos, totalCount, hasMore }: 
               </p>
             </div>
           </div>
-          <a
-            href="https://www.instagram.com/realshrikeproductions/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="promo-cta"
-          >
-            Contact Us on Instagram
-          </a>
+          <div className="promo-cta-row">
+            <a
+              href="https://calendly.com/realshrikeproductions/technical-consultation?month=2026-02"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="promo-cta"
+            >
+              Book a Consultation
+            </a>
+            <a
+              href="https://www.instagram.com/realshrikeproductions/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="promo-cta-secondary"
+            >
+              Contact Us on Instagram
+            </a>
+          </div>
         </div>
       </dialog>
     </main>
