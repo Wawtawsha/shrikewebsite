@@ -18,18 +18,30 @@ interface PressClubContentProps {
 
 export function PressClubContent({ event, initialPhotos, totalCount, hasMore }: PressClubContentProps) {
   const [bladeOpen, setBladeOpen] = useState(false);
+  const [promoDismissed, setPromoDismissed] = useState(false);
   const promoRef = useRef<HTMLDialogElement>(null);
   useNessusTracking("2016 Night at Press Club", PRESS_CLUB_CLIENT_ID);
 
   useEffect(() => {
-    if (!sessionStorage.getItem(PROMO_DISMISSED_KEY)) {
-      promoRef.current?.showModal();
-    }
+    setPromoDismissed(!!sessionStorage.getItem(PROMO_DISMISSED_KEY));
   }, []);
+
+  useEffect(() => {
+    if (sessionStorage.getItem(PROMO_DISMISSED_KEY)) return;
+    const timer = setTimeout(() => {
+      promoRef.current?.showModal();
+    }, 15000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  function openPromo() {
+    promoRef.current?.showModal();
+  }
 
   function dismissPromo() {
     promoRef.current?.close();
     sessionStorage.setItem(PROMO_DISMISSED_KEY, "1");
+    setPromoDismissed(true);
   }
 
   const formattedDate = new Date(event.date).toLocaleDateString("en-US", {
@@ -47,6 +59,18 @@ export function PressClubContent({ event, initialPhotos, totalCount, hasMore }: 
         transition: "padding-right 0.3s ease",
       }}
     >
+      <button className="promo-banner" onClick={openPromo} type="button">
+        <span className="promo-banner-text">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
+          </svg>
+          SPECIAL OFFER — Limited Time Deals from Shrike Media
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
+          </svg>
+        </span>
+      </button>
+
       <div className="gallery-container">
         <header className="text-center mb-8 pb-6" style={{ borderBottom: "1px solid var(--color-border-subtle)" }}>
           <h1

@@ -38,6 +38,36 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Sticky promo banner */
+.promo-banner {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  width: 100%;
+  padding: 10px 16px;
+  background: var(--color-accent);
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.promo-banner:hover {
+  background: var(--color-accent-hover);
+}
+
+.promo-banner-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: white;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
 /* Gallery container with responsive padding */
 .gallery-container {
   width: 100%;
