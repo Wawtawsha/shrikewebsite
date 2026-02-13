@@ -1,18 +1,38 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
-const reels = [
-  { mp4: "/videos/reel-1.mp4", av1: "/videos/reel-1.av1.mp4", label: "Events" },
-  { mp4: "/videos/reel-2.mp4", av1: "/videos/reel-2.av1.mp4", label: "Portraits" },
-  { mp4: "/videos/reel-3.mp4", av1: "/videos/reel-3.av1.mp4", label: "Stories" },
+/** All available vertical reel videos. */
+const ALL_REELS = [
+  "/videos/reel-1.mp4",
+  "/videos/reel-2.mp4",
+  "/videos/reel-3.mp4",
+  "/videos/reel-4.mp4",
+  "/videos/reel-5.mp4",
+  "/videos/reel-6.mp4",
+  "/videos/reel-7.mp4",
 ];
 
+const PANEL_LABELS = ["Events", "Portraits", "Stories"];
+
+/** Pick a random reel that isn't the one currently playing. */
+function pickNextReel(current: string): string {
+  const others = ALL_REELS.filter((r) => r !== current);
+  return others[Math.floor(Math.random() * others.length)];
+}
+
+/** Pick N unique random reels for initial display. */
+function pickInitialReels(count: number): string[] {
+  const shuffled = [...ALL_REELS].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, count);
+}
+
 function ReelPanel({
-  reel,
+  initialSrc,
+  label,
   index,
   isVisible,
   activeIndex,
@@ -20,7 +40,8 @@ function ReelPanel({
   onLeave,
   reducedMotion,
 }: {
-  reel: (typeof reels)[0];
+  initialSrc: string;
+  label: string;
   index: number;
   isVisible: boolean;
   activeIndex: number | null;
@@ -29,13 +50,30 @@ function ReelPanel({
   reducedMotion: boolean;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [currentSrc, setCurrentSrc] = useState(initialSrc);
   const isActive = activeIndex === index;
   const isDimmed = activeIndex !== null && activeIndex !== index;
 
+  // When a video ends, swap to a different one
+  const handleEnded = useCallback(() => {
+    const next = pickNextReel(currentSrc);
+    setCurrentSrc(next);
+  }, [currentSrc]);
+
+  // When src changes, load and play the new video
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || reducedMotion) return;
+    video.load();
+    if (isVisible) {
+      video.play().catch(() => {});
+    }
+  }, [currentSrc, reducedMotion, isVisible]);
+
+  // Initial play with staggered delay
   useEffect(() => {
     if (!videoRef.current || reducedMotion) return;
     if (isVisible) {
-      // Stagger start times so videos aren't synchronized
       const delay = index * 1200;
       const timer = setTimeout(() => {
         videoRef.current?.play().catch(() => {});
@@ -105,20 +143,19 @@ function ReelPanel({
           {reducedMotion ? (
             <div className="absolute inset-0 bg-gradient-to-br from-surface-elevated to-surface flex items-center justify-center">
               <span className="text-muted text-sm tracking-widest uppercase">
-                {reel.label}
+                {label}
               </span>
             </div>
           ) : (
             <video
               ref={videoRef}
               muted
-              loop
               playsInline
               preload="metadata"
+              onEnded={handleEnded}
               className="absolute inset-0 w-full h-full object-cover"
             >
-              <source src={reel.av1} type='video/mp4; codecs="av01.0.05M.08"' />
-              <source src={reel.mp4} type="video/mp4" />
+              <source src={currentSrc} type="video/mp4" />
             </video>
           )}
 
@@ -127,10 +164,8 @@ function ReelPanel({
 
           {/* Bottom label */}
           <div className="absolute bottom-0 left-0 right-0 p-5 pointer-events-none">
-            <span
-              className="text-[11px] font-medium tracking-[0.25em] uppercase text-white/60 transition-colors duration-300 group-hover:text-accent"
-            >
-              {reel.label}
+            <span className="text-[11px] font-medium tracking-[0.25em] uppercase text-white/60 transition-colors duration-300 group-hover:text-accent">
+              {label}
             </span>
           </div>
         </div>
@@ -143,6 +178,7 @@ export function CinemaTriptych() {
   const { ref, isVisible } = useScrollReveal({ threshold: 0.15 });
   const reducedMotion = useReducedMotion();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [initialReels] = useState(() => pickInitialReels(3));
 
   return (
     <section
@@ -170,10 +206,11 @@ export function CinemaTriptych() {
 
       {/* Triptych grid */}
       <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-        {reels.map((reel, index) => (
+        {PANEL_LABELS.map((label, index) => (
           <ReelPanel
-            key={reel.label}
-            reel={reel}
+            key={label}
+            initialSrc={initialReels[index]}
+            label={label}
             index={index}
             isVisible={isVisible}
             activeIndex={activeIndex}

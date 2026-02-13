@@ -52,7 +52,7 @@ export function HeroVideo() {
           poster="/images/hero-poster.jpg"
           className="absolute inset-0 h-full w-full object-cover"
         >
-          <source src="/videos/showreel.mp4" type="video/mp4" />
+          <source src="/videos/hero-bg.mp4" type="video/mp4" />
         </video>
       )}
 
