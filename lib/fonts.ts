@@ -1,4 +1,4 @@
-import { Inter, Geist, Source_Code_Pro, Syne, Cormorant_Garamond, Playfair_Display } from 'next/font/google';
+import { Inter, Geist, Source_Code_Pro, Syne, Cormorant_Garamond, Playfair_Display, Caveat } from 'next/font/google';
 
 export const inter = Inter({
   subsets: ['latin'],
@@ -39,4 +39,11 @@ export const playfairDisplay = Playfair_Display({
   display: 'swap',
   weight: ['400', '500', '600', '700', '800', '900'],
   variable: '--font-playfair',
+});
+
+export const caveat = Caveat({
+  subsets: ['latin'],
+  display: 'swap',
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-caveat',
 });

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { getStorageUrl } from "@/lib/gallery";
 import { RevealSection } from "../ServicePageSections";
+import { ScribbleNote } from "@/components/ScribbleNote";
 
 export const metadata: Metadata = {
   title: "Photography — Shrike Media",
@@ -170,6 +171,12 @@ export default async function PhotographyPage() {
           </div>
         </div>
       </section>
+
+      {/* Scribble note encouraging scroll */}
+      <ScribbleNote
+        message="Feeling lucky? Below are some photos we've taken, plucked at random from our galleries. Enjoy!"
+        delay={5000}
+      />
 
       {/* ─── Portfolio Showcase ─── */}
       <section className="px-6 md:px-16 lg:px-24 py-20">

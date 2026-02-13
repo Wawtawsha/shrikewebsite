@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { inter, geist, sourceCodePro, syne, cormorantGaramond, playfairDisplay } from "@/lib/fonts";
+import { inter, geist, sourceCodePro, syne, cormorantGaramond, playfairDisplay, caveat } from "@/lib/fonts";
 import { siteMetadata, SITE_URL, generateOrganizationJsonLd } from "@/lib/metadata";
 import "./globals.css";
 
@@ -58,7 +58,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${geist.variable} ${sourceCodePro.variable} ${syne.variable} ${cormorantGaramond.variable} ${playfairDisplay.variable} antialiased`}
+        className={`${inter.variable} ${geist.variable} ${sourceCodePro.variable} ${syne.variable} ${cormorantGaramond.variable} ${playfairDisplay.variable} ${caveat.variable} antialiased`}
       >
         <script
           type="application/ld+json"
