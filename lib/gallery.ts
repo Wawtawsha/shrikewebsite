@@ -52,6 +52,23 @@ export async function fetchPhotos(
   };
 }
 
+export async function fetchRandomPhotos(
+  eventId: string,
+  count: number
+): Promise<GalleryPhoto[]> {
+  const { data } = await supabase
+    .from("photos")
+    .select("*")
+    .eq("event_id", eventId)
+    .order("sort_order", { ascending: true })
+    .limit(30);
+
+  if (!data || data.length === 0) return [];
+
+  const shuffled = [...data].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, Math.min(count, shuffled.length)) as GalleryPhoto[];
+}
+
 export async function fetchUserLikes(
   eventId: string,
   deviceId: string
