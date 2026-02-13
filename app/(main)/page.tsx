@@ -3,6 +3,7 @@ import { HeroVideo } from "@/components/HeroVideo";
 import { ScrollIndicator } from "@/components/ScrollIndicator";
 import { WireframeBackground } from "@/components/WireframeBackground";
 import { WhyChooseUs } from "@/components/WhyChooseUs";
+import { CinemaTriptych } from "@/components/CinemaTriptych";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -18,6 +19,9 @@ export default function Home() {
         <HeroVideo />
         <ScrollIndicator />
       </div>
+
+      {/* Cinema Triptych — three vertical video reels */}
+      <CinemaTriptych />
 
       {/* Why Choose Us */}
       <WhyChooseUs />
