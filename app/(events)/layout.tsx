@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./events.css";
 
 export const metadata: Metadata = {
-  title: "2016 Night at Press Club",
-  description: "Photos from the 2016 Night at Press Club event.",
+  title: "Events | Shrike Media",
+  description: "Event photo galleries by Shrike Media.",
 };
 
 export default function EventsLayout({
