@@ -10,7 +10,7 @@ import { DownloadQueueBlade } from "@/components/gallery/DownloadQueueBlade";
 import { DownloadQueueFAB } from "@/components/gallery/DownloadQueueFAB";
 import { useNessusTracking } from "@/hooks/useNessusTracking";
 
-const PRESS_CLUB_CLIENT_ID = "8e408c1b-6e36-4026-8344-25d0c32f8d31";
+const WEBSITE_LABEL = "press-club";
 const PROMO_DISMISSED_KEY = "pressclub-promo-dismissed";
 const LEAD_ENDPOINT = "https://rjudjhjcfivugbyztnce.supabase.co/functions/v1/submit-lead";
 
@@ -28,7 +28,7 @@ export function PressClubContent({ event, initialPhotos, totalCount, hasMore }: 
   const [downloadBladeOpen, setDownloadBladeOpen] = useState(false);
   const [promoDismissed, setPromoDismissed] = useState(false);
   const promoRef = useRef<HTMLDialogElement>(null);
-  const { trackEvent } = useNessusTracking("2016 Night at Press Club", PRESS_CLUB_CLIENT_ID);
+  const { trackEvent } = useNessusTracking("2016 Night at Press Club", WEBSITE_LABEL);
 
   // Lead form state
   const leadRef = useRef<HTMLDialogElement>(null);
@@ -81,7 +81,7 @@ export function PressClubContent({ event, initialPhotos, totalCount, hasMore }: 
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          client_id: PRESS_CLUB_CLIENT_ID,
+          client_id: "da6fa735-8143-4cdf-941c-5b6021cbc961", // Shrike Media Website
           first_name: data.get("first_name"),
           last_name: data.get("last_name"),
           email: data.get("email"),

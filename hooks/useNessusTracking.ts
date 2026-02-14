@@ -4,7 +4,7 @@ import { useEffect, useCallback } from "react";
 
 const TRACKING_ENDPOINT =
   "https://rjudjhjcfivugbyztnce.supabase.co/functions/v1/track-visitor";
-const CLIENT_ID = "4f52c706-e3ae-47ae-8b6a-63e78495b214"; // Rosemont Vineyard
+const CLIENT_ID = "da6fa735-8143-4cdf-941c-5b6021cbc961"; // Shrike Media Website
 
 function getSessionId(): string {
   let sessionId = sessionStorage.getItem("nessus_session_id");
@@ -23,13 +23,12 @@ function getSessionId(): string {
  * Tracks page visits and custom events to the Nessus CRM analytics system.
  * Returns { trackEvent } for granular interaction tracking.
  */
-export function useNessusTracking(pagePath: string, clientId?: string) {
-  const resolvedClientId = clientId ?? CLIENT_ID;
-
+export function useNessusTracking(pagePath: string, websiteLabel: string) {
   useEffect(() => {
     const data = {
-      client_id: resolvedClientId,
+      client_id: CLIENT_ID,
       page_path: pagePath,
+      website_label: websiteLabel,
       referrer: document.referrer || null,
       user_agent: navigator.userAgent,
       session_id: getSessionId(),
@@ -41,7 +40,7 @@ export function useNessusTracking(pagePath: string, clientId?: string) {
       body: JSON.stringify(data),
       keepalive: true,
     }).catch(() => {});
-  }, [pagePath, resolvedClientId]);
+  }, [pagePath, websiteLabel]);
 
   const trackEvent = useCallback(
     (eventName: string, eventData?: Record<string, unknown>) => {
@@ -49,8 +48,9 @@ export function useNessusTracking(pagePath: string, clientId?: string) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          client_id: resolvedClientId,
+          client_id: CLIENT_ID,
           page_path: pagePath,
+          website_label: websiteLabel,
           event_name: eventName,
           event_data: eventData ?? null,
           session_id: getSessionId(),
@@ -60,7 +60,7 @@ export function useNessusTracking(pagePath: string, clientId?: string) {
         keepalive: true,
       }).catch(() => {});
     },
-    [pagePath, resolvedClientId]
+    [pagePath, websiteLabel]
   );
 
   return { trackEvent };
