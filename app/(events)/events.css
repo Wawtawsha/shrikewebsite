@@ -845,6 +845,29 @@
   }
 }
 
+/* Email download warning banner */
+.email-warning {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 16px auto 8px;
+  padding: 12px 20px;
+  color: #ff3b3b;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.4;
+  border: 2px solid #ff3b3b;
+  border-radius: 10px;
+  background: rgba(255, 59, 59, 0.08);
+}
+
+.email-warning-icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
 /* Reduced motion: disable animations */
 @media (prefers-reduced-motion: reduce) {
   .gallery-spinner {
