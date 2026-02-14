@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback, type FormEvent } from "react";
+import { useState, useRef, useCallback, type FormEvent } from "react";
 import Link from "next/link";
 import type { GalleryEvent, GalleryPhoto } from "@/types/gallery";
 import { MasonryGrid } from "@/components/gallery/MasonryGrid";
@@ -11,10 +11,9 @@ import { DownloadQueueFAB } from "@/components/gallery/DownloadQueueFAB";
 import { useNessusTracking } from "@/hooks/useNessusTracking";
 
 const PRESS_CLUB_CLIENT_ID = "8e408c1b-6e36-4026-8344-25d0c32f8d31";
-const PROMO_DISMISSED_KEY = "pressclub-promo-dismissed";
 const LEAD_ENDPOINT = "https://rjudjhjcfivugbyztnce.supabase.co/functions/v1/submit-lead";
 
-interface PressClubContentProps {
+interface CollegeThursdayContentProps {
   event: GalleryEvent;
   initialPhotos: GalleryPhoto[];
   totalCount: number;
@@ -23,12 +22,10 @@ interface PressClubContentProps {
 
 type LeadFormStatus = "idle" | "submitting" | "success" | "error";
 
-export function PressClubContent({ event, initialPhotos, totalCount, hasMore }: PressClubContentProps) {
+export function CollegeThursdayContent({ event, initialPhotos, totalCount, hasMore }: CollegeThursdayContentProps) {
   const [bladeOpen, setBladeOpen] = useState(false);
   const [downloadBladeOpen, setDownloadBladeOpen] = useState(false);
-  const [promoDismissed, setPromoDismissed] = useState(false);
-  const promoRef = useRef<HTMLDialogElement>(null);
-  const { trackEvent } = useNessusTracking("2016 Night at Press Club", PRESS_CLUB_CLIENT_ID);
+  const { trackEvent } = useNessusTracking("College Thursday", PRESS_CLUB_CLIENT_ID);
 
   // Lead form state
   const leadRef = useRef<HTMLDialogElement>(null);
@@ -43,31 +40,6 @@ export function PressClubContent({ event, initialPhotos, totalCount, hasMore }: 
   const closeLeadForm = useCallback(() => {
     leadRef.current?.close();
   }, []);
-
-  useEffect(() => {
-    setPromoDismissed(!!sessionStorage.getItem(PROMO_DISMISSED_KEY));
-  }, []);
-
-  useEffect(() => {
-    if (sessionStorage.getItem(PROMO_DISMISSED_KEY)) return;
-    const timer = setTimeout(() => {
-      promoRef.current?.showModal();
-      trackEvent("promo_popup_shown");
-    }, 15000);
-    return () => clearTimeout(timer);
-  }, [trackEvent]);
-
-  function openPromo() {
-    promoRef.current?.showModal();
-    trackEvent("promo_popup_shown");
-  }
-
-  function dismissPromo() {
-    promoRef.current?.close();
-    sessionStorage.setItem(PROMO_DISMISSED_KEY, "1");
-    setPromoDismissed(true);
-    trackEvent("promo_popup_dismissed");
-  }
 
   async function handleLeadSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -88,7 +60,7 @@ export function PressClubContent({ event, initialPhotos, totalCount, hasMore }: 
           phone: data.get("phone") || null,
           preferred_contact: data.get("preferred_contact"),
           sms_consent: data.get("sms_consent") === "on",
-          utm_source: "pressclub-gallery",
+          utm_source: "collegethursday-gallery",
           landing_page_url: window.location.href,
           referrer: document.referrer || null,
         }),
@@ -108,12 +80,6 @@ export function PressClubContent({ event, initialPhotos, totalCount, hasMore }: 
     }
   }
 
-  const formattedDate = new Date(event.date).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-
   const anyBladeOpen = bladeOpen || downloadBladeOpen;
 
   return (
@@ -126,32 +92,19 @@ export function PressClubContent({ event, initialPhotos, totalCount, hasMore }: 
           transition: "padding-right 0.3s ease",
         }}
       >
-        <button
-          className="promo-banner"
-          onClick={() => { openPromo(); trackEvent("banner_click"); }}
-          type="button"
-        >
-          <span className="promo-banner-text">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
-            </svg>
-            SPECIAL OFFER — Limited Time Deals
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
-            </svg>
-          </span>
-        </button>
-
         <div className="gallery-container">
           <header className="pressclub-header mb-8 pb-6" style={{ borderBottom: "1px solid var(--color-border-subtle)" }}>
             <div className="pressclub-header-top">
               <div className="pressclub-header-center">
                 <h1
-                  className="text-3xl md:text-5xl font-extrabold mb-2 tracking-tight"
+                  className="text-3xl md:text-5xl font-extrabold mb-1 tracking-tight"
                   style={{ fontFamily: "var(--font-display)" }}
                 >
                   {event.title}
                 </h1>
+                <p className="text-sm font-semibold mb-2" style={{ color: "var(--color-accent)", letterSpacing: "0.05em" }}>
+                  01-22-26
+                </p>
                 <div className="memphis-divider">
                   <span className="memphis-triangle" />
                   <span className="memphis-circle" />
@@ -172,13 +125,15 @@ export function PressClubContent({ event, initialPhotos, totalCount, hasMore }: 
                 Get in Touch
               </button>
             </div>
-            <Link href="/events/collegethursday" className="event-crosslink" onClick={() => trackEvent("crosslink_collegethursday")}>
-              CLICK HERE for College Thursday pics!
+
+            <Link href="/events/pressclub" className="event-crosslink" onClick={() => trackEvent("crosslink_pressclub")}>
+              CLICK HERE for 2016 Night pics!
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </Link>
-            <p style={{ color: "var(--color-muted)" }} className="mb-2 text-center">{formattedDate}</p>
+
+            <p style={{ color: "var(--color-muted)" }} className="mb-2 text-center">{new Date(event.date).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</p>
             <p className="text-sm mb-4 text-center" style={{ color: "var(--color-subtle)" }}>{totalCount} photos</p>
             <p className="gallery-tip-message">
               If you like your photos, and would like to donate something in return, please consider tipping. We sincerely appreciate it.
@@ -388,61 +343,6 @@ export function PressClubContent({ event, initialPhotos, totalCount, hasMore }: 
           photos={initialPhotos}
           trackEvent={trackEvent}
         />
-
-        <dialog ref={promoRef} className="promo-dialog" onClick={(e) => { if (e.target === e.currentTarget) dismissPromo(); }}>
-          <div className="promo-content">
-            <button className="promo-close" onClick={dismissPromo} aria-label="Close">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                <path d="M18 6L6 18M6 6l12 12" />
-              </svg>
-            </button>
-            <div className="promo-ribbon" aria-hidden="true">
-              <span>SPECIAL OFFER</span>
-            </div>
-            <h2 className="promo-title">Shrike Media Specials</h2>
-            <div className="memphis-divider">
-              <span className="memphis-triangle" />
-              <span className="memphis-circle" />
-              <span className="memphis-square" />
-              <span className="memphis-circle" />
-              <span className="memphis-triangle" />
-            </div>
-            <div className="promo-offers">
-              <div className="promo-offer">
-                <h3 className="promo-offer-title">Instagram Carousels</h3>
-                <p className="promo-offer-desc">
-                  Book a custom Instagram Carousel shoot — we handle the photography, editing, and delivery at a discounted rate.
-                </p>
-              </div>
-              <div className="promo-offer">
-                <h3 className="promo-offer-title">Sorority &amp; Fraternity Formals</h3>
-                <p className="promo-offer-desc">
-                  Now booking photography for Sorority and Fraternity Formals. Contact us to lock in your date.
-                </p>
-              </div>
-            </div>
-            <div className="promo-cta-row">
-              <a
-                href="https://calendly.com/realshrikeproductions/technical-consultation?month=2026-02"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="promo-cta"
-                onClick={() => trackEvent("calendly_click")}
-              >
-                Book a Consultation
-              </a>
-              <a
-                href="https://www.instagram.com/shrikeproductions/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="promo-cta-secondary"
-                onClick={() => trackEvent("instagram_click")}
-              >
-                Contact Us on Instagram
-              </a>
-            </div>
-          </div>
-        </dialog>
       </main>
     </DownloadQueueProvider>
   );

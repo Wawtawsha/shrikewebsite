@@ -1,9 +1,13 @@
 "use client";
 
+import { useCallback } from "react";
 import Lightbox from "yet-another-react-lightbox";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import Download from "yet-another-react-lightbox/plugins/download";
 import "yet-another-react-lightbox/styles.css";
+import { downloadWebSize } from "@/lib/download";
+import { useDownloadQueue } from "./DownloadQueueContext";
+import type { GalleryPhoto } from "@/types/gallery";
 
 interface Slide {
   src: string;
@@ -16,38 +20,24 @@ interface GalleryLightboxProps {
   open: boolean;
   index: number;
   slides: Slide[];
+  photos: GalleryPhoto[];
   onClose: () => void;
+  trackEvent?: (name: string, data?: Record<string, unknown>) => void;
 }
 
-async function toJpegBlob(blob: Blob): Promise<Blob> {
-  if (blob.type === "image/jpeg") return blob;
-  const bitmap = await createImageBitmap(blob);
-  const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
-  const ctx = canvas.getContext("2d")!;
-  ctx.drawImage(bitmap, 0, 0);
-  return canvas.convertToBlob({ type: "image/jpeg", quality: 0.92 });
-}
+export function GalleryLightbox({ open, index, slides, photos, onClose, trackEvent }: GalleryLightboxProps) {
+  const { isSelected, togglePhoto } = useDownloadQueue();
 
-async function downloadPhoto(src: string) {
-  try {
-    const response = await fetch(src);
-    const raw = await response.blob();
-    const blob = await toJpegBlob(raw);
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    const filename = src.split("/").pop() || "photo.jpg";
-    a.download = filename.replace(/\.\w+$/, ".jpg");
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  } catch {
-    window.open(src, "_blank");
-  }
-}
+  const handleDownload = useCallback(
+    ({ slide }: { slide: { src: string } }) => {
+      const filename = slide.src.split("/").pop() || "photo.jpg";
+      const idx = slides.findIndex((s) => s.src === slide.src);
+      trackEvent?.("instant_download", { photo_id: photos[idx]?.id });
+      downloadWebSize(slide.src, filename);
+    },
+    [slides, photos, trackEvent]
+  );
 
-export function GalleryLightbox({ open, index, slides, onClose }: GalleryLightboxProps) {
   return (
     <Lightbox
       open={open}
@@ -59,7 +49,45 @@ export function GalleryLightbox({ open, index, slides, onClose }: GalleryLightbo
       animation={{ fade: 300 }}
       carousel={{ finite: false }}
       controller={{ closeOnBackdropClick: true }}
-      download={{ download: ({ slide }) => downloadPhoto(slide.src) }}
+      download={{ download: handleDownload }}
+      toolbar={{
+        buttons: [
+          <button
+            key="queue-toggle"
+            type="button"
+            className="yarl__button lightbox-queue-btn"
+            onClick={() => {
+              if (index >= 0 && index < photos.length) {
+                const photo = photos[index];
+                togglePhoto(photo.id);
+                if (isSelected(photo.id)) {
+                  trackEvent?.("photo_dequeued", { photo_id: photo.id });
+                } else {
+                  trackEvent?.("photo_queued", { photo_id: photo.id });
+                }
+              }
+            }}
+            aria-label={
+              index >= 0 && index < photos.length && isSelected(photos[index].id)
+                ? "Remove from download queue"
+                : "Add to download queue"
+            }
+          >
+            {index >= 0 && index < photos.length && isSelected(photos[index].id) ? (
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--color-accent)" stroke="var(--color-accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            ) : (
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+            )}
+          </button>,
+          "download",
+          "close",
+        ],
+      }}
     />
   );
 }

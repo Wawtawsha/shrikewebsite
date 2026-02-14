@@ -9,6 +9,8 @@ import type { GalleryPhoto } from "@/types/gallery";
 import { BlurhashPlaceholder } from "./BlurhashPlaceholder";
 import { GalleryLightbox } from "./GalleryLightbox";
 import { LikeButton } from "./LikeButton";
+import { SelectButton } from "./SelectButton";
+import { InstantDownloadButton } from "./InstantDownloadButton";
 import { useDeviceId } from "@/hooks/useDeviceId";
 
 interface MasonryGridProps {
@@ -16,6 +18,7 @@ interface MasonryGridProps {
   totalCount: number;
   hasMore: boolean;
   eventId: string;
+  trackEvent?: (name: string, data?: Record<string, unknown>) => void;
 }
 
 interface GalleryPhotoAlbumPhoto {
@@ -42,14 +45,17 @@ function ImageWithPlaceholder({
   deviceId,
   isLiked,
   onPhotoClick,
+  trackEvent,
 }: {
   imgProps: RenderImageProps;
   photo: GalleryPhotoAlbumPhoto;
   deviceId: string | null;
   isLiked: boolean;
   onPhotoClick: () => void;
+  trackEvent?: (name: string, data?: Record<string, unknown>) => void;
 }) {
   const { style, ...rest } = imgProps;
+  const fullResUrl = getStorageUrl(photo.galleryPhoto.storage_path);
 
   return (
     <div
@@ -72,6 +78,14 @@ function ImageWithPlaceholder({
         loading="lazy"
         decoding="async"
       />
+      <div className="photo-action-row">
+        <InstantDownloadButton
+          photoUrl={fullResUrl}
+          filename={photo.galleryPhoto.filename}
+          onDownload={() => trackEvent?.("instant_download", { photo_id: photo.galleryPhoto.id })}
+        />
+        <SelectButton photoId={photo.galleryPhoto.id} />
+      </div>
       <LikeButton
         photoId={photo.galleryPhoto.id}
         initialCount={photo.galleryPhoto.like_count}
@@ -82,7 +96,7 @@ function ImageWithPlaceholder({
   );
 }
 
-export function MasonryGrid({ initialPhotos, totalCount, hasMore, eventId }: MasonryGridProps) {
+export function MasonryGrid({ initialPhotos, totalCount, hasMore, eventId, trackEvent }: MasonryGridProps) {
   const [photos, setPhotos] = useState<GalleryPhoto[]>(initialPhotos);
   const [loading, setLoading] = useState(false);
   const [hasMoreState, setHasMoreState] = useState(hasMore);
@@ -172,6 +186,7 @@ export function MasonryGrid({ initialPhotos, totalCount, hasMore, eventId }: Mas
                 deviceId={deviceId}
                 isLiked={userLikes.has(photo.galleryPhoto.id)}
                 onPhotoClick={() => setLightboxIndex(context.index)}
+                trackEvent={trackEvent}
               />
             );
           },
@@ -194,7 +209,9 @@ export function MasonryGrid({ initialPhotos, totalCount, hasMore, eventId }: Mas
         open={lightboxIndex >= 0}
         index={lightboxIndex}
         slides={slides}
+        photos={photos}
         onClose={() => setLightboxIndex(-1)}
+        trackEvent={trackEvent}
       />
     </div>
   );
