@@ -41,17 +41,26 @@ VALUES ('your-event-slug', 'Event Title', '2026-01-01', 'Description here.', tru
 
 ### 2. Upload Photos
 
-Use the upload script. For flat directories:
+Use the universal upload script. It's diff-based by default — safe to re-run without creating duplicates.
+
 ```bash
-npx tsx scripts/upload-photos.ts --event your-event-slug --dir "G:\path\to\photos"
+# Flat directory (all images in one folder)
+npx tsx scripts/upload.ts --event your-event-slug --dir "G:\path\to\photos"
+
+# Nested: only enter subdirs named "Final" (case-insensitive)
+npx tsx scripts/upload.ts --event your-event-slug --dir "G:\path\to\root" --subdirs final
+
+# Recursive: walk ALL subdirs
+npx tsx scripts/upload.ts --event your-event-slug --dir "G:\path\to\root" --recursive
+
+# Preview without uploading
+npx tsx scripts/upload.ts --event your-event-slug --dir "G:\path" --dry-run
+
+# Re-upload storage files (upsert), but skip existing DB rows
+npx tsx scripts/upload.ts --event your-event-slug --dir "G:\path" --force
 ```
 
-For nested directories (photos in specific subdirectories):
-```bash
-npx tsx scripts/upload-photos.ts --event your-event-slug --dir "G:\path\to\root" --subdirs final
-```
-
-The `--subdirs` flag recursively finds all directories matching that name (case-insensitive) and uploads images from each. Filenames are prefixed with the parent directory name to prevent collisions.
+**Naming:** Flat mode uses the filename as-is. `--subdirs` and `--recursive` prefix with the parent folder name to prevent collisions (e.g., `ekg-DSC00011`).
 
 ### 3. Cull Bad Photos (Optional)
 
@@ -303,6 +312,6 @@ Production URL: `https://shrike.vercel.app/events/pressclub`
 | `hooks/useNessusTracking.ts` | Analytics hook (clientId param added) |
 | `components/gallery/MasonryGrid.tsx` | Infinite-scroll masonry grid (shared) |
 | `components/gallery/GuestBookBlade.tsx` | Side panel guest book (shared) |
-| `scripts/upload-photos.ts` | Photo upload with --subdirs support |
+| `scripts/upload.ts` | Universal photo upload (diff-based, CLI-driven) |
 | `scripts/cull-photos.ts` | Automated blur/overexposure culling |
 | `scripts/dedup-photos.ts` | Duplicate row cleanup |
