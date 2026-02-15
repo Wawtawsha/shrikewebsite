@@ -8,6 +8,7 @@ import { DownloadQueueProvider } from "@/components/gallery/DownloadQueueContext
 import { useNessusTracking } from "@/hooks/useNessusTracking";
 import { ThemeSwitcher } from "@/components/gallery/ThemeSwitcher";
 import { BookingPopup } from "@/components/gallery/BookingPopup";
+import { DownloadInfoBanner } from "@/components/gallery/DownloadInfoBanner";
 
 interface GalleryContentProps {
   event: GalleryEvent;
@@ -77,6 +78,7 @@ export function GalleryContent({ event, initialPhotos, totalCount, hasMore }: Ga
               CashApp
             </a>
           </div>
+          <DownloadInfoBanner />
         </header>
       </div>
 

@@ -8,6 +8,7 @@ import { GuestBookBlade } from "@/components/gallery/GuestBookBlade";
 import { DownloadQueueProvider } from "@/components/gallery/DownloadQueueContext";
 import { DownloadQueueBlade } from "@/components/gallery/DownloadQueueBlade";
 import { DownloadQueueFAB } from "@/components/gallery/DownloadQueueFAB";
+import { DownloadInfoBanner } from "@/components/gallery/DownloadInfoBanner";
 import { useNessusTracking } from "@/hooks/useNessusTracking";
 
 const WEBSITE_LABEL = "press-club";
@@ -164,6 +165,7 @@ export function CollegeThursdayContent({ event, initialPhotos, totalCount, hasMo
                 CashApp
               </a>
             </div>
+            <DownloadInfoBanner />
           </header>
 
           {totalCount === 0 ? (
