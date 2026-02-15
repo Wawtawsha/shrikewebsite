@@ -75,11 +75,6 @@ export function GalleryContent({ event, initialPhotos, totalCount, hasMore }: Ga
               CashApp
             </a>
           </div>
-          <div className="email-warning" role="alert">
-            <span className="email-warning-icon" aria-hidden="true">&#9888;</span>
-            The &ldquo;Send to email for full resolution&rdquo; feature is currently down. We&rsquo;re working on it and it will be back up shortly!
-            <span className="email-warning-icon" aria-hidden="true">&#9888;</span>
-          </div>
         </header>
       </div>
 
