@@ -54,7 +54,7 @@ export function DownloadInfoBanner() {
               </li>
               <li>
                 A floating button will appear at the bottom showing your
-                selection count &mdash; tap it to open the download panel.
+                selection count. Tap it to open the download panel.
               </li>
               <li>
                 Enter your email and hit{" "}
