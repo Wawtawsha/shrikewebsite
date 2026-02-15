@@ -1,16 +1,16 @@
 # State: Shrike Media
 
-**Last Updated:** 2026-02-08
+**Last Updated:** 2026-02-15
 
 ---
 
 ## Project Reference
 
-**Project file:** `.planning/PROJECT.md` (updated 2026-02-08)
+**Project file:** `.planning/PROJECT.md` (updated 2026-02-15)
 
 **Core value:** When someone lands on this site, they must immediately feel they're looking at the work of elite creative engineers who can solve any problem.
 
-**Current focus:** Between milestones — v1.1 complete, ready for v1.2 or v2.0
+**Current focus:** Between milestones — v1.2 complete, ready for v1.3 or v2.0
 
 ---
 
@@ -18,10 +18,10 @@
 
 **Phase:** None (between milestones)
 **Plan:** None
-**Status:** v1.1 milestone archived
+**Status:** v1.2 milestone cataloged
 **Progress:** N/A
 
-**Last activity:** 2026-02-08 — Milestone v1.1 Event Photo Gallery completed and archived
+**Last activity:** 2026-02-15 — Cleanup milestone: cataloged all post-v1.1 work as v1.2
 
 ---
 
@@ -31,46 +31,64 @@
 |-----------|-----------|-------------|--------|
 | v1.0 — Dark Cinematic Portfolio | 2026-02-01 | 25/25 | 3 |
 | v1.1 — Event Photo Gallery | 2026-02-08 | 15/15 | 3 |
+| v1.2 — Event Platform & Services Expansion | 2026-02-15 | 12/12 | organic |
 
-**Total shipped:** 40 requirements across 6 phases
+**Total shipped:** 52 requirements across 3 milestones
 
 ---
 
 ## Accumulated Context
 
+### Architecture
+
+- **Route groups:** `(main)` dark cinematic, `(events)` chocolate-memphis, `(gallery)` warm theme
+- **Supabase project:** `lualkffegfusyibldvqn` (us-east-1, Free plan)
+- **Supabase tables:** events, photos, photo_likes, photo_comments, download_sessions
+- **Analytics:** Nessus CRM via separate Supabase project (edge functions)
+- **Hosting:** Vercel (Next.js 16.1.6)
+
+### Live Event Galleries
+
+| Event | Route | Photos | Status |
+|-------|-------|--------|--------|
+| 2016 Night at Press Club | `/events/pressclub` | 300+ | Live |
+| College Thursday | `/events/collegethursday` | 784 | Live |
+
+### Key Technical Notes
+
+- CSS z-index blurhash approach (not JS load detection)
+- `toAlbumPhotos()` must always be memoized with `useMemo`
+- Playwright blade buttons outside viewport — use `form.requestSubmit()` workaround
+- Vercel auto-deploy sometimes doesn't trigger — use `npx vercel --prod` as fallback
+- Download queue persists to localStorage per event (`download-queue-{eventId}`)
+- DB column is `author_name` (not `display_name`)
+
 ### Active TODOs
-- [ ] Upload real event photos for production use
-- [ ] Test moderation endpoint via curl
+
 - [ ] Test on actual mobile device
-- [ ] Deploy to Vercel for production
+- [ ] Add Resend email delivery for download links (currently direct redirect only)
+- [ ] Add more events to Nexus hub (SAE, Theta Chi noted as TODOs in code)
 
 ### Blockers
-None
 
-### Notes
-- Supabase project: `lualkffegfusyibldvqn` (us-east-1, Free plan)
-- 33 test photos uploaded for vineyard-women-2026 event
-- DB column is `author_name` (not `display_name`)
-- CSS z-index blurhash approach is the correct pattern (not JS load detection)
-- `toAlbumPhotos()` must always be memoized with `useMemo`
-- Gallery accessed via direct URL only — no main nav link
+None
 
 ---
 
 ## Session Continuity
 
-**Last session:** 2026-02-08 — v1.1 milestone completion
-**Session outcome:** Milestone archived, tag created
+**Last session:** 2026-02-15 — Cleanup milestone
+**Session outcome:** All planning docs updated to reflect v1.2
 
 **Stopped at:** Between milestones
 **Resume file:** None
 
 **Context for next session:**
-- All planning docs archived to `.planning/milestones/`
-- `MILESTONES.md` created with v1.0 and v1.1 entries
-- Next step: `/gsd:new-milestone` when ready for v1.2 or v2.0
+- All planning docs current as of 2026-02-15
+- `MILESTONES.md` has v1.0, v1.1, v1.2 entries
+- Next step: `/gsd:new-milestone` when ready for v1.3 or v2.0
 
 ---
 
 *State file initialized: 2026-01-30*
-*Last updated: 2026-02-08 after v1.1 milestone archived*
+*Last updated: 2026-02-15 after v1.2 cleanup milestone*

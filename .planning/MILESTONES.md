@@ -25,5 +25,18 @@ Added Pinterest-style photo gallery for event client delivery. Supabase backend 
 
 ---
 
-*Last milestone completed: v1.1 (2026-02-08)*
-*Total requirements shipped: 40*
+## v1.2 — Event Platform & Services Expansion
+
+**Completed:** 2026-02-15
+**Phases:** Organic (no formal phases) | **Requirements:** 12/12
+
+Evolved from single generic gallery into a full event delivery platform. Two dedicated event galleries (Press Club 300+ photos, College Thursday 784 photos) with chocolate-memphis theme. Two-tier download system: instant web-size (1024px, no gate) and full-res email queue (download sessions with 72-hour token expiry, ZIP bundling). Nexus event hub for discovery. Landing page upgraded with cinema triptych video showcase and real event videos. Services completely redesigned with 4 dedicated subpages. Lead capture forms and promo popups on event pages. Nessus CRM analytics throughout.
+
+**Key decisions:** Dedicated event routes over query params, localStorage download queue persistence, token-based download pages (no auth), client-side ZIP via JSZip, Nessus CRM for analytics (own tracking, no third-party), chocolate-memphis theme distinct from main site and generic gallery, cinema triptych with auto-rotating real video content.
+
+**New Supabase table:** `download_sessions` (token, email, photo_ids array, 72h expiry)
+
+---
+
+*Last milestone completed: v1.2 (2026-02-15)*
+*Total requirements shipped: 52*
