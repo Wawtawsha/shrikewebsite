@@ -10,6 +10,17 @@ export function getStorageUrl(path: string): string {
   return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/event-photos/${path}`;
 }
 
+export async function fetchAllEvents(): Promise<GalleryEvent[]> {
+  const { data, error } = await supabase
+    .from("events")
+    .select("*")
+    .eq("is_published", true)
+    .order("date", { ascending: false });
+
+  if (error || !data) return [];
+  return data as GalleryEvent[];
+}
+
 export async function fetchEvent(slug: string): Promise<GalleryEvent | null> {
   const { data, error } = await supabase
     .from("events")

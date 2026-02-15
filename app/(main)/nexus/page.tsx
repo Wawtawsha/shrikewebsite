@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { fetchEvent, fetchRandomPhotos, getStorageUrl } from "@/lib/gallery";
+import { fetchAllEvents, fetchRandomPhotos, getStorageUrl } from "@/lib/gallery";
 import type { GalleryPhoto } from "@/types/gallery";
 
 export const metadata: Metadata = {
@@ -10,34 +10,13 @@ export const metadata: Metadata = {
     "Browse photo galleries from Shrike Media events — 2016 Night, College Thursdays, Rosemont Vineyard, SAE House Party, and more.",
 };
 
-const EVENTS = [
-  {
-    title: "2016 Night",
-    slug: "2016-night-at-press-club",
-    url: "/events/pressclub",
-  },
-  {
-    title: "College Thursdays",
-    slug: "college-thursday",
-    url: "/events/collegethursday",
-  },
-  {
-    title: "Rosemont Vineyard",
-    slug: "rosemont-tasting",
-    url: "/gallery?event=rosemont-tasting",
-  },
-  {
-    title: "SAE House Party",
-    slug: "sae-house-party",
-    url: "/events/SAE",
-  },
-  {
-    // TODO: Ask Steph for slug and URL once the Theta Chi event page is built
-    title: "Back Sydney Band Theta Chi",
-    slug: null,
-    url: "#",
-  },
-];
+/** Slug → gallery URL. Events not listed here won't appear on the nexus page. */
+const EVENT_URLS: Record<string, string> = {
+  "sae-house-party": "/events/SAE",
+  "rosemont-tasting": "/gallery?event=rosemont-tasting",
+  "college-thursday": "/events/collegethursday",
+  "2016-night-at-press-club": "/events/pressclub",
+};
 
 const PREVIEW_COUNT = 5;
 
@@ -45,41 +24,18 @@ interface EventSection {
   title: string;
   url: string;
   photos: GalleryPhoto[];
-  comingSoon: boolean;
 }
 
 async function loadEventSections(): Promise<EventSection[]> {
+  const events = await fetchAllEvents(); // sorted by date desc from DB
   const sections: EventSection[] = [];
 
-  for (const evt of EVENTS) {
-    if (!evt.slug) {
-      sections.push({
-        title: evt.title,
-        url: evt.url,
-        photos: [],
-        comingSoon: true,
-      });
-      continue;
-    }
-
-    const event = await fetchEvent(evt.slug);
-    if (!event) {
-      sections.push({
-        title: evt.title,
-        url: evt.url,
-        photos: [],
-        comingSoon: false,
-      });
-      continue;
-    }
+  for (const event of events) {
+    const url = EVENT_URLS[event.slug];
+    if (!url) continue; // skip events without a gallery page
 
     const photos = await fetchRandomPhotos(event.id, PREVIEW_COUNT);
-    sections.push({
-      title: evt.title,
-      url: evt.url,
-      photos,
-      comingSoon: false,
-    });
+    sections.push({ title: event.title, url, photos });
   }
 
   return sections;
@@ -116,7 +72,7 @@ export default async function NexusPage() {
               >
                 {section.title}
               </h2>
-              {!section.comingSoon && section.url !== "#" && (
+              {section.photos.length > 0 && (
                 <Link href={section.url} className="nexus-cta group">
                   View Gallery
                   <svg
@@ -138,11 +94,7 @@ export default async function NexusPage() {
             </div>
 
             {/* Photo Grid */}
-            {section.comingSoon ? (
-              <div className="nexus-coming-soon">
-                <p className="text-muted text-lg">Coming Soon</p>
-              </div>
-            ) : section.photos.length === 0 ? (
+            {section.photos.length === 0 ? (
               <div className="nexus-coming-soon">
                 <p className="text-muted text-lg">Gallery not available yet</p>
               </div>
