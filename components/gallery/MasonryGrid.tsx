@@ -82,7 +82,7 @@ function ImageWithPlaceholder({
         <InstantDownloadButton
           photoUrl={fullResUrl}
           filename={photo.galleryPhoto.filename}
-          onDownload={() => trackEvent?.("instant_download", { photo_id: photo.galleryPhoto.id })}
+          onDownload={() => trackEvent?.("instant_download", { photo_id: photo.galleryPhoto.id, filename: photo.galleryPhoto.filename })}
         />
         <SelectButton photoId={photo.galleryPhoto.id} />
       </div>
@@ -91,6 +91,7 @@ function ImageWithPlaceholder({
         initialCount={photo.galleryPhoto.like_count}
         isLiked={isLiked}
         deviceId={deviceId}
+        trackEvent={trackEvent}
       />
     </div>
   );
@@ -141,10 +142,11 @@ export function MasonryGrid({ initialPhotos, totalCount, hasMore, eventId, track
     if (!error && data) {
       setPhotos((prev) => [...prev, ...(data as GalleryPhoto[])]);
       setHasMoreState(offset + limit < totalCount);
+      trackEvent?.("gallery_load_more", { page_number: Math.floor(offset / limit) + 1, photos_loaded: offset + data.length });
     }
     setLoading(false);
     loadingRef.current = false;
-  }, [photos.length, eventId, totalCount]);
+  }, [photos.length, eventId, totalCount, trackEvent]);
 
   // Infinite scroll via IntersectionObserver
   useEffect(() => {

@@ -333,6 +333,7 @@ export function CollegeThursdayContent({ event, initialPhotos, totalCount, hasMo
             onToggle={() => setBladeOpen((prev) => !prev)}
             eventId={event.id}
             firstPhotoId={initialPhotos[0].id}
+            trackEvent={trackEvent}
           />
         )}
 

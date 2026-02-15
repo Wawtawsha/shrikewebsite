@@ -7,9 +7,10 @@ interface GuestBookBladeProps {
   onToggle: () => void;
   eventId: string;
   firstPhotoId: string;
+  trackEvent?: (name: string, data?: Record<string, unknown>) => void;
 }
 
-export function GuestBookBlade({ open, onToggle, eventId, firstPhotoId }: GuestBookBladeProps) {
+export function GuestBookBlade({ open, onToggle, eventId, firstPhotoId, trackEvent }: GuestBookBladeProps) {
   return (
     <>
       {/* Floating toggle button */}
@@ -71,7 +72,7 @@ export function GuestBookBlade({ open, onToggle, eventId, firstPhotoId }: GuestB
           </button>
         </div>
         <div className="guestbook-blade-content">
-          <CommentSection eventId={eventId} firstPhotoId={firstPhotoId} />
+          <CommentSection eventId={eventId} firstPhotoId={firstPhotoId} trackEvent={trackEvent} />
         </div>
       </aside>
     </>

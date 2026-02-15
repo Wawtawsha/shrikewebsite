@@ -8,6 +8,7 @@ interface LikeButtonProps {
   initialCount: number;
   isLiked: boolean;
   deviceId: string | null;
+  trackEvent?: (name: string, data?: Record<string, unknown>) => void;
 }
 
 export const LikeButton = memo(function LikeButton({
@@ -15,6 +16,7 @@ export const LikeButton = memo(function LikeButton({
   initialCount,
   isLiked,
   deviceId,
+  trackEvent,
 }: LikeButtonProps) {
   const [liked, setLiked] = useState(isLiked);
   const [count, setCount] = useState(initialCount);
@@ -34,6 +36,8 @@ export const LikeButton = memo(function LikeButton({
       setAnimating(true);
       setTimeout(() => setAnimating(false), 300);
     }
+
+    trackEvent?.("like_photo", { photo_id: photoId, action: wasLiked ? "unlike" : "like" });
 
     try {
       if (wasLiked) {

@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 
-export function ThemeSwitcher() {
+interface ThemeSwitcherProps {
+  trackEvent?: (name: string, data?: Record<string, unknown>) => void;
+}
+
+export function ThemeSwitcher({ trackEvent }: ThemeSwitcherProps) {
   const [dark, setDark] = useState(false);
 
   function toggle() {
@@ -15,6 +19,7 @@ export function ThemeSwitcher() {
     } else {
       el.removeAttribute("data-gallery-theme");
     }
+    trackEvent?.("theme_switched", { theme: next ? "dark" : "light" });
   }
 
   return (

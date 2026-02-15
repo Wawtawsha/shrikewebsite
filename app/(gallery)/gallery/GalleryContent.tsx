@@ -17,7 +17,7 @@ interface GalleryContentProps {
 
 export function GalleryContent({ event, initialPhotos, totalCount, hasMore }: GalleryContentProps) {
   const [bladeOpen, setBladeOpen] = useState(false);
-  useNessusTracking(`Gallery — ${event.title}`, "rosemont");
+  const { trackEvent } = useNessusTracking(`Gallery — ${event.title}`, "rosemont");
 
   const formattedDate = new Date(event.date).toLocaleDateString("en-US", {
     year: "numeric",
@@ -38,7 +38,7 @@ export function GalleryContent({ event, initialPhotos, totalCount, hasMore }: Ga
       <div className="gallery-banner">
         <header className="gallery-header">
           <div className="gallery-header-toggle">
-            <ThemeSwitcher />
+            <ThemeSwitcher trackEvent={trackEvent} />
           </div>
           <h1 className="gallery-title">
             {event.title}
@@ -89,6 +89,7 @@ export function GalleryContent({ event, initialPhotos, totalCount, hasMore }: Ga
             totalCount={totalCount}
             hasMore={hasMore}
             eventId={event.id}
+            trackEvent={trackEvent}
           />
         )}
       </div>
@@ -114,6 +115,7 @@ export function GalleryContent({ event, initialPhotos, totalCount, hasMore }: Ga
           onToggle={() => setBladeOpen((prev) => !prev)}
           eventId={event.id}
           firstPhotoId={initialPhotos[0].id}
+          trackEvent={trackEvent}
         />
       )}
 

@@ -378,6 +378,7 @@ export function PressClubContent({ event, initialPhotos, totalCount, hasMore }: 
             onToggle={() => setBladeOpen((prev) => !prev)}
             eventId={event.id}
             firstPhotoId={initialPhotos[0].id}
+            trackEvent={trackEvent}
           />
         )}
 

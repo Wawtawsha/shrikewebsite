@@ -10,6 +10,7 @@ import type { GalleryComment } from "@/types/gallery";
 interface CommentSectionProps {
   eventId: string;
   firstPhotoId: string;
+  trackEvent?: (name: string, data?: Record<string, unknown>) => void;
 }
 
 function getRelativeTime(dateString: string): string {
@@ -29,7 +30,7 @@ function getRelativeTime(dateString: string): string {
   });
 }
 
-export function CommentSection({ eventId, firstPhotoId }: CommentSectionProps) {
+export function CommentSection({ eventId, firstPhotoId, trackEvent }: CommentSectionProps) {
   const deviceId = useDeviceId();
   const [comments, setComments] = useState<GalleryComment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -101,6 +102,7 @@ export function CommentSection({ eventId, firstPhotoId }: CommentSectionProps) {
     setBody("");
     setSubmitting(false);
     formRenderedAt.current = Date.now();
+    trackEvent?.("comment_submitted", { photo_id: firstPhotoId, has_name: !!displayName.trim() });
   };
 
   const visibleComments = showAll ? comments : comments.slice(0, 20);

@@ -32,7 +32,7 @@ export function GalleryLightbox({ open, index, slides, photos, onClose, trackEve
     ({ slide }: { slide: { src: string } }) => {
       const filename = slide.src.split("/").pop() || "photo.jpg";
       const idx = slides.findIndex((s) => s.src === slide.src);
-      trackEvent?.("instant_download", { photo_id: photos[idx]?.id });
+      trackEvent?.("instant_download", { photo_id: photos[idx]?.id, filename: photos[idx]?.filename });
       downloadWebSize(slide.src, filename);
     },
     [slides, photos, trackEvent]
@@ -49,6 +49,7 @@ export function GalleryLightbox({ open, index, slides, photos, onClose, trackEve
       animation={{ fade: 300 }}
       carousel={{ finite: false }}
       controller={{ closeOnBackdropClick: true }}
+      on={{ view: ({ index: i }) => { trackEvent?.("photo_lightbox_opened", { photo_id: photos[i]?.id }); } }}
       download={{ download: handleDownload }}
       toolbar={{
         buttons: [
@@ -61,9 +62,9 @@ export function GalleryLightbox({ open, index, slides, photos, onClose, trackEve
                 const photo = photos[index];
                 togglePhoto(photo.id);
                 if (isSelected(photo.id)) {
-                  trackEvent?.("photo_dequeued", { photo_id: photo.id });
+                  trackEvent?.("photo_dequeued", { photo_id: photo.id, filename: photo.filename });
                 } else {
-                  trackEvent?.("photo_queued", { photo_id: photo.id });
+                  trackEvent?.("photo_queued", { photo_id: photo.id, filename: photo.filename });
                 }
               }
             }}

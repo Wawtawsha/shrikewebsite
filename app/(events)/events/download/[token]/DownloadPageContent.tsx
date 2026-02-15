@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { getStorageUrl } from "@/lib/gallery";
 import { downloadFullRes } from "@/lib/download";
 import { supabase } from "@/lib/supabase";
+import { useNessusTracking } from "@/hooks/useNessusTracking";
 import type { GalleryPhoto } from "@/types/gallery";
 
 interface DownloadSession {
@@ -26,6 +27,7 @@ interface DownloadPageContentProps {
 export function DownloadPageContent({ session, eventTitle, photos }: DownloadPageContentProps) {
   const [downloading, setDownloading] = useState<Set<string>>(new Set());
   const [zipping, setZipping] = useState(false);
+  const { trackEvent } = useNessusTracking(`Download — ${eventTitle}`, "press-club");
 
   // Track page visit and increment download count
   useEffect(() => {
@@ -71,6 +73,7 @@ export function DownloadPageContent({ session, eventTitle, photos }: DownloadPag
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
+      trackEvent("zip_downloaded", { photo_count: photos.length });
     } catch (err) {
       console.error("ZIP download failed:", err);
     }
