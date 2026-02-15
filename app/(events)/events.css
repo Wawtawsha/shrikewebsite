@@ -1428,6 +1428,131 @@ div[role="button"]:focus-within .photo-action-row {
   }
 }
 
+/* ===== Blacklight Theme (SAE) ===== */
+.blacklight-theme {
+  --color-background: oklch(0.07 0.04 290);
+  --color-surface: oklch(0.12 0.04 290);
+  --color-surface-elevated: oklch(0.17 0.04 290);
+  --color-foreground: oklch(0.93 0.02 290);
+  --color-muted: oklch(0.55 0.04 290);
+  --color-subtle: oklch(0.38 0.04 290);
+  --color-accent: oklch(0.50 0.27 290);
+  --color-accent-hover: oklch(0.44 0.29 290);
+  --color-accent-soft: oklch(0.15 0.08 290);
+  --color-heart: oklch(0.55 0.22 290);
+  --color-border: oklch(0.18 0.05 290);
+  --color-border-subtle: oklch(0.14 0.04 290);
+
+  background: oklch(0.07 0.04 290);
+  color: oklch(0.93 0.02 290);
+}
+
+/* Blacklight glow on interactive elements */
+.blacklight-theme .guestbook-fab {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 24px oklch(0.50 0.27 290 / 0.3);
+}
+
+.blacklight-theme .download-queue-fab {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 24px oklch(0.50 0.27 290 / 0.3);
+}
+
+.blacklight-theme .promo-cta {
+  box-shadow: 0 4px 16px oklch(0.50 0.27 290 / 0.25);
+}
+
+/* Lightbox backdrop for blacklight */
+.blacklight-theme .yarl__root {
+  --yarl__color_backdrop: rgba(10, 5, 21, 0.96);
+}
+
+/* UV glow divider */
+.uv-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 16px 0;
+}
+
+.uv-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: oklch(0.50 0.27 290);
+  box-shadow: 0 0 8px oklch(0.50 0.27 290 / 0.6);
+  animation: uv-pulse 2.5s ease-in-out infinite;
+}
+
+.uv-dot--green {
+  background: oklch(0.75 0.25 140);
+  box-shadow: 0 0 8px oklch(0.75 0.25 140 / 0.6);
+  animation-delay: 0.4s;
+}
+
+.uv-dot--coral {
+  background: oklch(0.65 0.22 20);
+  box-shadow: 0 0 8px oklch(0.65 0.22 20 / 0.6);
+  animation-delay: 0.8s;
+}
+
+@keyframes uv-pulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+
+/* SAE header layout */
+.sae-header {
+  text-align: center;
+}
+
+.sae-header-top {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.sae-header-center {
+  flex: 1;
+}
+
+@media (max-width: 600px) {
+  .sae-header-top {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .sae-header-top .lead-trigger-btn {
+    position: static;
+    margin-top: 12px;
+  }
+}
+
+/* Blacklight ribbon shimmer override */
+.blacklight-theme .promo-ribbon span {
+  animation: blacklight-shimmer 3s ease-in-out infinite;
+}
+
+@keyframes blacklight-shimmer {
+  0%, 100% { background: oklch(0.50 0.27 290); }
+  50% { background: oklch(0.60 0.25 290); }
+}
+
+/* Blacklight memphis override (if reused) */
+.blacklight-theme .memphis-circle {
+  background: oklch(0.50 0.27 290);
+  box-shadow: 0 0 6px oklch(0.50 0.27 290 / 0.5);
+}
+
+.blacklight-theme .memphis-square {
+  background: oklch(0.75 0.25 140);
+  box-shadow: 0 0 6px oklch(0.75 0.25 140 / 0.5);
+}
+
+.blacklight-theme .memphis-triangle {
+  border-bottom-color: oklch(0.65 0.22 20);
+}
+
 /* Reduced motion: disable animations */
 @media (prefers-reduced-motion: reduce) {
   .gallery-spinner {
@@ -1448,6 +1573,11 @@ div[role="button"]:focus-within .photo-action-row {
 
   .promo-ribbon span {
     animation: none;
+  }
+
+  .uv-dot {
+    animation: none;
+    opacity: 1;
   }
 
   .download-queue-blade {
