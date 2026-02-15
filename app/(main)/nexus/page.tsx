@@ -7,7 +7,7 @@ import type { GalleryPhoto } from "@/types/gallery";
 export const metadata: Metadata = {
   title: "Event Gallery | Shrike Media",
   description:
-    "Browse photo galleries from Shrike Media events — 2016 Night, College Thursdays, Rosemont Vineyard, and more.",
+    "Browse photo galleries from Shrike Media events — 2016 Night, College Thursdays, Rosemont Vineyard, SAE House Party, and more.",
 };
 
 const EVENTS = [
@@ -27,10 +27,9 @@ const EVENTS = [
     url: "/gallery?event=rosemont-tasting",
   },
   {
-    // TODO: Ask Steph for slug and URL once the SAE event page is built
-    title: "Back Sydney Band SAE",
-    slug: null,
-    url: "#",
+    title: "SAE House Party",
+    slug: "sae-house-party",
+    url: "/events/SAE",
   },
   {
     // TODO: Ask Steph for slug and URL once the Theta Chi event page is built
