@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { GalleryEvent, GalleryPhoto } from "@/types/gallery";
 import { MasonryGrid } from "@/components/gallery/MasonryGrid";
 import { GuestBookBlade } from "@/components/gallery/GuestBookBlade";
+import { DownloadQueueProvider } from "@/components/gallery/DownloadQueueContext";
 import { useNessusTracking } from "@/hooks/useNessusTracking";
 import { ThemeSwitcher } from "@/components/gallery/ThemeSwitcher";
 import { BookingPopup } from "@/components/gallery/BookingPopup";
@@ -26,6 +27,7 @@ export function GalleryContent({ event, initialPhotos, totalCount, hasMore }: Ga
   });
 
   return (
+    <DownloadQueueProvider eventId={event.id}>
     <main
       id="main-content"
       className="min-h-screen"
@@ -120,5 +122,6 @@ export function GalleryContent({ event, initialPhotos, totalCount, hasMore }: Ga
       )}
 
     </main>
+    </DownloadQueueProvider>
   );
 }
