@@ -30,6 +30,21 @@ export function HeroVideo() {
     }
   }, [reducedMotion]);
 
+  // Resume video when tab regains focus (Chrome suspends background videos)
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || reducedMotion) return;
+
+    function handleVisibility() {
+      if (!document.hidden && video!.paused) {
+        video!.play().catch(() => {});
+      }
+    }
+
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => document.removeEventListener("visibilitychange", handleVisibility);
+  }, [reducedMotion]);
+
   return (
     <section className="relative h-screen w-full overflow-hidden">
       {/* Background media */}

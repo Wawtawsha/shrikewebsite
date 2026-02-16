@@ -18,10 +18,13 @@ const ALL_REELS = [
 
 const PANEL_LABELS = ["Events", "Portraits", "Stories"];
 
-/** Pick a random reel that isn't the one currently playing. */
-function pickNextReel(current: string): string {
-  const others = ALL_REELS.filter((r) => r !== current);
-  return others[Math.floor(Math.random() * others.length)];
+/** Pick a random reel excluding all currently-playing videos. */
+function pickNextReel(excluded: Set<string>): string {
+  const available = ALL_REELS.filter((r) => !excluded.has(r));
+  // With 7 videos and 3 panels, there should always be 4 available.
+  // Fallback: if somehow empty, pick any random reel.
+  const pool = available.length > 0 ? available : ALL_REELS;
+  return pool[Math.floor(Math.random() * pool.length)];
 }
 
 /** Pick N unique random reels for initial display. */
@@ -39,6 +42,7 @@ function ReelPanel({
   onHover,
   onLeave,
   reducedMotion,
+  onPickNext,
 }: {
   initialSrc: string;
   label: string;
@@ -48,17 +52,18 @@ function ReelPanel({
   onHover: (i: number) => void;
   onLeave: () => void;
   reducedMotion: boolean;
+  onPickNext: (panelIndex: number) => string;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [currentSrc, setCurrentSrc] = useState(initialSrc);
   const isActive = activeIndex === index;
   const isDimmed = activeIndex !== null && activeIndex !== index;
 
-  // When a video ends, swap to a different one
-  const handleEnded = useCallback(() => {
-    const next = pickNextReel(currentSrc);
+  // Swap to the next video via parent's dedup-aware picker
+  const swapVideo = useCallback(() => {
+    const next = onPickNext(index);
     setCurrentSrc(next);
-  }, [currentSrc]);
+  }, [onPickNext, index]);
 
   // When src changes, load and play the new video
   useEffect(() => {
@@ -83,6 +88,25 @@ function ReelPanel({
       videoRef.current.pause();
     }
   }, [isVisible, index, reducedMotion]);
+
+  // Recovery: resume playback when tab regains focus
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || reducedMotion) return;
+
+    function handleVisibility() {
+      if (document.hidden || !isVisible) return;
+      // If video is paused or ended after tab resume, restart or swap
+      if (video!.ended) {
+        swapVideo();
+      } else if (video!.paused) {
+        video!.play().catch(() => {});
+      }
+    }
+
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => document.removeEventListener("visibilitychange", handleVisibility);
+  }, [reducedMotion, isVisible, swapVideo]);
 
   // Parallax: center panel moves slightly slower than outer panels
   const parallaxOffset = index === 1 ? 0.15 : 0.25;
@@ -152,7 +176,8 @@ function ReelPanel({
               muted
               playsInline
               preload="metadata"
-              onEnded={handleEnded}
+              onEnded={swapVideo}
+              onError={swapVideo}
               className="absolute inset-0 w-full h-full object-cover"
             >
               <source src={currentSrc} type="video/mp4" />
@@ -179,6 +204,17 @@ export function CinemaTriptych() {
   const reducedMotion = useReducedMotion();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [initialReels] = useState(() => pickInitialReels(3));
+
+  // Track what each panel is currently playing (shared across all panels)
+  const currentVideosRef = useRef<string[]>([...initialReels]);
+
+  // Dedup-aware picker: excludes all videos currently playing in any panel
+  const pickNext = useCallback((panelIndex: number): string => {
+    const excluded = new Set(currentVideosRef.current);
+    const next = pickNextReel(excluded);
+    currentVideosRef.current[panelIndex] = next;
+    return next;
+  }, []);
 
   return (
     <section
@@ -217,6 +253,7 @@ export function CinemaTriptych() {
             onHover={setActiveIndex}
             onLeave={() => setActiveIndex(null)}
             reducedMotion={reducedMotion}
+            onPickNext={pickNext}
           />
         ))}
       </div>
