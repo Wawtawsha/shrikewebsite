@@ -63,5 +63,61 @@ export function useNessusTracking(pagePath: string, websiteLabel: string) {
     [pagePath, websiteLabel]
   );
 
+  // Scroll depth tracking
+  useEffect(() => {
+    // Short page guard: skip tracking if page content is already fully visible
+    if (
+      document.documentElement.scrollHeight <=
+      window.innerHeight + 100
+    ) {
+      return;
+    }
+
+    const milestones = [25, 50, 75, 90, 100];
+    const fired = new Set<number>();
+    const observers: IntersectionObserver[] = [];
+    const sentinels: HTMLElement[] = [];
+
+    milestones.forEach((percent) => {
+      // Create sentinel element at scroll depth using PIXEL positioning
+      const pixelTop =
+        (percent / 100) * document.documentElement.scrollHeight;
+      const sentinel = document.createElement("div");
+      sentinel.setAttribute("data-scroll-sentinel", "true");
+      sentinel.style.cssText = `
+        position: absolute;
+        top: ${pixelTop}px;
+        height: 1px;
+        width: 1px;
+        pointer-events: none;
+        visibility: hidden;
+      `;
+      document.body.appendChild(sentinel);
+      sentinels.push(sentinel);
+
+      // Create IntersectionObserver for this milestone
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting && !fired.has(percent)) {
+              fired.add(percent);
+              trackEvent("scroll_depth", { percent_scrolled: percent });
+            }
+          });
+        },
+        { threshold: 0 }
+      );
+
+      observer.observe(sentinel);
+      observers.push(observer);
+    });
+
+    // Cleanup: disconnect observers and remove sentinels
+    return () => {
+      observers.forEach((obs) => obs.disconnect());
+      sentinels.forEach((el) => el.remove());
+    };
+  }, [pagePath, trackEvent]);
+
   return { trackEvent };
 }
