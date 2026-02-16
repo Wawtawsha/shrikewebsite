@@ -343,6 +343,7 @@ export function CollegeThursdayContent({ event, initialPhotos, totalCount, hasMo
           open={downloadBladeOpen}
           onClose={() => setDownloadBladeOpen(false)}
           eventId={event.id}
+          eventTitle={event.title}
           photos={initialPhotos}
           trackEvent={trackEvent}
         />

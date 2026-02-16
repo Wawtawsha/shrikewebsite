@@ -345,6 +345,7 @@ export function SAEContent({ event, initialPhotos, totalCount, hasMore }: SAECon
           open={downloadBladeOpen}
           onClose={() => setDownloadBladeOpen(false)}
           eventId={event.id}
+          eventTitle={event.title}
           photos={initialPhotos}
           trackEvent={trackEvent}
         />

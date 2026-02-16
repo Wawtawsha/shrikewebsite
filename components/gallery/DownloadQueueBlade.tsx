@@ -6,17 +6,20 @@ import { supabase } from "@/lib/supabase";
 import { getStorageUrl } from "@/lib/gallery";
 import type { GalleryPhoto } from "@/types/gallery";
 
+const LEAD_ENDPOINT = "https://rjudjhjcfivugbyztnce.supabase.co/functions/v1/submit-lead";
+
 interface DownloadQueueBladeProps {
   open: boolean;
   onClose: () => void;
   eventId: string;
+  eventTitle: string;
   photos: GalleryPhoto[];
   trackEvent?: (name: string, data?: Record<string, unknown>) => void;
 }
 
 type SubmitStatus = "idle" | "submitting" | "error";
 
-export function DownloadQueueBlade({ open, onClose, eventId, photos, trackEvent }: DownloadQueueBladeProps) {
+export function DownloadQueueBlade({ open, onClose, eventId, eventTitle, photos, trackEvent }: DownloadQueueBladeProps) {
   const { selectedPhotos, removePhoto, clearAll, count } = useDownloadQueue();
   const [status, setStatus] = useState<SubmitStatus>("idle");
   const [email, setEmail] = useState("");
@@ -43,6 +46,21 @@ export function DownloadQueueBlade({ open, onClose, eventId, photos, trackEvent 
 
         if (error || !data) throw new Error("Failed to create download session");
 
+        // Fire-and-forget: create lead from download email
+        fetch(LEAD_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            client_id: "da6fa735-8143-4cdf-941c-5b6021cbc961",
+            email,
+            notes: `Downloaded photos from ${eventTitle}`,
+            utm_source: "photo-download",
+            utm_campaign: eventTitle,
+            landing_page_url: window.location.href,
+            referrer: document.referrer || null,
+          }),
+        }).catch(() => {}); // Silent — don't block download flow
+
         clearAll();
         window.location.href = `/events/download/${data.token}`;
       } catch {
@@ -50,7 +68,7 @@ export function DownloadQueueBlade({ open, onClose, eventId, photos, trackEvent 
         setTimeout(() => setStatus("idle"), 3000);
       }
     },
-    [email, count, eventId, selectedPhotos, clearAll, trackEvent]
+    [email, count, eventId, eventTitle, selectedPhotos, clearAll, trackEvent]
   );
 
   return (

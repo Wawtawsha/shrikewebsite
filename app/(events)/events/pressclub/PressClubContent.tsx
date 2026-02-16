@@ -388,6 +388,7 @@ export function PressClubContent({ event, initialPhotos, totalCount, hasMore }: 
           open={downloadBladeOpen}
           onClose={() => setDownloadBladeOpen(false)}
           eventId={event.id}
+          eventTitle={event.title}
           photos={initialPhotos}
           trackEvent={trackEvent}
         />
