@@ -7,6 +7,14 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { OptimizedImage } from "./OptimizedImage";
 import { ParallaxSection } from "./ParallaxSection";
 
+/** Try to play a video; if it fails, force-reload the source first. */
+function forcePlay(video: HTMLVideoElement) {
+  video.play().catch(() => {
+    video.load();
+    video.play().catch(() => {});
+  });
+}
+
 export function HeroVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const reducedMotion = useReducedMotion();
@@ -30,19 +38,34 @@ export function HeroVideo() {
     }
   }, [reducedMotion]);
 
-  // Resume video when tab regains focus (Chrome suspends background videos)
+  // Heartbeat: detect stuck video and recover.
+  // Handles both backgrounded-tab resume AND foreground Chrome energy saver.
   useEffect(() => {
     const video = videoRef.current;
     if (!video || reducedMotion) return;
 
-    function handleVisibility() {
-      if (!document.hidden && video!.paused) {
-        video!.play().catch(() => {});
+    let lastTime = video.currentTime;
+
+    // Check every 3 seconds if the video is making progress
+    const heartbeat = setInterval(() => {
+      if (document.hidden) return;
+
+      if (video.paused || video.currentTime === lastTime) {
+        forcePlay(video);
       }
+      lastTime = video.currentTime;
+    }, 3000);
+
+    // Also handle tab visibility change (immediate recovery)
+    function handleVisibility() {
+      if (!document.hidden && video) forcePlay(video);
     }
 
     document.addEventListener("visibilitychange", handleVisibility);
-    return () => document.removeEventListener("visibilitychange", handleVisibility);
+    return () => {
+      clearInterval(heartbeat);
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
   }, [reducedMotion]);
 
   return (
@@ -63,8 +86,14 @@ export function HeroVideo() {
           muted
           loop
           playsInline
-          preload="metadata"
-          poster="/images/hero-poster.jpg"
+          preload="auto"
+          onError={() => {
+            const video = videoRef.current;
+            if (video) {
+              video.load();
+              video.play().catch(() => {});
+            }
+          }}
           className="absolute inset-0 h-full w-full object-cover"
         >
           <source src="/videos/hero-bg.mp4" type="video/mp4" />

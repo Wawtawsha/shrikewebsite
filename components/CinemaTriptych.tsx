@@ -89,23 +89,41 @@ function ReelPanel({
     }
   }, [isVisible, index, reducedMotion]);
 
-  // Recovery: resume playback when tab regains focus
+  // Heartbeat + visibility recovery: detect stuck videos and recover.
+  // Handles Chrome energy saver (foreground throttle) and tab suspend.
   useEffect(() => {
     const video = videoRef.current;
-    if (!video || reducedMotion) return;
+    if (!video || reducedMotion || !isVisible) return;
+
+    let lastTime = video.currentTime;
+
+    function recover() {
+      if (!video) return;
+      if (video.ended) {
+        swapVideo();
+      } else if (video.paused || video.currentTime === lastTime) {
+        video.play().catch(() => {
+          video.load();
+          video.play().catch(() => {});
+        });
+      }
+      lastTime = video.currentTime;
+    }
+
+    const heartbeat = setInterval(() => {
+      if (document.hidden) return;
+      recover();
+    }, 4000);
 
     function handleVisibility() {
-      if (document.hidden || !isVisible) return;
-      // If video is paused or ended after tab resume, restart or swap
-      if (video!.ended) {
-        swapVideo();
-      } else if (video!.paused) {
-        video!.play().catch(() => {});
-      }
+      if (!document.hidden) recover();
     }
 
     document.addEventListener("visibilitychange", handleVisibility);
-    return () => document.removeEventListener("visibilitychange", handleVisibility);
+    return () => {
+      clearInterval(heartbeat);
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
   }, [reducedMotion, isVisible, swapVideo]);
 
   // Parallax: center panel moves slightly slower than outer panels
