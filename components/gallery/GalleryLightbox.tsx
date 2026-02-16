@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 import Lightbox from "yet-another-react-lightbox";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import Download from "yet-another-react-lightbox/plugins/download";
@@ -27,6 +27,32 @@ interface GalleryLightboxProps {
 
 export function GalleryLightbox({ open, index, slides, photos, onClose, trackEvent }: GalleryLightboxProps) {
   const { isSelected, togglePhoto } = useDownloadQueue();
+  const viewedPhotos = useRef(new Set<string>());
+  const isFirstView = useRef(true);
+
+  const handleView = useCallback(
+    ({ index: i }: { index: number }) => {
+      const photoId = photos[i]?.id;
+      if (!photoId) return;
+
+      if (isFirstView.current) {
+        isFirstView.current = false;
+        trackEvent?.("photo_lightbox_opened", { photo_id: photoId });
+      }
+      viewedPhotos.current.add(photoId);
+    },
+    [photos, trackEvent]
+  );
+
+  const handleClose = useCallback(() => {
+    const count = viewedPhotos.current.size;
+    if (count > 1) {
+      trackEvent?.("photo_lightbox_session", { photos_viewed: count });
+    }
+    viewedPhotos.current.clear();
+    isFirstView.current = true;
+    onClose();
+  }, [trackEvent, onClose]);
 
   const handleDownload = useCallback(
     ({ slide }: { slide: { src: string } }) => {
@@ -41,7 +67,7 @@ export function GalleryLightbox({ open, index, slides, photos, onClose, trackEve
   return (
     <Lightbox
       open={open}
-      close={onClose}
+      close={handleClose}
       index={index}
       slides={slides}
       plugins={[Zoom, Download]}
@@ -49,7 +75,7 @@ export function GalleryLightbox({ open, index, slides, photos, onClose, trackEve
       animation={{ fade: 300 }}
       carousel={{ finite: false }}
       controller={{ closeOnBackdropClick: true }}
-      on={{ view: ({ index: i }) => { trackEvent?.("photo_lightbox_opened", { photo_id: photos[i]?.id }); } }}
+      on={{ view: handleView }}
       download={{ download: handleDownload }}
       toolbar={{
         buttons: [
