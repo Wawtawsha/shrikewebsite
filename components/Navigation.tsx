@@ -10,6 +10,7 @@ const navLinks = [
   { href: '/', label: 'Home' },
   // { href: '/work', label: 'Work' }, // Hidden until portfolio is ready
   { href: '/services', label: 'Services' },
+  { href: '/graduation', label: 'Graduation' },
 ];
 
 export function Navigation() {
