@@ -12,6 +12,7 @@ export const metadata: Metadata = {
 
 /** Slug → gallery URL. Events not listed here won't appear on the nexus page. */
 const EVENT_URLS: Record<string, string> = {
+  "theta-chi-house-party": "/events/theta-chi",
   "sae-house-party": "/events/SAE",
   "rosemont-tasting": "/gallery?event=rosemont-tasting",
   "college-thursday": "/events/collegethursday",
