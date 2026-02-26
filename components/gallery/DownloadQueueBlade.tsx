@@ -19,40 +19,59 @@ interface DownloadQueueBladeProps {
 
 type SubmitStatus = "idle" | "submitting" | "error";
 
+/** Strip to 10 digits. Returns null if not a valid US number. */
+function normalizePhone(raw: string): string | null {
+  const digits = raw.replace(/\D/g, "");
+  if (digits.length === 10) return digits;
+  if (digits.length === 11 && digits[0] === "1") return digits.slice(1);
+  return null;
+}
+
+/** Format 10-digit string as (XXX) XXX-XXXX */
+function formatPhone(value: string): string {
+  const digits = value.replace(/\D/g, "").slice(0, 10);
+  if (digits.length <= 3) return digits;
+  if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+  return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+}
+
 export function DownloadQueueBlade({ open, onClose, eventId, eventTitle, photos, trackEvent }: DownloadQueueBladeProps) {
   const { selectedPhotos, removePhoto, clearAll, count } = useDownloadQueue();
   const [status, setStatus] = useState<SubmitStatus>("idle");
-  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
 
   const selectedPhotosList = photos.filter((p) => selectedPhotos.has(p.id));
+
+  const handlePhoneChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setPhone(formatPhone(e.target.value));
+  }, []);
 
   const handleSubmit = useCallback(
     async (e: FormEvent) => {
       e.preventDefault();
-      if (!email || count === 0) return;
+      const normalized = normalizePhone(phone);
+      if (!normalized || count === 0) return;
 
       setStatus("submitting");
-      trackEvent?.("download_email_submitted", {
-        email_domain: email.split("@")[1],
-        photo_count: count,
-      });
+      trackEvent?.("download_phone_submitted", { photo_count: count });
 
       try {
         const { data, error } = await supabase.from("download_sessions").insert({
           event_id: eventId,
-          email,
+          phone: normalized,
           photo_ids: Array.from(selectedPhotos),
         }).select("token").single();
 
         if (error || !data) throw new Error("Failed to create download session");
 
-        // Fire-and-forget: create lead from download email
+        // Fire-and-forget: create lead from download phone
         fetch(LEAD_ENDPOINT, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             client_id: "da6fa735-8143-4cdf-941c-5b6021cbc961",
-            email,
+            phone: normalized,
+            preferred_contact: "phone",
             notes: `Downloaded photos from ${eventTitle}`,
             utm_source: "photo-download",
             utm_campaign: eventTitle,
@@ -68,7 +87,7 @@ export function DownloadQueueBlade({ open, onClose, eventId, eventTitle, photos,
         setTimeout(() => setStatus("idle"), 3000);
       }
     },
-    [email, count, eventId, eventTitle, selectedPhotos, clearAll, trackEvent]
+    [phone, count, eventId, eventTitle, selectedPhotos, clearAll, trackEvent]
   );
 
   return (
@@ -133,14 +152,15 @@ export function DownloadQueueBlade({ open, onClose, eventId, eventTitle, photos,
 
             <form onSubmit={handleSubmit} className="download-queue-form">
               <p className="download-queue-subtitle">
-                Enter your email to download {count} photo{count !== 1 ? "s" : ""} in full resolution.
+                Enter your phone number to download {count} photo{count !== 1 ? "s" : ""} in full resolution.
               </p>
               <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
+                type="tel"
+                value={phone}
+                onChange={handlePhoneChange}
+                placeholder="(555) 123-4567"
                 required
+                pattern="\(\d{3}\) \d{3}-\d{4}"
                 className="lead-form-input"
                 style={{ width: "100%" }}
               />

@@ -57,7 +57,7 @@ export function DownloadInfoBanner() {
                 selection count. Tap it to open the download panel.
               </li>
               <li>
-                Enter your email and hit{" "}
+                Enter your phone number and hit{" "}
                 <strong>&ldquo;Get Download Link.&rdquo;</strong>{" "}
                 You&rsquo;ll be taken to a page where you can download all
                 selected photos in full resolution.
