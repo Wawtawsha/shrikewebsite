@@ -11,7 +11,7 @@ import { DownloadQueueFAB } from "@/components/gallery/DownloadQueueFAB";
 import { DownloadInfoBanner } from "@/components/gallery/DownloadInfoBanner";
 import { useNessusTracking } from "@/hooks/useNessusTracking";
 
-const WEBSITE_LABEL = "press-club";
+const WEBSITE_LABEL = "college-thursday";
 const LEAD_ENDPOINT = "https://rjudjhjcfivugbyztnce.supabase.co/functions/v1/submit-lead";
 
 interface CollegeThursdayContentProps {
@@ -127,8 +127,8 @@ export function CollegeThursdayContent({ event, initialPhotos, totalCount, hasMo
               </button>
             </div>
 
-            <Link href="/events/pressclub" className="event-crosslink" onClick={() => trackEvent("crosslink_pressclub")}>
-              CLICK HERE for 2016 Night pics!
+            <Link href="/nexus" className="event-crosslink" onClick={() => trackEvent("crosslink_nexus")}>
+              See more events
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
