@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, useCallback, type FormEvent } from "react";
+import { useState, useCallback, useRef, useEffect, type FormEvent } from "react";
+import { createPortal } from "react-dom";
+import { usePhoneUnlock } from "./PhoneUnlockContext";
 
 const LEAD_ENDPOINT = "https://rjudjhjcfivugbyztnce.supabase.co/functions/v1/submit-lead";
 const CLIENT_ID = "da6fa735-8143-4cdf-941c-5b6021cbc961";
@@ -40,6 +42,36 @@ export function PhoneUnlockForm({
   const [phone, setPhone] = useState("");
   const [notifyEvents, setNotifyEvents] = useState(false);
   const [status, setStatus] = useState<Status>("idle");
+  const [formVisible, setFormVisible] = useState(true);
+  const formRef = useRef<HTMLDivElement>(null);
+  const { isUnlocked } = usePhoneUnlock();
+
+  // Track form visibility with IntersectionObserver
+  useEffect(() => {
+    const el = formRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setFormVisible(entry.isIntersecting),
+      { threshold: 0 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const scrollToForm = useCallback(() => {
+    const el = formRef.current;
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+    // Wait for scroll to settle, then pulse
+    setTimeout(() => {
+      el.classList.add("unlock-form-pulse");
+      el.addEventListener(
+        "animationend",
+        () => el.classList.remove("unlock-form-pulse"),
+        { once: true }
+      );
+    }, 600);
+  }, []);
 
   const handlePhoneChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -87,10 +119,11 @@ export function PhoneUnlockForm({
   );
 
   const isValid = normalizePhone(phone) !== null;
+  const showStickyButton = !isUnlocked && !formVisible && status !== "success";
 
   if (status === "success") {
     return (
-      <div className="header-unlock-form header-unlock-form--success">
+      <div ref={formRef} className="header-unlock-form header-unlock-form--success">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <polyline points="20 6 9 17 4 12" />
         </svg>
@@ -102,60 +135,76 @@ export function PhoneUnlockForm({
   }
 
   return (
-    <div className="header-unlock-form">
-      <p className="header-unlock-title">Unlock Downloads</p>
-      {theme === "memphis" ? (
-        <div className="memphis-divider" style={{ padding: "6px 0" }}>
-          <span className="memphis-triangle" />
-          <span className="memphis-circle" />
-          <span className="memphis-triangle" />
-        </div>
-      ) : (
-        <div className="uv-divider" style={{ padding: "6px 0" }}>
-          <span className="uv-dot" />
-          <span className="uv-dot uv-dot--green" />
-          <span className="uv-dot" />
-        </div>
-      )}
-      <form onSubmit={handleSubmit} className="header-unlock-fields">
-        <input
-          type="text"
-          className="lead-form-input"
-          placeholder="Name (optional)"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          autoComplete="given-name"
-        />
-        <input
-          type="tel"
-          className="lead-form-input"
-          placeholder="(555) 123-4567"
-          value={phone}
-          onChange={handlePhoneChange}
-          autoComplete="tel"
-          required
-        />
-        <label className="lead-form-checkbox-label" style={{ margin: 0 }}>
+    <>
+      <div ref={formRef} className="header-unlock-form">
+        <p className="header-unlock-title">Unlock Downloads</p>
+        {theme === "memphis" ? (
+          <div className="memphis-divider" style={{ padding: "6px 0" }}>
+            <span className="memphis-triangle" />
+            <span className="memphis-circle" />
+            <span className="memphis-triangle" />
+          </div>
+        ) : (
+          <div className="uv-divider" style={{ padding: "6px 0" }}>
+            <span className="uv-dot" />
+            <span className="uv-dot uv-dot--green" />
+            <span className="uv-dot" />
+          </div>
+        )}
+        <form onSubmit={handleSubmit} className="header-unlock-fields">
           <input
-            type="checkbox"
-            checked={notifyEvents}
-            onChange={(e) => setNotifyEvents(e.target.checked)}
+            type="text"
+            className="lead-form-input"
+            placeholder="Name (optional)"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            autoComplete="given-name"
           />
-          <span>Notify me when Shrike Media will be at an event!</span>
-        </label>
+          <input
+            type="tel"
+            className="lead-form-input"
+            placeholder="(555) 123-4567"
+            value={phone}
+            onChange={handlePhoneChange}
+            autoComplete="tel"
+            required
+          />
+          <label className="lead-form-checkbox-label" style={{ margin: 0 }}>
+            <input
+              type="checkbox"
+              checked={notifyEvents}
+              onChange={(e) => setNotifyEvents(e.target.checked)}
+            />
+            <span>Notify me when Shrike Media will be at an event!</span>
+          </label>
+          <button
+            type="submit"
+            className="lead-form-submit"
+            disabled={!isValid || status === "submitting"}
+            style={{ marginTop: 4 }}
+          >
+            {status === "submitting"
+              ? "Sending..."
+              : status === "error"
+                ? "Something went wrong — try again"
+                : "Unlock Downloads"}
+          </button>
+        </form>
+      </div>
+      {showStickyButton && createPortal(
         <button
-          type="submit"
-          className="lead-form-submit"
-          disabled={!isValid || status === "submitting"}
-          style={{ marginTop: 4 }}
+          type="button"
+          className="scroll-to-unlock-btn"
+          onClick={scrollToForm}
         >
-          {status === "submitting"
-            ? "Sending..."
-            : status === "error"
-              ? "Something went wrong — try again"
-              : "Unlock Downloads"}
-        </button>
-      </form>
-    </div>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </svg>
+          Unlock Photo Downloads
+        </button>,
+        document.body
+      )}
+    </>
   );
 }
