@@ -117,13 +117,6 @@ function PressClubInner({ event, initialPhotos, totalCount, hasMore }: PressClub
                 <span className="memphis-triangle" />
               </div>
             </div>
-            <PhoneUnlockForm
-              websiteLabel={WEBSITE_LABEL}
-              eventTitle={event.title}
-              onUnlock={unlock}
-              trackEvent={trackEvent}
-              theme="memphis"
-            />
           </div>
           <Link href="/nexus" className="event-crosslink" onClick={() => trackEvent("crosslink_nexus")}>
             See more events
@@ -163,6 +156,13 @@ function PressClubInner({ event, initialPhotos, totalCount, hasMore }: PressClub
             </a>
           </div>
           <DownloadInfoBanner />
+          <PhoneUnlockForm
+            websiteLabel={WEBSITE_LABEL}
+            eventTitle={event.title}
+            onUnlock={unlock}
+            trackEvent={trackEvent}
+            theme="memphis"
+          />
         </header>
 
         {totalCount === 0 ? (

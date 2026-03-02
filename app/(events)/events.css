@@ -593,6 +593,7 @@
 /* Header layout for Get in Touch button */
 .pressclub-header {
   text-align: center;
+  position: relative;
 }
 
 .pressclub-header-top {
@@ -1503,6 +1504,7 @@ div[role="button"]:focus-within .photo-action-row {
 /* SAE header layout */
 .sae-header {
   text-align: center;
+  position: relative;
 }
 
 .sae-header-top {
@@ -1553,16 +1555,18 @@ div[role="button"]:focus-within .photo-action-row {
   border-bottom-color: oklch(0.65 0.22 20);
 }
 
-/* Header unlock form */
+/* Header unlock form — positioned inside header, after DownloadInfoBanner in DOM */
 .header-unlock-form {
   position: absolute;
   right: 0;
   top: 4px;
   max-width: 260px;
+  padding: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 4px;
+  border-radius: 12px;
 }
 
 .header-unlock-form--success {
@@ -1609,7 +1613,7 @@ div[role="button"]:focus-within .photo-action-row {
   .header-unlock-form {
     position: static;
     max-width: 100%;
-    margin-top: 12px;
+    margin-top: 16px;
   }
 }
 

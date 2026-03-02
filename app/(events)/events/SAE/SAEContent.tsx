@@ -73,13 +73,6 @@ function SAEInner({ event, initialPhotos, totalCount, hasMore }: SAEContentProps
                 <span className="uv-dot" />
               </div>
             </div>
-            <PhoneUnlockForm
-              websiteLabel={WEBSITE_LABEL}
-              eventTitle={event.title}
-              onUnlock={unlock}
-              trackEvent={trackEvent}
-              theme="blacklight"
-            />
           </div>
 
           <Link href="/nexus" className="event-crosslink" onClick={() => trackEvent("crosslink_nexus")}>
@@ -121,6 +114,13 @@ function SAEInner({ event, initialPhotos, totalCount, hasMore }: SAEContentProps
             </a>
           </div>
           <DownloadInfoBanner />
+          <PhoneUnlockForm
+            websiteLabel={WEBSITE_LABEL}
+            eventTitle={event.title}
+            onUnlock={unlock}
+            trackEvent={trackEvent}
+            theme="blacklight"
+          />
         </header>
 
         {totalCount === 0 ? (

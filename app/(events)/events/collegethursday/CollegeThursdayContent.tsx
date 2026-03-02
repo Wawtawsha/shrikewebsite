@@ -70,13 +70,6 @@ function CollegeThursdayInner({ event, initialPhotos, totalCount, hasMore }: Col
                 <span className="memphis-triangle" />
               </div>
             </div>
-            <PhoneUnlockForm
-              websiteLabel={WEBSITE_LABEL}
-              eventTitle={event.title}
-              onUnlock={unlock}
-              trackEvent={trackEvent}
-              theme="memphis"
-            />
           </div>
 
           <Link href="/nexus" className="event-crosslink" onClick={() => trackEvent("crosslink_nexus")}>
@@ -118,6 +111,13 @@ function CollegeThursdayInner({ event, initialPhotos, totalCount, hasMore }: Col
             </a>
           </div>
           <DownloadInfoBanner />
+          <PhoneUnlockForm
+            websiteLabel={WEBSITE_LABEL}
+            eventTitle={event.title}
+            onUnlock={unlock}
+            trackEvent={trackEvent}
+            theme="memphis"
+          />
         </header>
 
         {totalCount === 0 ? (
