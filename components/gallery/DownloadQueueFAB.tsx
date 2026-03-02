@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import { createPortal } from "react-dom";
 import { useDownloadQueue } from "./DownloadQueueContext";
 import { usePhoneUnlock } from "./PhoneUnlockContext";
 
@@ -51,10 +52,11 @@ export function DownloadQueueFAB({ onOpen, hidden }: DownloadQueueFABProps) {
           <path d="M5 12h14M12 5l7 7-7 7" />
         </svg>
       </button>
-      {showChyron && (
+      {showChyron && createPortal(
         <div className="download-toast" key={Date.now()}>
           Enter your phone number to unlock downloads
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

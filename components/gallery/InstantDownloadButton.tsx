@@ -1,6 +1,7 @@
 "use client";
 
 import { memo, useCallback, useState, useRef } from "react";
+import { createPortal } from "react-dom";
 import { downloadWebSize } from "@/lib/download";
 import { usePhoneUnlock } from "./PhoneUnlockContext";
 
@@ -79,10 +80,11 @@ export const InstantDownloadButton = memo(function InstantDownloadButton({
           </svg>
         )}
       </button>
-      {showChyron && (
+      {showChyron && createPortal(
         <div className="download-toast" key={Date.now()}>
           Enter your phone number above to unlock downloads
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
