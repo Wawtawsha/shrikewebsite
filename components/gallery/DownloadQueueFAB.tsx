@@ -33,14 +33,13 @@ export function DownloadQueueFAB({ onOpen, hidden }: DownloadQueueFABProps) {
   }
 
   return (
-    <div className="fab-chyron-wrapper" style={{ position: "fixed", bottom: 144, right: 24, zIndex: 40 }}>
+    <>
       <button
         className={`download-queue-fab ${wiggling ? "instant-download-wiggle" : ""}`}
         onClick={handleClick}
         onAnimationEnd={() => setWiggling(false)}
         aria-label={`${count} photo${count !== 1 ? "s" : ""} selected for full resolution download`}
         type="button"
-        style={{ position: "static" }}
       >
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
@@ -53,10 +52,10 @@ export function DownloadQueueFAB({ onOpen, hidden }: DownloadQueueFABProps) {
         </svg>
       </button>
       {showChyron && (
-        <div className="fab-chyron" key={Date.now()}>
+        <div className="download-toast" key={Date.now()}>
           Enter your phone number to unlock downloads
         </div>
       )}
-    </div>
+    </>
   );
 }

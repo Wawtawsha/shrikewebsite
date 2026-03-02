@@ -56,7 +56,7 @@ export const InstantDownloadButton = memo(function InstantDownloadButton({
   ].filter(Boolean).join(" ");
 
   return (
-    <div style={{ position: "relative" }}>
+    <>
       <button
         className={className}
         onClick={handleClick}
@@ -80,10 +80,10 @@ export const InstantDownloadButton = memo(function InstantDownloadButton({
         )}
       </button>
       {showChyron && (
-        <div className="download-chyron" key={Date.now()}>
+        <div className="download-toast" key={Date.now()}>
           Enter your phone number above to unlock downloads
         </div>
       )}
-    </div>
+    </>
   );
 });
