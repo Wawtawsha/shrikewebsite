@@ -590,20 +590,20 @@
 }
 
 /* Lead capture form */
-/* Header layout for Get in Touch button */
-.pressclub-header {
+/* Header layout for events */
+.event-header {
   text-align: center;
   position: relative;
 }
 
-.pressclub-header-top {
+.event-header-top {
   position: relative;
   display: flex;
   align-items: flex-start;
   justify-content: center;
 }
 
-.pressclub-header-center {
+.event-header-center {
   flex: 1;
 }
 
@@ -835,7 +835,7 @@
 
 /* Mobile: stack button below title */
 @media (max-width: 600px) {
-  .pressclub-header-top {
+  .event-header-top {
     flex-direction: column;
     align-items: center;
   }
@@ -1501,34 +1501,6 @@ div[role="button"]:focus-within .photo-action-row {
   50% { opacity: 1; transform: scale(1.3); }
 }
 
-/* SAE header layout */
-.sae-header {
-  text-align: center;
-  position: relative;
-}
-
-.sae-header-top {
-  position: relative;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-}
-
-.sae-header-center {
-  flex: 1;
-}
-
-@media (max-width: 600px) {
-  .sae-header-top {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .sae-header-top .lead-trigger-btn {
-    position: static;
-    margin-top: 12px;
-  }
-}
 
 /* Blacklight ribbon shimmer override */
 .blacklight-theme .promo-ribbon span {
