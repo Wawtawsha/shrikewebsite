@@ -60,4 +60,23 @@ export const eventConfigs: Record<string, EventConfig> = {
     theme: "default",
     websiteLabel: "college-thursday",
   },
+  ct0226: {
+    supabaseSlug: "ct0226",
+    theme: "blacklight",
+    promo: {
+      bannerText: "SPECIAL OFFER — Limited Time Deals",
+      offers: [
+        {
+          title: "Instagram Carousels",
+          description:
+            "Book a custom Instagram Carousel shoot — we handle the photography, editing, and delivery at a discounted rate.",
+        },
+        {
+          title: "Sorority & Fraternity Formals",
+          description:
+            "Now booking photography for Sorority and Fraternity Formals. Contact us to lock in your date.",
+        },
+      ],
+    },
+  },
 };
