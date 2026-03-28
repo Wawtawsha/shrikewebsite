@@ -50,7 +50,7 @@ export default function ServicesPage() {
               {
                 num: "02",
                 title: "Production",
-                text: "We execute with precision — professional equipment, controlled environments, and obsessive attention to every detail.",
+                text: "We execute with precision. Professional equipment, controlled environments, and obsessive attention to every detail.",
               },
               {
                 num: "03",

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { RevealSection } from "../ServicePageSections";
 
 export const metadata: Metadata = {
-  title: "Technical Consultation — Shrike Media",
+  title: "Technical Consultation | Shrike Media",
   description:
     "Software architecture, data engineering, and creative technology expertise. From system design to implementation guidance.",
 };
@@ -40,7 +40,7 @@ export default function TechnicalPage() {
           </Link>
 
           <p className="text-emerald-400/80 text-[11px] font-medium tracking-[0.3em] uppercase mb-5">
-            03 — Technical Consultation
+            03 / Technical Consultation
           </p>
 
           <h1
@@ -54,7 +54,7 @@ export default function TechnicalPage() {
 
           <p className="text-muted text-lg md:text-xl max-w-lg leading-relaxed">
             Software architecture, data engineering, and creative technology
-            expertise — from the same team that builds production systems for
+            expertise, from the same team that builds production systems for
             Fortune 500 clients.
           </p>
         </div>
@@ -144,7 +144,7 @@ export default function TechnicalPage() {
               {
                 num: "03",
                 title: "Deliver",
-                text: "Hands-on guidance through implementation. We don't just advise — we pair with your team to ensure the architecture ships.",
+                text: "Hands-on guidance through implementation. We don't just advise. We pair with your team to ensure the architecture ships.",
               },
             ].map((step, i) => (
               <RevealSection key={step.num} delay={i * 0.12}>
@@ -185,7 +185,7 @@ export default function TechnicalPage() {
               Have a technical challenge?
             </h2>
             <p className="text-muted mt-2 text-lg">
-              Book a free 30-minute discovery call. No sales pitch — just
+              Book a free 30-minute discovery call. No sales pitch, just
               technical conversation.
             </p>
           </div>

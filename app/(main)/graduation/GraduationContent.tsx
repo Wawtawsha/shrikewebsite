@@ -38,7 +38,7 @@ export function GraduationContent() {
             Choose a time that works for you and we&apos;ll handle the rest.
           </p>
           <p className="text-amber-400/60 text-sm mb-8">
-            Limited spots for Spring 2026 — book early to lock in your date.
+            Limited spots for Spring 2026. Book early to lock in your date.
           </p>
           <div className="rounded-lg overflow-hidden border border-border">
             <InlineWidget

@@ -99,7 +99,7 @@ export function PhoneUnlockForm({
             preferred_contact: "phone",
             notify_events: notifyEvents,
             utm_source: `${websiteLabel}-gallery`,
-            notes: `Download unlock — ${eventTitle}`,
+            notes: `Download unlock: ${eventTitle}`,
             landing_page_url: window.location.href,
             referrer: document.referrer || null,
           }),
@@ -186,7 +186,7 @@ export function PhoneUnlockForm({
             {status === "submitting"
               ? "Sending..."
               : status === "error"
-                ? "Something went wrong — try again"
+                ? "Something went wrong, try again"
                 : "Unlock Downloads"}
           </button>
         </form>

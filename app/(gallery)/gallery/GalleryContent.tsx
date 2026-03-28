@@ -19,7 +19,7 @@ interface GalleryContentProps {
 
 export function GalleryContent({ event, initialPhotos, totalCount, hasMore }: GalleryContentProps) {
   const [bladeOpen, setBladeOpen] = useState(false);
-  const { trackEvent } = useNessusTracking(`Gallery — ${event.title}`, event.slug);
+  const { trackEvent } = useNessusTracking(`Gallery: ${event.title}`, event.slug);
 
   const formattedDate = new Date(event.date).toLocaleDateString("en-US", {
     year: "numeric",

@@ -7,7 +7,7 @@ import type { GalleryPhoto } from "@/types/gallery";
 export const metadata: Metadata = {
   title: "Event Gallery | Shrike Media",
   description:
-    "Browse photo galleries from Shrike Media events — 2016 Night, College Thursdays, Rosemont Vineyard, SAE House Party, and more.",
+    "Browse photo galleries from Shrike Media events: 2016 Night, College Thursdays, Rosemont Vineyard, SAE House Party, and more.",
 };
 
 /** Slug → gallery URL. Events not listed here won't appear on the nexus page. */

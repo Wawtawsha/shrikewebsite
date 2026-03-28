@@ -6,7 +6,7 @@ import {
 } from "../ServicePageSections";
 
 export const metadata: Metadata = {
-  title: "Videography — Shrike Media",
+  title: "Videography | Shrike Media",
   description:
     "Brand films, event coverage, and narrative storytelling in stunning 4K. Book your production today.",
 };
@@ -43,7 +43,7 @@ export default function VideographyPage() {
           </Link>
 
           <p className="text-sky-400/80 text-[11px] font-medium tracking-[0.3em] uppercase mb-5">
-            02 — Videography
+            02 / Videography
           </p>
 
           <h1
@@ -56,7 +56,7 @@ export default function VideographyPage() {
           </h1>
 
           <p className="text-muted text-lg md:text-xl max-w-lg leading-relaxed">
-            Brand films, event coverage, and narrative storytelling — shot in
+            Brand films, event coverage, and narrative storytelling. Shot in
             stunning 4K with cinematic color science and professional audio.
           </p>
         </div>

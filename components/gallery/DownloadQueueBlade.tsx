@@ -78,7 +78,7 @@ export function DownloadQueueBlade({ open, onClose, eventId, eventTitle, photos,
             landing_page_url: window.location.href,
             referrer: document.referrer || null,
           }),
-        }).catch(() => {}); // Silent — don't block download flow
+        }).catch(() => {}); // Silent - don't block download flow
 
         clearAll();
         window.location.href = `/events/download/${data.token}`;
@@ -172,7 +172,7 @@ export function DownloadQueueBlade({ open, onClose, eventId, eventTitle, photos,
                 {status === "submitting"
                   ? "Loading..."
                   : status === "error"
-                    ? "Something went wrong — try again"
+                    ? "Something went wrong, try again"
                     : "Get Download Link"}
               </button>
             </form>

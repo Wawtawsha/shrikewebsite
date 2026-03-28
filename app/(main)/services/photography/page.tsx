@@ -7,7 +7,7 @@ import { RevealSection } from "../ServicePageSections";
 import { ScribbleNote } from "@/components/ScribbleNote";
 
 export const metadata: Metadata = {
-  title: "Photography — Shrike Media",
+  title: "Photography | Shrike Media",
   description:
     "Editorial portraits, commercial product shoots, and brand imagery crafted with cinematic precision. Book your session today.",
 };
@@ -66,7 +66,7 @@ export default async function PhotographyPage() {
           </Link>
 
           <p className="text-amber-400/80 text-[11px] font-medium tracking-[0.3em] uppercase mb-5">
-            01 — Photography
+            01 / Photography
           </p>
 
           <h1
@@ -80,7 +80,7 @@ export default async function PhotographyPage() {
 
           <p className="text-muted text-lg md:text-xl max-w-lg leading-relaxed">
             Editorial portraits, commercial product shoots, and brand imagery
-            — crafted with cinematic precision and obsessive attention to
+            crafted with cinematic precision and obsessive attention to
             detail.
           </p>
         </div>
@@ -138,7 +138,7 @@ export default async function PhotographyPage() {
             {[
               {
                 title: "Professional Lighting & Equipment",
-                desc: "Studio and location shoots with cinema-grade gear — Profoto strobes, Sony Alpha series, premium glass.",
+                desc: "Studio and location shoots with cinema-grade gear. Profoto strobes, Sony Alpha series, premium glass.",
               },
               {
                 title: "Full Post-Production",
@@ -146,7 +146,7 @@ export default async function PhotographyPage() {
               },
               {
                 title: "High-Res Deliverables",
-                desc: "Print-ready files in multiple formats — TIFF, JPEG, PNG. Web-optimized versions included.",
+                desc: "Print-ready files in multiple formats: TIFF, JPEG, PNG. Web-optimized versions included.",
               },
               {
                 title: "Commercial Usage Rights",

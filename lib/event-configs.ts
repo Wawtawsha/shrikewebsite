@@ -12,7 +12,7 @@ export interface PromoConfig {
 export interface EventConfig {
   /** Slug used to look up the event in Supabase */
   supabaseSlug: string;
-  /** Theme variant — controls colors, divider style, and unlock form */
+  /** Theme variant - controls colors, divider style, and unlock form */
   theme: "default" | "blacklight";
   /** Tracking label (defaults to URL slug if omitted) */
   websiteLabel?: string;
@@ -30,12 +30,12 @@ export const eventConfigs: Record<string, EventConfig> = {
     theme: "default",
     websiteLabel: "press-club",
     promo: {
-      bannerText: "SPECIAL OFFER — Limited Time Deals",
+      bannerText: "SPECIAL OFFER: Limited Time Deals",
       offers: [
         {
           title: "Instagram Carousels",
           description:
-            "Book a custom Instagram Carousel shoot — we handle the photography, editing, and delivery at a discounted rate.",
+            "Book a custom Instagram Carousel shoot. We handle the photography, editing, and delivery at a discounted rate.",
         },
         {
           title: "Sorority & Fraternity Formals",
@@ -64,12 +64,12 @@ export const eventConfigs: Record<string, EventConfig> = {
     supabaseSlug: "ct0226",
     theme: "blacklight",
     promo: {
-      bannerText: "SPECIAL OFFER — Limited Time Deals",
+      bannerText: "SPECIAL OFFER: Limited Time Deals",
       offers: [
         {
           title: "Instagram Carousels",
           description:
-            "Book a custom Instagram Carousel shoot — we handle the photography, editing, and delivery at a discounted rate.",
+            "Book a custom Instagram Carousel shoot. We handle the photography, editing, and delivery at a discounted rate.",
         },
         {
           title: "Sorority & Fraternity Formals",

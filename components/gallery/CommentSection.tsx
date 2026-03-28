@@ -64,12 +64,12 @@ export function CommentSection({ eventId, firstPhotoId, trackEvent }: CommentSec
     const trimmedBody = body.trim();
     const trimmedName = displayName.trim();
     if (!isClean(trimmedBody) || (trimmedName && !isClean(trimmedName))) {
-      setError("Please rephrase your message — some words aren't allowed.");
+      setError("Please rephrase your message, some words aren't allowed.");
       return;
     }
 
     if (!deviceId) {
-      setError("Unable to post — please try refreshing.");
+      setError("Unable to post. Please try refreshing.");
       return;
     }
 
@@ -90,9 +90,9 @@ export function CommentSection({ eventId, firstPhotoId, trackEvent }: CommentSec
 
     if (insertError) {
       if (insertError.message?.includes("Too many comments")) {
-        setError("You're posting too fast — please wait a few minutes.");
+        setError("You're posting too fast. Please wait a few minutes.");
       } else {
-        setError("Something went wrong — please try again.");
+        setError("Something went wrong. Please try again.");
       }
       setSubmitting(false);
       return;
@@ -171,7 +171,7 @@ export function CommentSection({ eventId, firstPhotoId, trackEvent }: CommentSec
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
           </svg>
           <p className="text-sm" style={{ fontStyle: "italic" }}>
-            No comments yet — be the first!
+            No comments yet. Be the first!
           </p>
         </div>
       ) : (

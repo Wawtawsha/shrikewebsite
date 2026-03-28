@@ -27,7 +27,7 @@ interface DownloadPageContentProps {
 export function DownloadPageContent({ session, eventTitle, photos }: DownloadPageContentProps) {
   const [downloading, setDownloading] = useState<Set<string>>(new Set());
   const [zipping, setZipping] = useState(false);
-  const { trackEvent } = useNessusTracking(`Download — ${eventTitle}`, "press-club");
+  const { trackEvent } = useNessusTracking(`Download: ${eventTitle}`, "press-club");
 
   // Track page visit and increment download count
   useEffect(() => {

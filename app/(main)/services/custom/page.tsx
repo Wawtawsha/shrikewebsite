@@ -3,9 +3,9 @@ import Link from "next/link";
 import { RevealSection } from "../ServicePageSections";
 
 export const metadata: Metadata = {
-  title: "Custom Package — Shrike Media",
+  title: "Custom Package | Shrike Media",
   description:
-    "Bespoke creative solutions combining photography, videography, and technical consulting — tailored exactly to your vision.",
+    "Bespoke creative solutions combining photography, videography, and technical consulting, tailored exactly to your vision.",
 };
 
 const CALENDLY_URL =
@@ -79,7 +79,7 @@ export default function CustomPage() {
           </Link>
 
           <p className="text-violet-400/80 text-[11px] font-medium tracking-[0.3em] uppercase mb-5">
-            04 — Custom Package
+            04 / Custom Package
           </p>
 
           <h1
@@ -94,7 +94,7 @@ export default function CustomPage() {
           <p className="text-muted text-lg md:text-xl max-w-lg leading-relaxed">
             Not every project fits a standard package. We build bespoke
             solutions that combine photography, videography, and technical
-            expertise — tailored exactly to what you need.
+            expertise, tailored exactly to what you need.
           </p>
         </div>
       </section>
@@ -228,7 +228,7 @@ export default function CustomPage() {
             {[
               {
                 quote:
-                  "Shrike delivered a complete brand package — photos, promo video, and a custom analytics dashboard — all in one engagement. Seamless.",
+                  "Shrike delivered a complete brand package: photos, promo video, and a custom analytics dashboard, all in one engagement. Seamless.",
                 client: "Marketing Director, Tech Startup",
                 services: "Photography + Videography + Technical",
               },

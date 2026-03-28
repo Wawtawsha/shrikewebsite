@@ -11,7 +11,7 @@ const services = [
     number: "01",
     title: "Photography",
     description:
-      "Editorial portraits, commercial product shoots, and brand imagery — crafted with cinematic precision.",
+      "Editorial portraits, commercial product shoots, and brand imagery, crafted with cinematic precision.",
     href: "/services/photography",
     gradient: "from-amber-900/70 via-orange-950/30 to-transparent",
     accentColor: "bg-amber-500",
@@ -44,7 +44,7 @@ const services = [
     number: "04",
     title: "Custom Package",
     description:
-      "Bespoke solutions combining any of our services — tailored exactly to your vision.",
+      "Bespoke solutions combining any of our services, tailored exactly to your vision.",
     href: "/services/custom",
     gradient: "from-violet-900/60 via-purple-950/30 to-transparent",
     accentColor: "bg-violet-500",
