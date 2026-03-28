@@ -14,6 +14,8 @@ const ALL_REELS = [
   "/videos/reel-5.mp4",
   "/videos/reel-6.mp4",
   "/videos/reel-7.mp4",
+  "/videos/reel-8.mp4",
+  "/videos/reel-9.mp4",
 ];
 
 const PANEL_LABELS = ["Events", "Portraits", "Stories"];

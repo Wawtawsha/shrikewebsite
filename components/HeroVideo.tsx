@@ -1,11 +1,23 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { OptimizedImage } from "./OptimizedImage";
 import { ParallaxSection } from "./ParallaxSection";
+
+/** All available hero background videos (landscape). */
+const HERO_VIDEOS = [
+  "/videos/hero-bg.mp4",
+  "/videos/hero-2.mp4",
+];
+
+/** Pick a random hero video, avoiding the current one. */
+function pickNextHero(current: string): string {
+  const others = HERO_VIDEOS.filter((v) => v !== current);
+  return others[Math.floor(Math.random() * others.length)];
+}
 
 /** Try to play a video; if it fails, force-reload the source first. */
 function forcePlay(video: HTMLVideoElement) {
@@ -19,6 +31,13 @@ export function HeroVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const reducedMotion = useReducedMotion();
   const [isMobile, setIsMobile] = useState(false);
+  const [currentSrc, setCurrentSrc] = useState(
+    () => HERO_VIDEOS[Math.floor(Math.random() * HERO_VIDEOS.length)]
+  );
+
+  const swapVideo = useCallback(() => {
+    setCurrentSrc((prev) => pickNextHero(prev));
+  }, []);
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 767px)");
@@ -28,6 +47,14 @@ export function HeroVideo() {
     mq.addEventListener("change", handler);
     return () => mq.removeEventListener("change", handler);
   }, []);
+
+  // Load and play when src changes
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || reducedMotion) return;
+    video.load();
+    video.play().catch(() => {});
+  }, [currentSrc, reducedMotion]);
 
   useEffect(() => {
     if (!videoRef.current) return;
@@ -50,7 +77,9 @@ export function HeroVideo() {
     const heartbeat = setInterval(() => {
       if (document.hidden) return;
 
-      if (video.paused || video.currentTime === lastTime) {
+      if (video.ended) {
+        swapVideo();
+      } else if (video.paused || video.currentTime === lastTime) {
         forcePlay(video);
       }
       lastTime = video.currentTime;
@@ -66,7 +95,7 @@ export function HeroVideo() {
       clearInterval(heartbeat);
       document.removeEventListener("visibilitychange", handleVisibility);
     };
-  }, [reducedMotion]);
+  }, [reducedMotion, swapVideo]);
 
   return (
     <section className="relative h-screen w-full overflow-hidden">
@@ -84,19 +113,13 @@ export function HeroVideo() {
           ref={videoRef}
           autoPlay
           muted
-          loop
           playsInline
           preload="auto"
-          onError={() => {
-            const video = videoRef.current;
-            if (video) {
-              video.load();
-              video.play().catch(() => {});
-            }
-          }}
+          onEnded={swapVideo}
+          onError={swapVideo}
           className="absolute inset-0 h-full w-full object-cover"
         >
-          <source src="/videos/hero-bg.mp4" type="video/mp4" />
+          <source src={currentSrc} type="video/mp4" />
         </video>
       )}
 
