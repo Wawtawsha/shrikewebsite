@@ -227,11 +227,19 @@ export function CinemaTriptych() {
 
   // Track what each panel is currently playing (shared across all panels)
   const currentVideosRef = useRef<string[]>([...initialReels]);
+  // Recently-retired videos get a cooldown before reappearing
+  const recentlyPlayedRef = useRef<string[]>([]);
 
-  // Dedup-aware picker: excludes all videos currently playing in any panel
+  // Dedup-aware picker: excludes current + recently retired videos
   const pickNext = useCallback((panelIndex: number): string => {
-    const excluded = new Set(currentVideosRef.current);
+    const excluded = new Set([
+      ...currentVideosRef.current,
+      ...recentlyPlayedRef.current,
+    ]);
     const next = pickNextReel(excluded);
+    // Push outgoing video onto cooldown list (keep last 3)
+    const outgoing = currentVideosRef.current[panelIndex];
+    recentlyPlayedRef.current = [outgoing, ...recentlyPlayedRef.current].slice(0, 3);
     currentVideosRef.current[panelIndex] = next;
     return next;
   }, []);
